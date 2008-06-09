@@ -1,0 +1,14 @@
+New in release 1.9:
+
+* support for binary COFF
+* generation of verilog memory models (used when you want to run simulation
+of OpenRISC processor cores)
+
+New in release 1.2:
+
+* support for OR16 ISA
+
+New in release 1.1 :
+
+ * First release
+

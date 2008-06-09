@@ -1,0 +1,28 @@
+This directory includes some test case programs that should be used to verify correct operation
+of the or1ksim, OR32 GCC and OR32 GNU Binutils.
+
+All programs are built and checked by:
+
+./configure --target=or32-uclinux
+make all check
+
+You need to have all GNU OR32 tools installed and in the path.
+
+!!! For all test cases, or1ksim should be built with ONLY_VIRTUAL_MACHINE undefined in 
+cpu/or1k/except.h !!!
+
+All tests should exit with:
+MTSPR(0x1234, deaddead);
+syscall exit(0)
+
+If the test fails, it should print as much output as possible about the failure.
+
+dhry: Dhrystone 2.1: a benchmark modified to use simulator's timing facility.
+basic: a test for all instructions and all GPRs.
+test1: a test for "all" instructions and their combinations.
+pic: a test for PIC and TICK timer. All three modes of TICK timer are tested and interrupt is enabled and disabled in PIC.
+excpt: a test of l.sys instruction. Checks all the delay slot issues ind other things.
+cfg: a test of SPRs (SPR_VR, SPR_CPUCFGR, SPR_DMMUCFGR, SPR_IMMUCFGR, SPR_DCCFGR, SPR_ICCFGR, SPR_DCFGR, SPR_PCCFGR).
+dma: a test of DMA in normal (software) mode.
+compress: UNIX compressed modified not to use libc calls.
+mul: Test l.mul, l.mac and l.macrc instructions.

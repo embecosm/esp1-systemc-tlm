@@ -1,0 +1,10 @@
+Makefile
+sim
+config.cache
+config.log
+config.status
+stamp-h1
+trace.dat
+*.log
+auto*.cache
+.deps
