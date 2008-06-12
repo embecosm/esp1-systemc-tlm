@@ -15,3 +15,6 @@ Jimmy Chen-Min Chen, <jimmy@ee.nctu.edu.tw>
 
 Richard Prescott, <rip@step.polymtl.ca>
   Added channels for peripheral to communicate with host
+
+Jeremy Bennett, <jeremy@jeremybennett.com>
+  9 Jun 08. Added OSCI SystemC TLM 2.0 wrapper and tidied up for GCC 4.3.0

@@ -18,5 +18,5 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libarch.a
-libarch_a_SOURCES = execute.c
+noinst_LTLIBRARIES = libarch.la
+libarch_la_SOURCES = execute.c

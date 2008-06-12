@@ -1,3 +1,6 @@
+	      Or1ksim: The OpenRISC 1000 Architectural Simulator
+	      ==================================================
+
 
 What is this stuff?
 ===================
@@ -8,41 +11,62 @@ for copying permission. To contact the authors, see AUTHORS file.
 This simulator loads an assembly file for one of the both architectures
 and it simulates the operation of instructions. 
 
+
+Pre-requisites
+==============
+
+The GNU toolchain for OpenRISC 1000 is required. Instructions how to build
+these GNU tools can be found on www.opencores.org
+
+
 Installation
 ============
 
-To compile, run the configure script and specify the target architecture.
-Example:
+The installation uses standard GNU autoconf/automake files. Generic
+instructions on this are in the INSTALL file.
 
-  $ ./configure --target=or32
+Or1ksim is best built in a separate directory.
 
-After that, just issue "make all" command. By default there should be no
-warnings. There is no "make install". Just use it from default location
-or copy it to your bin directory (usually something like /usr/local/bin
-or ~/bin).
+Both the target architecture and (optionally) the installation directory can
+be specified to configure. For example:
 
-GNU Tools
-=========
+  $ mkdir ork1sim_builddir
+  $ cd ork1sim_builddir
+  $ ./configure --target=or32-uclinux --prefix=<install dir>
 
-Instructions how to build GNU tools can be found on www.opencores.org
+Then to build and install run
+
+  $ make all
+  $ make install
+
+Note that there is no "make check". To test the simulator follow the
+instructions in the "testing" subdirectory.
+
 
 Simulator test
 ==============
 
-Edit the sim.cfg file in order to configure your system.
+Follow the instructions in testbench/README to test the simulator.
 
-Issue 'sim testbench/dhry' test simulator (testbench should be configured first).
-See testbench/README for more details about running.
 
-Also run sim with --help option for list of command line options and
-help in command mode, to list the commands.
+Help
+====
+
+Run sim with --help option for list of command line options and help in
+command mode, to list the commands.
+
 
 OpenRISC and open cores
 =======================
 
-About the same idea as with GNU project except we want free and open source
-IP (intellectual property) cores. We design open source, synthesizable
-cores. OpenRISC is one such core. It is a 32-bit RISC microprocessor that
-will run GNU/Linux.
-For more information visit us at http://www.opencores.org.
+This project is licensed under the GNU Public License version 2. See the file
+COPYING for details.
 
+About the same idea as with GNU project except we want free and open source IP
+(intellectual property) cores. We design open source, synthesizable
+cores. OpenRISC is one such core. It is a 32-bit RISC microprocessor that will
+run GNU/Linux.  For more information visit us at http://www.opencores.org.
+
+
+Upated by Jeremy Bennett (jeremy@jeremybennett.com)
+9 June 2008

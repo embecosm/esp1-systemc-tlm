@@ -18,8 +18,8 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libchannels.a
-libchannels_a_SOURCES = \
+noinst_LTLIBRARIES = libchannels.la
+libchannels_la_SOURCES = \
 channel.c		\
 fd.c			\
 file.c			\

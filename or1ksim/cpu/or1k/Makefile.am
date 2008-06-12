@@ -18,6 +18,6 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libor1k.a
-libor1k_a_SOURCES = sprs.c except.c spr_dump.c
+noinst_LTLIBRARIES = libor1k.la
+libor1k_la_SOURCES = sprs.c except.c spr_dump.c
 

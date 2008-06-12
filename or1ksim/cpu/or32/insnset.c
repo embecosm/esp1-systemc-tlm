@@ -331,6 +331,10 @@ INSTRUCTION (l_nop) {
       simprintf(stackaddr, evalsim_reg(3));
       debug(5, "simprintf %x\n", stackaddr);
       break;
+    case NOP_PUTC:		/*JPB */
+      printf( "%c", evalsim_reg( 3 ));
+      fflush( stdout );
+      break;
     case NOP_REPORT:
       PRINTF("report(0x%"PRIxREG");\n", evalsim_reg(3));
     default:

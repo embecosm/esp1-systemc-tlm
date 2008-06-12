@@ -481,6 +481,7 @@ others it is also used in assembly file(s). */
 #define NOP_EXIT        0x0001      /* End of simulation */
 #define NOP_REPORT      0x0002      /* Simple report */
 #define NOP_PRINTF      0x0003      /* Simprintf instruction */
+#define NOP_PUTC        0x0004      /* JPB: Simputc instruction */
 #define NOP_CNT_RESET   0x0005	    /* Reset statistics counters */
 #define NOP_REPORT_FIRST 0x0400     /* Report with number */
 #define NOP_REPORT_LAST 0x03ff      /* Report with number */

@@ -18,5 +18,5 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libport.a
-libport_a_SOURCES = strndup.c isblank.c
+noinst_LTLIBRARIES = libport.la
+libport_la_SOURCES = strndup.c isblank.c

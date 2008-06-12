@@ -18,8 +18,8 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libcuc.a
+noinst_LTLIBRARIES = libcuc.la
 
-libcuc_a_SOURCES = cuc.c cuc.h load.c bb.c memory.c \
+libcuc_la_SOURCES = cuc.c cuc.h load.c bb.c memory.c \
 	verilog.c timings.c insn.c insn.h adv.c
 

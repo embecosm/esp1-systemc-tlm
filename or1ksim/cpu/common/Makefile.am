@@ -18,5 +18,5 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libcommon.a
-libcommon_a_SOURCES = abstract.c parse.c stats.c trace.c labels.c
+noinst_LTLIBRARIES = libcommon.la
+libcommon_la_SOURCES = abstract.c parse.c stats.c trace.c labels.c

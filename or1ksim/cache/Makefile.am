@@ -18,6 +18,6 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libcache.a
-libcache_a_SOURCES = dcache_model.c icache_model.c
+noinst_LTLIBRARIES = libcache.la
+libcache_la_SOURCES = dcache_model.c icache_model.c
 

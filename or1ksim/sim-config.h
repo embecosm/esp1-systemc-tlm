@@ -33,6 +33,14 @@
 #define STR_SIZE        (256)
 
 struct config {
+  struct {			      /* External linkage for SystemC */
+    void               *class_ptr;
+    unsigned long int (*callback)( void              *class_ptr,
+				   enum or1ksim_cb    code,
+				   unsigned long int  addr,
+				   unsigned long int  wdata );
+  } ext;
+
   struct {
     int enabled;                      /* Is tick timer enabled?  */
   } tick;
@@ -301,8 +309,9 @@ struct config_section *reg_config_sec(const char *section,
 extern struct config_section *cur_section;
 #define CONFIG_ERROR(s) {fprintf (stderr, "ERROR: config.%s:%s\n", cur_section->name, s); if (runtime.sim.init) exit (1);}
 
-/* FIXME: These will disapeer one day... */
+/* FIXME: These will disappear one day... */
 void reg_mc_sec(void);
+void reg_generic_sec(void);		/* JPB */
 void reg_uart_sec(void);
 void reg_dma_sec(void);
 void reg_memory_sec(void);

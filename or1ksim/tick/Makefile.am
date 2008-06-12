@@ -18,5 +18,5 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libtick.a
-libtick_a_SOURCES = tick.c
+noinst_LTLIBRARIES = libtick.la
+libtick_la_SOURCES = tick.c

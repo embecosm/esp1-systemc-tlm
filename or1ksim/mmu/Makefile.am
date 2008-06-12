@@ -18,6 +18,6 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libmmu.a
-libmmu_a_SOURCES = dmmu.c immu.c
+noinst_LTLIBRARIES = libmmu.la
+libmmu_la_SOURCES = dmmu.c immu.c
 

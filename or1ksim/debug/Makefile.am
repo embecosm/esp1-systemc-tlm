@@ -18,5 +18,5 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libdebug.a
-libdebug_a_SOURCES = debug_unit.c debug_unit.h gdbcomm.c gdbcomm.h
+noinst_LTLIBRARIES = libdebug.la
+libdebug_la_SOURCES = debug_unit.c debug_unit.h gdbcomm.c gdbcomm.h

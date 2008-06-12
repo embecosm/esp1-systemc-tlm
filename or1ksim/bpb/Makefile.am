@@ -18,6 +18,6 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libbpb.a
-libbpb_a_SOURCES = branch_predict.c
+noinst_LTLIBRARIES = libbpb.la
+libbpb_la_SOURCES = branch_predict.c
 

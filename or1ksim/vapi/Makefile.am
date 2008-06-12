@@ -18,5 +18,5 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libvapi.a
-libvapi_a_SOURCES = vapi.c vapi.h
+noinst_LTLIBRARIES = libvapi.la
+libvapi_la_SOURCES = vapi.c vapi.h

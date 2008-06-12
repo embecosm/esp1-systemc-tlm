@@ -18,5 +18,5 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libsupport.a
-libsupport_a_SOURCES = simprintf.c dumpverilog.c profile.c sched.c debug.c misc.c
+noinst_LTLIBRARIES = libsupport.la
+libsupport_la_SOURCES = simprintf.c dumpverilog.c profile.c sched.c debug.c misc.c

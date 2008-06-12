@@ -18,5 +18,5 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-noinst_LIBRARIES = libpic.a
-libpic_a_SOURCES = pic.c
+noinst_LTLIBRARIES = libpic.la
+libpic_la_SOURCES = pic.c

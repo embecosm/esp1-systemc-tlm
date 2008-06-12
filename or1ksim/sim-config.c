@@ -473,6 +473,7 @@ void reg_config_secs(void)
   reg_config_param(reg_config_sec("base", NULL, NULL), "include", paramt_str,
                    base_include);
 
+  reg_generic_sec();			/* JPB */
   reg_sim_sec();
   reg_cpu_sec();
   reg_memory_sec();
