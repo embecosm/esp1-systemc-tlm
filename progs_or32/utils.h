@@ -20,18 +20,16 @@
  *
  * ----------------------------------------------------------------------------
  *
- * Simple hello world for Or1ksim
+ * Header for simple OR1ksim Utilities
  *
  * $Id$
  *
  */
 
 
-#include "utils.h"
+/* The utility routines */
 
-main()
-{
-  simputs( "Hello World\n" );
-  simexit( 0 );
-
-}
+extern void  simexit( int  rc );
+extern void  simputc( int  c );
+extern void  simputh( int  i );
+extern void  simputs( char *str );

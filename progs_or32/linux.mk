@@ -27,6 +27,7 @@
 # Tools
 
 CC = or32-uclinux-gcc
+CFLAGS = -ggdb
 LD = or32-uclinux-ld
 
 
@@ -34,34 +35,51 @@ LD = or32-uclinux-ld
 # Make the lot
 
 .PHONY: all
-all: hello generic_io
+all: hello generic_io uart_loop
 
 
 # ----------------------------------------------------------------------------
 # Bootloader - puts code at 0x100
 
-bootloader.o: bootloader.s
-	$(CC) -c $<
+start.o: start.s
+	$(CC) $(CFLAGS) -c $<
 
 
 # ----------------------------------------------------------------------------
-# Hello world. Ensure bootloader.o is first!
+# Utilities
 
-hello: bootloader.o hello.o 
+utils.o: utils.c
+	$(CC) $(CFLAGS) -c $<
+
+
+# ----------------------------------------------------------------------------
+# Hello world. Ensure start.o is first!
+
+hello: start.o utils.o hello.o 
 	$(LD) -Ttext 0x0 $^ -o $@
 
 hello.o: hello.c
-	$(CC) -c $<
+	$(CC) $(CFLAGS) -c $<
 
 
 # ----------------------------------------------------------------------------
-# Generic I/O. Ensure bootloader.o is first!
+# Generic I/O. Ensure start.o is first!
 
-generic_io: bootloader.o generic_io.o 
+generic_io: start.o utils.o generic_io.o 
 	$(LD) -Ttext 0x0 $^ -o $@
 
 generic_io.o: generic_io.c
-	$(CC) -c $<
+	$(CC) $(CFLAGS) -c $<
+
+
+# ----------------------------------------------------------------------------
+# Generic I/O. Ensure start.o is first!
+
+uart_loop: start.o utils.o uart_loop.o 
+	$(LD) -Ttext 0x0 $^ -o $@
+
+uart_loop.o: uart_loop.c
+	$(CC) $(CFLAGS) -c $<
 
 
 # ----------------------------------------------------------------------------
@@ -72,3 +90,4 @@ clean:
 	$(RM) *.o
 	$(RM) hello
 	$(RM) generic_io
+	$(RM) uart_loop

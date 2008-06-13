@@ -26,46 +26,51 @@
  *
  */
 
-#include "utils.h"
 
-#define BASEADDR  0x90000000
+/* l.nop constants only used here */
 
-struct testdev
+#define NOP_NOP         0x0000      /* Normal nop instruction */
+#define NOP_EXIT        0x0001      /* End of simulation */
+#define NOP_REPORT      0x0002      /* Simple report */
+#define NOP_PRINTF      0x0003      /* Simprintf instruction */
+#define NOP_PUTC        0x0004      /* JPB: Simputc instruction */
+#define NOP_CNT_RESET   0x0005	    /* Reset statistics counters */
+
+
+void  simexit( int  rc )
 {
-  volatile unsigned char       byte;
-  volatile unsigned short int  halfword;
-  volatile unsigned long  int  fullword;
-};
+  __asm__ __volatile__ ( "\tl.nop\t%0" : : "K"( NOP_EXIT ));
 
-main()
+}	/* simexit() */
+
+
+void  simputc( int  c )
 {
-  volatile struct testdev *dev = (struct testdev *)BASEADDR;
+  __asm__ __volatile__ ( "\tl.nop\t%0" : : "K"( NOP_PUTC ));
 
-  unsigned char       byteRes;
-  unsigned short int  halfwordRes;
-  unsigned long int   fullwordRes;
+}	/* simputc() */
 
-  /* Write different sizes */
 
-  simputs( "Writing byte to address\n" );
-  dev->byte     =       0xa5;
-  simputs( "Writing half word to address\n" );
-  dev->halfword =     0xbeef;
-  simputs( "Writing full word to address\n" );
-  dev->fullword = 0xdeadbeef;
+extern void  simputh( int  i )
+{
+  int   lsd = i & 0xf;
+  char  ch  = lsd < 10 ? '0' + lsd : 'A' + lsd - 10;
 
-  /* Read different sizes */
+  if( i > 0 ) {
+    simputh( i >> 4 );
+  }
 
-  simputs( "Reading byte from address\n" );
-  byteRes = dev->byte;
-  simputs( "Reading half word from address\n" );
-  halfwordRes = dev->halfword;
-  simputs( "Reading full word from address\n" );
-  fullwordRes = dev->fullword;
+  simputc( ch );
 
-  /* Just so we can see something happened */
+}	/* simputh() */
+  
+    
+void  simputs( char *str )
+{
+  int  i;
 
-  simputs( "I/O All Done\n" );
-  simexit( 0 );
+  for( i = 0; str[i] != '\0' ; i++ ) {
+    simputc( (int)(str[i]) );
+  }
 
-}
+}	/* simputs() */

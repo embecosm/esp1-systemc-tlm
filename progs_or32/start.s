@@ -20,9 +20,10 @@
 
 # ----------------------------------------------------------------------------
 
-# This is a general purpose bootloader routine. It sets up the stack register
-# and frame, and jumps to the _main program location. It should be linked at
-# the start of all programs.
+# This is a general purpose bootloader routine. It defines the _start address
+# (required by the standard linker to be the reset vector, sets up the stack
+# register and frame, and jumps to the _main program location. It should be
+# linked at the start of all programs.
 
 # $Id$
 
