@@ -98,7 +98,7 @@ static void xterm_close(void * data)
 		
 }
 
-#if defined(HAS_ON_EXIT)
+#if defined(HAVE_ON_EXIT)
 static void xterm_exit(int i, void * data)
 {
 	xterm_close(data);
@@ -118,7 +118,7 @@ static void * xterm_init(const char * input)
 		retval->fds.fdout = -1;
 		retval->pid = -1;
 
-#if defined(HAS_ON_EXIT)
+#if defined(HAVE_ON_EXIT)
 		/* reset cause exit(1), leaving an xterm opened */
 		on_exit(xterm_exit, retval);
 #endif
