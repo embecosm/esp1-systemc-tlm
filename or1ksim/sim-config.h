@@ -35,9 +35,12 @@
 struct config {
   struct {			      /* External linkage for SystemC */
     void               *class_ptr;
-    unsigned long int (*callback)( void              *class_ptr,
-				   enum or1ksim_cb    code,
+    unsigned long int (*read_cb)( void              *class_ptr,
+				  unsigned long int  addr,
+				  unsigned long int  mask);
+    void              (*write_cb)( void              *class_ptr,
 				   unsigned long int  addr,
+				   unsigned long int  mask,
 				   unsigned long int  wdata );
   } ext;
 

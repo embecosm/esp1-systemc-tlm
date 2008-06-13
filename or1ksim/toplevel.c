@@ -105,7 +105,8 @@ int main( int   argc,
   }
 
   config.ext.class_ptr = NULL;		/* SystemC linkage disabled here. */
-  config.ext.callback  = NULL;
+  config.ext.read_cb   = NULL;
+  config.ext.write_cb  = NULL;
 
   print_config();
   signal(SIGINT, ctrl_c);

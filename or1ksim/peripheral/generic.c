@@ -54,14 +54,25 @@
 DEFAULT_DEBUG_CHANNEL( generic );
 
 
-/* Generic callback routine. Note the address here is aboslute, not relative
-   to the device. */
+/* Generic read and write callback routines. Note the address here is
+   aboslute, not relative to the device. */
 
-static unsigned long int  ext_callback( enum or1ksim_cb    code,
-					unsigned long int  addr,
-					unsigned long int  wdata )
+static unsigned long int  ext_read( unsigned long int  addr,
+				    unsigned long int  mask )
 {
-  return config.ext.callback( config.ext.class_ptr, code, addr, wdata );
+  return config.ext.read_cb( config.ext.class_ptr, addr, mask );
+
+}	/* ext_callback() */
+		       
+
+/* Generic read and write callback routines. Note the address here is
+   aboslute, not relative to the device. */
+
+static void  ext_write( unsigned long int  addr,
+			unsigned long int  mask,
+			unsigned long int  value )
+{
+  config.ext.write_cb( config.ext.class_ptr, addr, mask, value );
 
 }	/* ext_callback() */
 		       
@@ -83,9 +94,21 @@ static uint8_t  generic_read_byte( oraddr_t  addr,
     return 0;
   }
   else {
-    return (uint8_t)ext_callback( OR1KSIM_CB_BYTE_R,
-				  (unsigned long int)(addr + dev->baseaddr),
-				  0UL );
+    unsigned long  fulladdr = (unsigned long int)(addr + dev->baseaddr);
+    unsigned long  wordaddr = fulladdr & 0xfffffffc;
+    unsigned long  bitoff   = (fulladdr & 0x00000003) << 3;
+
+#ifdef WORDS_BIGENDIAN
+    unsigned long  mask     = 0x000000ff << (24 - bitoff);
+    unsigned long  res      = ext_read( wordaddr, mask );
+
+    return (uint8_t)((res >> (24 - bitoff)) & 0x000000ff);
+#else
+    unsigned long  mask     = 0x000000ff << bitoff;
+    unsigned long  res      = ext_read( wordaddr, mask );
+
+    return (uint8_t)((res >> bitoff) & 0x00000ff);
+#endif      
   }
 }	/* generic_read_byte() */
 
@@ -104,9 +127,19 @@ static void  generic_write_byte( oraddr_t  addr,
 	   PRIxADDR ")\n", dev->name, addr );
   }
   else {
-    (void)ext_callback( OR1KSIM_CB_BYTE_W,
-			(unsigned long int)(addr + dev->baseaddr),
-			(unsigned long int)value );
+    unsigned long  fulladdr = (unsigned long int)(addr + dev->baseaddr);
+    unsigned long  wordaddr = fulladdr & 0xfffffffc;
+    unsigned long  bitoff   = (fulladdr & 0x00000003) << 3;
+
+#ifdef WORDS_BIGENDIAN
+    unsigned long  mask     = 0x000000ff << (24 - bitoff);
+    unsigned long  wordval  = ((unsigned long int)value) << (24 - bitoff);
+#else
+    unsigned long  mask     = 0x000000ff << bitoff;
+    unsigned long  wordval  = ((unsigned long int)value) << bitoff;
+#endif      
+
+    ext_write( wordaddr, mask, wordval );
   }
 }	/* generic_write_byte() */
 
@@ -125,16 +158,33 @@ static uint16_t  generic_read_hw( oraddr_t  addr,
 	   PRIxADDR ")\n", dev->name, addr );
     return 0;
   }
+  else if( addr & 0x1 ) {
+    fprintf( stderr, "Unaligned half word read from 0x" PRIxADDR " ignored\n",
+	     addr );
+    return 0;
+  }
   else {
-    return (uint16_t)ext_callback( OR1KSIM_CB_HW_R,
-				   (unsigned long int)(addr + dev->baseaddr),
-				   0UL );
+    unsigned long  fulladdr = (unsigned long int)(addr + dev->baseaddr);
+    unsigned long  wordaddr = fulladdr & 0xfffffffc;
+    unsigned long  bitoff   = (fulladdr & 0x00000003) << 3;
+
+#ifdef WORDS_BIGENDIAN
+    unsigned long  mask     = 0x0000ffff << (16 - bitoff);
+    unsigned long  res      = ext_read( wordaddr, mask );
+
+    return (uint16_t)((res >> (16 - bitoff)) & 0x0000ffff);
+#else
+    unsigned long  mask     = 0x0000ffff << bitoff;
+    unsigned long  res      = ext_read( wordaddr, mask );
+
+    return (uint16_t)((res >> bitoff) & 0x0000ffff);
+#endif      
   }
 }	/* generic_read_hw() */
 
 
 static void  generic_write_hw( oraddr_t  addr,
-			       uint16_t   value,
+			       uint16_t  value,
 			       void     *dat )
 {
   struct dev_generic *dev = (struct dev_generic *)dat;
@@ -146,10 +196,24 @@ static void  generic_write_hw( oraddr_t  addr,
     TRACE( "Generic device \"%s\": Half word write out of range (addr %"
 	   PRIxADDR ")\n", dev->name, addr );
   }
+  else if( addr & 0x1 ) {
+    fprintf( stderr, "Unaligned half word write to 0x" PRIxADDR " ignored\n",
+	     addr );
+  }
   else{
-    (void)ext_callback( OR1KSIM_CB_HW_W,
-			(unsigned long int)(addr + dev->baseaddr),
-			(unsigned long int)value );
+    unsigned long  fulladdr = (unsigned long int)(addr + dev->baseaddr);
+    unsigned long  wordaddr = fulladdr & 0xfffffffc;
+    unsigned long  bitoff   = (fulladdr & 0x00000003) << 3;
+
+#ifdef WORDS_BIGENDIAN
+    unsigned long  mask     = 0x0000ffff << (16 - bitoff);
+    unsigned long  wordval  = ((unsigned long int)value) << (16 - bitoff);
+#else
+    unsigned long  mask     = 0x0000ffff << bitoff;
+    unsigned long  wordval  = ((unsigned long int)value) << bitoff;
+#endif      
+
+    ext_write( wordaddr, mask, wordval );
   }
 }	/* generic_write_hw() */
 
@@ -168,10 +232,15 @@ static uint32_t  generic_read_word( oraddr_t  addr,
 	   PRIxADDR ")\n", dev->name, addr );
     return 0;
   }
+  else if( 0 != (addr & 0x3) ) {
+    fprintf( stderr, "Unaligned full word read from 0x" PRIxADDR " ignored\n",
+	     addr );
+    return 0;
+  }
   else {
-    return (uint32_t)ext_callback( OR1KSIM_CB_WORD_R,
-				   (unsigned long int)(addr + dev->baseaddr),
-				   0UL );
+    unsigned long  wordaddr = (unsigned long int)(addr + dev->baseaddr);
+
+    return (uint32_t) ext_read( wordaddr, 0xffffffff );
   }
 }	/* generic_read_word() */
 
@@ -189,10 +258,14 @@ static void  generic_write_word( oraddr_t  addr,
     TRACE( "Generic device \"%s\": Full word write out of range (addr %"
 	   PRIxADDR ")\n", dev->name, addr );
   }
+  else if( 0 != (addr & 0x3) ) {
+    fprintf( stderr, "Unaligned full word write to 0x" PRIxADDR " ignored\n",
+	     addr );
+  }
   else{
-    (void)ext_callback( OR1KSIM_CB_WORD_W,
-			(unsigned long int)(addr + dev->baseaddr),
-			(unsigned long int)value );
+    unsigned long  wordaddr = (unsigned long int)(addr + dev->baseaddr);
+
+    ext_write( wordaddr, 0xffffffff, value );
   }
 }	/* generic_write_word() */
 
