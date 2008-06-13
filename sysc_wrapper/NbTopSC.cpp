@@ -27,7 +27,8 @@
 
 #include "tlm.h"
 #include "Or1ksimSC.h"
-#include "DataReporterSC.h"
+#include "UartSC.h"
+#include "XtermSC.h"
 
 
 int  sc_main( int   argc,
@@ -38,12 +39,14 @@ int  sc_main( int   argc,
     exit( 1 );
   }
 
-  Or1ksimSC       top( "top", argv[1], argv[2] );
-  DataReporterSC  log( "log" );
+  Or1ksimSC  iss( "or1ksim", argv[1], argv[2] );
+  UartSC     uart( "uart" );
+  XtermSC    term( "log" );
 
   // Connect up the ports
 
-  top.dataIni( log.dataTar );
+  iss.dataIni( uart.uartInPort );
+  uart.uartOutPort( term.xtermPort );
 
   sc_core::sc_start();
 

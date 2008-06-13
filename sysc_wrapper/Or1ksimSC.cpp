@@ -28,19 +28,28 @@
 #include "Or1ksimSC.h"
 
 
-// Static utility routine (for easy C linkage!) that will call the class
-// callback routine. In theory this ought to be possible by using member
+// Static utility routines (for easy C linkage!) that will call the class
+// callback routines. In theory this ought to be possible by using member
 // pointers to functions. However given the external linkage is to C and not
 // C++, this way is much safer!
 
-static unsigned long int  staticIoCallback( void              *instancePtr,
-					    enum or1ksim_cb    code,
-					    unsigned long int  addr,
-					    unsigned long int  wdata )
+static unsigned long int  staticReadCallback( void              *instancePtr,
+					      unsigned long int  addr,
+					      unsigned long int  mask )
 {
-  ((Or1ksimSC *)instancePtr)->ioCallback( code, addr, wdata );
+  return ((Or1ksimSC *)instancePtr)->readCallback( addr, mask );
 
-}	// staticIoCallback()
+}	// staticReadCallback()
+
+
+static void  staticWriteCallback( void              *instancePtr,
+				  unsigned long int  addr,
+				  unsigned long int  mask,
+				  unsigned long int  wdata )
+{
+  ((Or1ksimSC *)instancePtr)->writeCallback( addr, mask, wdata );
+
+}	// staticWriteCallback()
 
 
 // Constructor
@@ -53,7 +62,8 @@ Or1ksimSC::Or1ksimSC ( sc_core::sc_module_name  name,
   sc_module( name )
   // dataIni( "data_initiator" )
 {
-  or1ksim_init( configFile, imageFile, staticIoCallback, this );
+  or1ksim_init( configFile, imageFile, this, staticReadCallback,
+		staticWriteCallback );
 
   // Thread to run the ISS
 
@@ -72,109 +82,112 @@ Or1ksimSC::run()
 }	// Or1ksimSC()
 
 
-// Take a callback from the simulator - this is the entry point used by the
+// Static method, which identifies the endianism of the model
+
+bool
+Or1ksimSC::isLittleEndian()
+{
+  return (1 == or1ksim_is_le());
+
+}	// or1ksimIsLe()
+
+
+// Take a read from the simulator - this is the entry point used by the
 // static callback.
 
 unsigned long int
-Or1ksimSC::ioCallback( enum or1ksim_cb    code,
-		       unsigned long int  addr,
-		       unsigned long int  wdata )
+Or1ksimSC::readCallback( unsigned long int  addr,
+			 unsigned long int  mask )
 {
   tlm::tlm_generic_payload *trans = new tlm::tlm_generic_payload();
 
-  /* Set up the command */
+  // Set up the command and address
 
-  switch( code ) {
-
-  case OR1KSIM_CB_BYTE_R:
-  case OR1KSIM_CB_HW_R:
-  case OR1KSIM_CB_WORD_R:
-
-    trans->set_command( tlm::TLM_READ_COMMAND );
-    break;
-    
-  case OR1KSIM_CB_BYTE_W:
-  case OR1KSIM_CB_HW_W:
-  case OR1KSIM_CB_WORD_W:
-
-    trans->set_command( tlm::TLM_WRITE_COMMAND );
-    break;
-  }
-
-  /* Set the address */
-
+  trans->set_read();
   trans->set_address( (const sc_dt::uint64)addr );
 
-  /* Set up the size and allocate a suitable data pointer */
+  // Set up the size (always 4 bytes) and allocate a suitable data pointer
 
-  unsigned char *dataPtr;
+  unsigned char *dataPtr = new unsigned char[4];
 
-  switch( code ) {
-
-  case OR1KSIM_CB_BYTE_R:
-  case OR1KSIM_CB_BYTE_W:
-
-    dataPtr = new unsigned char[1];
-    trans->set_data_length( 1 );
-    break;
-    
-  case OR1KSIM_CB_HW_R:
-  case OR1KSIM_CB_HW_W:
-
-    dataPtr = new unsigned char[2];
-    trans->set_data_length( 2 );
-    break;
-    
-  case OR1KSIM_CB_WORD_R:
-  case OR1KSIM_CB_WORD_W:
-
-    dataPtr = new unsigned char[4];
-    trans->set_data_length( 4 );
-    break;
-  } 
-
+  trans->set_data_length( 4 );
   trans->set_data_ptr( dataPtr );
 
-  /* For writes, initialize the data. */
+  // Set up the byte enable mask (always 4 bytes)
 
-  switch( code ) {
+  unsigned char *byteMask = new unsigned char[4];
 
-  case OR1KSIM_CB_BYTE_W:
+  (void)memcpy( byteMask, &mask, 4 );
 
-    if( tlm::host_has_little_endianness()) {
-      memcpy( dataPtr, (unsigned char *)(&wdata), 1 );
-    }
-    else {
-      memcpy( dataPtr, (unsigned char *)(&wdata + 3), 1 );
-    }
-    break;
-    
-  case OR1KSIM_CB_HW_W:
-
-    if( tlm::host_has_little_endianness()) {
-      memcpy( dataPtr, (unsigned char *)(&wdata), 2 );
-    }
-    else {
-      memcpy( dataPtr, (unsigned char *)(&wdata + 2), 2 );
-    }
-    break;
-    
-  case OR1KSIM_CB_WORD_W:
-
-    memcpy( dataPtr, (unsigned char *)(&wdata), 4 );
-    break;
-  } 
+  trans->set_byte_enable_length( 4 );
+  trans->set_byte_enable_ptr( byteMask );
 
   // Send it
 
   sc_core::sc_time  t = sc_core::sc_time( 0.0, sc_core::SC_SEC );
   dataIni->b_transport( *trans, t );
 
-  free( trans );
+  // The result should be in the data. Copy it for return.
 
-  return 0;
+  unsigned long int  res;
+  (void)memcpy( &res, dataPtr, 4 );
 
-}	// ioCallback()
+  // Free up the memory
+
+  delete [] byteMask;
+  delete [] dataPtr;
+  delete trans;
+
+  return  res;
+
+}	// readCallback()
+
+
+// Take a write from the simulator - this is the entry point used by the
+// static callback.
+
+void
+Or1ksimSC::writeCallback( unsigned long int  addr,
+			  unsigned long int  mask,
+			  unsigned long int  wdata )
+{
+  tlm::tlm_generic_payload *trans = new tlm::tlm_generic_payload();
+
+  // Set up the command and address
+
+  trans->set_write();
+  trans->set_address( (const sc_dt::uint64)addr );
+
+  // Set up the size (always 4 bytes) and allocate a suitable data pointer
+
+  unsigned char *dataPtr = new unsigned char[4];
+
+  (void)memcpy( dataPtr, (unsigned char *)(&wdata), 4 );
+
+  trans->set_data_length( 4 );
+  trans->set_data_ptr( dataPtr );
+
+  // Set up the byte enable mask (always 4 bytes)
+
+  unsigned char *byteMask = new unsigned char[4];
+
+  (void)memcpy( byteMask, &mask, 4 );
+
+  trans->set_byte_enable_length( 4 );
+  trans->set_byte_enable_ptr( byteMask );
+
+  // Send it
+
+  sc_core::sc_time  t = sc_core::sc_time( 0.0, sc_core::SC_SEC );
+  dataIni->b_transport( *trans, t );
+
+  // Free up the memory
+
+  delete [] byteMask;
+  delete [] dataPtr;
+  delete trans;
+
+}	// writeCallback()
 
 
 // EOF

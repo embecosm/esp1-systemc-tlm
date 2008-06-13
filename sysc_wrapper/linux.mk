@@ -55,7 +55,7 @@ all: NbTopSC
 # ----------------------------------------------------------------------------
 # 
 
-NbTopSC: NbTopSC.o Or1ksimSC.o DataReporterSC.o
+NbTopSC: NbTopSC.o Or1ksimSC.o UartSC.o XtermSC.o
 	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath -Wl,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 
@@ -65,7 +65,10 @@ NbTopSC.o: NbTopSC.cpp Or1ksimSC.h DataReporterSC.h
 Or1ksimSC.o: Or1ksimSC.cpp Or1ksimSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
-DataReporterSC.o: DataReporterSC.cpp DataReporterSC.h
+UartSC.o: UartSC.cpp UartSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+XtermSC.o: XtermSC.cpp XtermSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 

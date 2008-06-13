@@ -71,26 +71,42 @@ DataReporterSC::dataRepBlkTrans( tlm::tlm_generic_payload &payload,
 
   // What address?
 
-  std::cout << "  Address: " << payload.get_address() << std::endl;
+  std::cout << "  Address: " << std::hex << payload.get_address() << std::endl;
 
   // Data if writing
 
-  if( tlm::TLM_WRITE_COMMAND == payload.get_command()) {
+  if( payload.is_write()) {
 
     int            l   = payload.get_data_length();
     unsigned char *dat = payload.get_data_ptr();
 
     std::cout << "  Data size: " << l << std::endl;
-    std::cout << "    ";
 
     for( int i = 0 ; i < l ; i++ ) {
-      std::cout << "dat[" << i << "] = "<< (int)(dat[i]) << std::endl;
+      std::cout << "    dat[" << i << "] = " << std::hex << (int)(dat[i])
+		<< std::endl;
     }
+  }
+
+  // Byte mask
+
+  int            l    = payload.get_byte_enable_length();
+  unsigned char *mask = payload.get_byte_enable_ptr();
+
+  std::cout << "  Byte mask size: " << l << std::endl;
+
+  for( int i = 0 ; i < l ; i++ ) {
+    std::cout << "    mask[" << i << "] = " << std::hex << (int)(mask[i])
+	      << std::endl;
   }
 
   // All done
 
   std::cout << std::endl ;
+
+  // Set the reponse
+
+  payload.set_response_status( tlm::TLM_OK_RESPONSE );
     
 }	// dataRepBlkTrans()
 

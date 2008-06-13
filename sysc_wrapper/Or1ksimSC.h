@@ -50,11 +50,18 @@ class Or1ksimSC
 
   void  run();
 
-  // I/O callback
+  // I/O callbacks
 
-  unsigned long int  ioCallback( enum or1ksim_cb    code,
-				 unsigned long int  addr,
-				 unsigned long int  wdata );
+  unsigned long int  readCallback( unsigned long int  mask,
+				   unsigned long int  addr );
+
+  void               writeCallback( unsigned long int  addr,
+				    unsigned long int  mask,
+				    unsigned long int  wdata );
+
+  // Static utility to return the endianism of the model
+
+  static bool  isLittleEndian();
 
   // Initiator port for data accesses (no off chip instructions for now)
 

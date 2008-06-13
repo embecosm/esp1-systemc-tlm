@@ -32,8 +32,6 @@
 #include "tlm_utils/simple_target_socket.h"
 #include "or1ksim.h"
 
-#include "Or1ksimSC.h"
-
 //! Module class for the Data reporter.
 
 class DataReporterSC
@@ -53,7 +51,6 @@ class DataReporterSC
   // Target port for data accesses to be reported
   
   tlm_utils::simple_target_socket<DataReporterSC>  dataTar;	// Target port
-  tlm::tlm_generic_payload                        *payload;	// Payload ptr
 
 };	/* DataReporterSC() */
 
