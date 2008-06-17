@@ -54,25 +54,25 @@
 DEFAULT_DEBUG_CHANNEL( generic );
 
 
-/* Generic read and write callback routines. Note the address here is
-   aboslute, not relative to the device. */
+/* Generic read and write upcall routines. Note the address here is absolute,
+   not relative to the device. */
 
 static unsigned long int  ext_read( unsigned long int  addr,
 				    unsigned long int  mask )
 {
-  return config.ext.read_cb( config.ext.class_ptr, addr, mask );
+  return config.ext.read_up( config.ext.class_ptr, addr, mask );
 
 }	/* ext_callback() */
-		       
 
-/* Generic read and write callback routines. Note the address here is
-   aboslute, not relative to the device. */
+
+/* Generic read and write upcall routines. Note the address here is absolute,
+   not relative to the device. */
 
 static void  ext_write( unsigned long int  addr,
 			unsigned long int  mask,
 			unsigned long int  value )
 {
-  config.ext.write_cb( config.ext.class_ptr, addr, mask, value );
+  config.ext.write_up( config.ext.class_ptr, addr, mask, value );
 
 }	/* ext_callback() */
 		       

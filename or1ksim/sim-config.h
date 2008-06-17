@@ -35,10 +35,10 @@
 struct config {
   struct {			      /* External linkage for SystemC */
     void               *class_ptr;
-    unsigned long int (*read_cb)( void              *class_ptr,
+    unsigned long int (*read_up)( void              *class_ptr,
 				  unsigned long int  addr,
 				  unsigned long int  mask);
-    void              (*write_cb)( void              *class_ptr,
+    void              (*write_up)( void              *class_ptr,
 				   unsigned long int  addr,
 				   unsigned long int  mask,
 				   unsigned long int  wdata );
