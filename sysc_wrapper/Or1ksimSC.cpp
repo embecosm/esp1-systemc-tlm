@@ -31,25 +31,29 @@
 // Static utility routines (for easy C linkage!) that will call the class
 // callback routines. In theory this ought to be possible by using member
 // pointers to functions. However given the external linkage is to C and not
-// C++, this way is much safer!
+// C++, this way is much safer! Cast to SystemC fixed width types.
 
-static unsigned long int  staticReadCallback( void              *instancePtr,
-					      unsigned long int  addr,
-					      unsigned long int  mask )
+static unsigned long int  staticReadUpcall( void              *instancePtr,
+					    unsigned long int  addr,
+					    unsigned long int  mask )
 {
-  return ((Or1ksimSC *)instancePtr)->readCallback( addr, mask );
+  Or1ksimSC *classPtr = (Or1ksimSC *)instancePtr;
 
-}	// staticReadCallback()
+  return (unsigned long int)classPtr->readUpcall( (sc_dt::uint64)addr,
+						  (uint32_t)mask );
+}	// staticReadUpcall()
 
 
-static void  staticWriteCallback( void              *instancePtr,
-				  unsigned long int  addr,
-				  unsigned long int  mask,
-				  unsigned long int  wdata )
+static void  staticWriteUpcall( void              *instancePtr,
+				unsigned long int  addr,
+				unsigned long int  mask,
+				unsigned long int  wdata )
 {
-  ((Or1ksimSC *)instancePtr)->writeCallback( addr, mask, wdata );
+  Or1ksimSC *classPtr = (Or1ksimSC *)instancePtr;
 
-}	// staticWriteCallback()
+  classPtr->writeUpcall( (sc_dt::uint64)addr, (uint32_t)mask, (uint32_t)wdata );
+
+}	// staticWriteUpcall()
 
 
 // Constructor
@@ -59,15 +63,13 @@ SC_HAS_PROCESS( Or1ksimSC );
 Or1ksimSC::Or1ksimSC ( sc_core::sc_module_name  name,
 		       const char              *configFile,
 		       const char              *imageFile ) :
-  sc_module( name )
-  // dataIni( "data_initiator" )
+  sc_module( name ),
+  dataIni( "data_initiator" )
 {
-  or1ksim_init( configFile, imageFile, this, staticReadCallback,
-		staticWriteCallback );
+  or1ksim_init( configFile, imageFile, this, staticReadUpcall,
+		staticWriteUpcall );
 
-  // Thread to run the ISS
-
-  SC_THREAD( run );
+  SC_THREAD( run );		  // Thread to run the ISS
 
 }	/* Or1ksimSC() */
 
@@ -77,7 +79,10 @@ Or1ksimSC::Or1ksimSC ( sc_core::sc_module_name  name,
 void
 Or1ksimSC::run()
 {
-  (void)or1ksim_run( -1LL );
+  scLastUpTime   = sc_core::sc_time_stamp();
+  or1kLastUpTime = or1ksim_time();
+
+  (void)or1ksim_run( -1.0 );
 
 }	// Or1ksimSC()
 
@@ -95,99 +100,83 @@ Or1ksimSC::isLittleEndian()
 // Take a read from the simulator - this is the entry point used by the
 // static callback.
 
-unsigned long int
-Or1ksimSC::readCallback( unsigned long int  addr,
-			 unsigned long int  mask )
+uint32_t
+Or1ksimSC::readUpcall( sc_dt::uint64  addr,
+		       uint32_t       mask )
 {
-  tlm::tlm_generic_payload *trans = new tlm::tlm_generic_payload();
+  tlm::tlm_generic_payload  trans;
+  uint32_t        rdata;		// For the result
 
-  // Set up the command and address
+  // Set up the payload fields. Assume everything is 4 bytes.
 
-  trans->set_read();
-  trans->set_address( (const sc_dt::uint64)addr );
+  trans.set_read();
+  trans.set_address( addr );
 
-  // Set up the size (always 4 bytes) and allocate a suitable data pointer
+  trans.set_data_length( 4 );
+  trans.set_data_ptr( (unsigned char *)&rdata );
 
-  unsigned char *dataPtr = new unsigned char[4];
+  trans.set_byte_enable_length( 4 );
+  trans.set_byte_enable_ptr( (unsigned char *)&mask );
 
-  trans->set_data_length( 4 );
-  trans->set_data_ptr( dataPtr );
+  // Synchronize clocks and transport. Then return the result
 
-  // Set up the byte enable mask (always 4 bytes)
+  syncTrans( trans );
+  return  rdata;
 
-  unsigned char *byteMask = new unsigned char[4];
-
-  (void)memcpy( byteMask, &mask, 4 );
-
-  trans->set_byte_enable_length( 4 );
-  trans->set_byte_enable_ptr( byteMask );
-
-  // Send it
-
-  sc_core::sc_time  t = sc_core::sc_time( 0.0, sc_core::SC_SEC );
-  dataIni->b_transport( *trans, t );
-
-  // The result should be in the data. Copy it for return.
-
-  unsigned long int  res;
-  (void)memcpy( &res, dataPtr, 4 );
-
-  // Free up the memory
-
-  delete [] byteMask;
-  delete [] dataPtr;
-  delete trans;
-
-  return  res;
-
-}	// readCallback()
+}	// readUpcall()
 
 
 // Take a write from the simulator - this is the entry point used by the
 // static callback.
 
 void
-Or1ksimSC::writeCallback( unsigned long int  addr,
-			  unsigned long int  mask,
-			  unsigned long int  wdata )
+Or1ksimSC::writeUpcall( sc_dt::uint64  addr,
+			uint32_t       mask,
+			uint32_t       wdata )
 {
-  tlm::tlm_generic_payload *trans = new tlm::tlm_generic_payload();
+  tlm::tlm_generic_payload  trans;
 
-  // Set up the command and address
+  // Set up the payload fields. Assume everything is 4 bytes.
 
-  trans->set_write();
-  trans->set_address( (const sc_dt::uint64)addr );
+  trans.set_write();
+  trans.set_address( addr );
 
-  // Set up the size (always 4 bytes) and allocate a suitable data pointer
+  trans.set_data_length( 4 );
+  trans.set_data_ptr( (unsigned char *)&wdata );
 
-  unsigned char *dataPtr = new unsigned char[4];
+  trans.set_byte_enable_length( 4 );
+  trans.set_byte_enable_ptr( (unsigned char *)&mask );
 
-  (void)memcpy( dataPtr, (unsigned char *)(&wdata), 4 );
+  // Synchronize clocks and transport.
 
-  trans->set_data_length( 4 );
-  trans->set_data_ptr( dataPtr );
+  syncTrans( trans );
 
-  // Set up the byte enable mask (always 4 bytes)
+}	// writeUpcall()
 
-  unsigned char *byteMask = new unsigned char[4];
 
-  (void)memcpy( byteMask, &mask, 4 );
+// Synchronized transport from the initiator
 
-  trans->set_byte_enable_length( 4 );
-  trans->set_byte_enable_ptr( byteMask );
+void
+Or1ksimSC::syncTrans( tlm::tlm_generic_payload &trans )
+{
+  // Synchronize with SystemC for the amount of time that the ISS has used
+  // since the last upcall.
 
-  // Send it
+  double  or1kGap = or1ksim_time() - or1kLastUpTime;
 
-  sc_core::sc_time  t = sc_core::sc_time( 0.0, sc_core::SC_SEC );
-  dataIni->b_transport( *trans, t );
+  scLastUpTime   += sc_core::sc_time( or1kGap, sc_core::SC_SEC );
+  or1kLastUpTime += or1kGap;
 
-  // Free up the memory
+  wait( scLastUpTime - sc_core::sc_time_stamp());
 
-  delete [] byteMask;
-  delete [] dataPtr;
-  delete trans;
+  // Call the transport, backdating any additional time owed for the
+  // transaction.
 
-}	// writeCallback()
+  sc_core::sc_time  delay = sc_core::sc_time( 0.0, sc_core::SC_SEC );
+  dataIni->b_transport( trans, delay );
+  scLastUpTime += delay;
+
+}	// syncTrans()
 
 
 // EOF

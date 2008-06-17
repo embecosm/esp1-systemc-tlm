@@ -29,6 +29,8 @@
 #ifndef OR1KSIM_SC__H
 #define OR1KSIM_SC__H
 
+#include <stdint.h>
+
 #include "tlm.h"
 #include "tlm_utils/simple_initiator_socket.h"
 #include "or1ksim.h"
@@ -50,14 +52,16 @@ class Or1ksimSC
 
   void  run();
 
-  // I/O callbacks
+  // I/O upcalls from Or1ksim, with a common synchronized transport utility.
 
-  unsigned long int  readCallback( unsigned long int  mask,
-				   unsigned long int  addr );
+  uint32_t           readUpcall( sc_dt::uint64  addr,
+				 uint32_t       mask );
 
-  void               writeCallback( unsigned long int  addr,
-				    unsigned long int  mask,
-				    unsigned long int  wdata );
+  void               writeUpcall( sc_dt::uint64  addr,
+				  uint32_t       mask,
+				  uint32_t       wdata );
+
+  void               syncTrans( tlm::tlm_generic_payload &trans );
 
   // Static utility to return the endianism of the model
 
@@ -66,6 +70,11 @@ class Or1ksimSC
   // Initiator port for data accesses (no off chip instructions for now)
 
   tlm_utils::simple_initiator_socket<Or1ksimSC>  dataIni;
+
+  // Timestamp by SystemC and Or1ksim at the last upcall.
+
+  sc_core::sc_time  scLastUpTime;
+  double            or1kLastUpTime;
 
 };	/* Or1ksimSC() */
 
