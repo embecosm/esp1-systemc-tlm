@@ -1,0 +1,11 @@
+		       OSCI TLM 2.0 Wrapper for Or1ksim
+		       ================================
+
+This project provides example code for the Embecosm Application Note
+"Converting an ISS to sue OSCI TLM 2.0"
+
+It is based on the 0.2.0 release of Or1ksim.
+
+
+Jeremy Bennett
+9 Jun 08
