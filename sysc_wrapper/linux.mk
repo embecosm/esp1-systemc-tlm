@@ -49,7 +49,7 @@ LIBS    = -lsim -lsystemc
 # Make the lot
 
 .PHONY: all
-all: TestSC SocSC
+all: TestSC SimpleSocSC
 
 
 # ----------------------------------------------------------------------------
@@ -72,11 +72,11 @@ LoggerSC.o: LoggerSC.cpp LoggerSC.h
 # ----------------------------------------------------------------------------
 # 
 
-SocSC: SocSC.o Or1ksimSC.o UartSC.o TermSC.o
+SimpleSocSC: SimpleSocSC.o Or1ksimSC.o UartSC.o TermSC.o
 	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 
-SocSC.o: SocSC.cpp Or1ksimSC.h DataReporterSC.h
+SimpleSocSC.o: SimpleSocSC.cpp Or1ksimSC.h DataReporterSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 UartSC.o: UartSC.cpp UartSC.h
@@ -92,4 +92,5 @@ TermSC.o: TermSC.cpp TermSC.h
 .PHONY: clean
 clean:
 	$(RM) *.o
-	$(RM) SocSC
+	$(RM) TestSC
+	$(RM) SimpleSocSC

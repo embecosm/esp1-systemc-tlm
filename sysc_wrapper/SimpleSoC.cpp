@@ -20,8 +20,7 @@
 
 // ----------------------------------------------------------------------------
 
-// Implementation of on-blocking top level SystemC method for the OSCI SystemC
-// wrapper project
+// Top level simple SoC.
 
 // $Id$
 
@@ -30,6 +29,7 @@
 #include "UartSC.h"
 #include "TermSC.h"
 
+#define BAUD_RATE  9600UL		// Baud rate of the terminal
 
 int  sc_main( int   argc,
 	      char *argv[] )
@@ -41,13 +41,13 @@ int  sc_main( int   argc,
 
   Or1ksimSC  iss( "or1ksim", argv[1], argv[2] );
   UartSC     uart( "uart", Or1ksimSC::getClockRate() );
-  TermSC     term( "terminal", 9600UL );
+  TermSC     term( "terminal", BAUD_RATE );
 
   // Connect up the TLM ports
 
   iss.dataIni( uart.uartPort );
 
-  // Connect up the fifos
+  // Connect up the UART and terminal via a 1-byte fifo.
 
   sc_core::sc_fifo<unsigned char>  u2t(1);
   sc_core::sc_fifo<unsigned char>  t2u(1);
@@ -56,6 +56,8 @@ int  sc_main( int   argc,
   uart.uartTx( u2t );
   term.termRx( u2t );
   term.termTx( t2u );
+
+  // Run it forever
 
   sc_core::sc_start();
 

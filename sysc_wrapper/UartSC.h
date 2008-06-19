@@ -30,7 +30,6 @@
 
 #include "tlm.h"
 #include "tlm_utils/simple_target_socket.h"
-#include "tlm_utils/simple_initiator_socket.h"
 
 // Offsets for the 16450 UART registers
 
