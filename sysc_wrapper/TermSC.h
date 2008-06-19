@@ -28,6 +28,8 @@
 #ifndef TERM_SC__H
 #define TERM_SC__H
 
+#include <signal.h>
+
 #include "tlm.h"
 #include "tlm_utils/simple_target_socket.h"
 #include "or1ksim.h"
