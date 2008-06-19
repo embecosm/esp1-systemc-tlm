@@ -35,7 +35,7 @@ LD = or32-uclinux-ld
 # Make the lot
 
 .PHONY: all
-all: hello generic_io uart_loop
+all: hello logger_test uart_loop
 
 
 # ----------------------------------------------------------------------------
@@ -65,10 +65,10 @@ hello.o: hello.c
 # ----------------------------------------------------------------------------
 # Generic I/O. Ensure start.o is first!
 
-generic_io: start.o utils.o generic_io.o 
+logger_test: start.o utils.o logger_test.o 
 	$(LD) -Ttext 0x0 $^ -o $@
 
-generic_io.o: generic_io.c
+logger_test.o: logger_test.c
 	$(CC) $(CFLAGS) -c $<
 
 
@@ -89,5 +89,5 @@ uart_loop.o: uart_loop.c
 clean:
 	$(RM) *.o
 	$(RM) hello
-	$(RM) generic_io
+	$(RM) logger_test
 	$(RM) uart_loop
