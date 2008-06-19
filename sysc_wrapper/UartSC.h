@@ -34,11 +34,8 @@
 
 // Offsets for the 16450 UART registers
 
-#define UART_RXBUF  0		// R: Rx buffer, DLAB=0
-#define UART_TXBUF  0		// W: Tx buffer, DLAB=0
-#define UART_DLL  0		// R/W: Divisor Latch Low, DLAB=1
-#define UART_DLH  1 		// R/W: Divisor Latch High, DLAB=1
-#define UART_IER  1 		// R/W: Interrupt Enable Register
+#define UART_BUF  0		// R/W: Rx/Tx buffer, DLAB=0
+#define UART_IER  1 		// R/W: Interrupt Enable Register, DLAB=0
 #define UART_IIR  2 		// R: Interrupt ID Register
 #define UART_LCR  3 		// R/W: Line Control Register
 #define UART_MCR  4 		// W: Modem Control Register
@@ -85,7 +82,7 @@
 #define UART_LCR_WLSB1  0x02  	// Word length select bit #1
 #define UART_LCR_WLSB0  0x01  	// Word length select bit #0
 
-#define UART_LCD_MASK   0x03	// Mask for word length
+#define UART_LCR_MASK   0x03	// Mask for word length
 #define UART_LCR_WLEN5  0x00  	// Wordlength: 5 bits
 #define UART_LCR_WLEN6  0x01  	// Wordlength: 6 bits
 #define UART_LCR_WLEN7  0x02  	// Wordlength: 7 bits
@@ -122,7 +119,10 @@
 
 
 
-// Module class for the UART.
+// Module class for the UART. It has a simple target socket for the CPU to
+// read/write registers, a signal port (rx pin) for the terminal to write
+// characters to the UART and a signal port (tx pin) for the UART to write
+// characters to the terminal.
 
 class UartSC
 : public sc_core::sc_module
@@ -131,47 +131,76 @@ class UartSC
 
   // Constructor and destructor
 
-  UartSC( sc_core::sc_module_name  name );
+  UartSC( sc_core::sc_module_name  name,
+	  unsigned long int        clockRate );
   ~UartSC();
 
-  // Blocking transport method - called whenever an initiator wants to read or
-  // write from/to our target port.
-
-  void  doReadWrite( tlm::tlm_generic_payload &payload,
-		     sc_core::sc_time         &delayTime );
-
-  // Target port for devices to read or write to us. Initator port, so we can
-  // drive an external terminal.
+  // Target socket for the CPU to read or write to us.
   
-  tlm_utils::simple_target_socket<UartSC>     uartInPort;
-  tlm_utils::simple_initiator_socket<UartSC>  uartOutPort;
+  tlm_utils::simple_target_socket<UartSC>     uartPort;
+
+  // Fifos for the terminal to read/write to us
+
+  sc_core::sc_fifo_in<unsigned char>   uartRx;
+  sc_core::sc_fifo_out<unsigned char>  uartTx;
 
 
  private:
 
-  // Split out read and write for clarity
-
-  void  doRead( tlm::tlm_generic_payload &payload,
-		sc_core::sc_time         &delayTime );
-
-  void  doWrite( tlm::tlm_generic_payload &payload,
-		 sc_core::sc_time         &delayTime );
-
   // Control the UART
 
-  void  uartInit();
+  void  uartInit( unsigned long int  clockRate );
 
-  // Talk to the xterm
+  // The two thread running the behavior of the UART. The CPU thread is
+  // notified when a value appears in the Tx buffer, transfers it to the Tx
+  // hold register waits the time start, data and stop bits would take and
+  // then writes the value to the terminal. The terminal thread is statically
+  // sensitive to the Rx port and copies any data received into the Rx buffer
 
-  int   remoteRead();
-  void  remoteWrite( unsigned char  ch );
+  void  uartCpuThread();
+  void  uartTermThread();
 
-  // UART registers and additional state
+  // Blocking transport method - called whenever the CPU initiator wants to
+  // read or write from/to our target port.
 
-  unsigned char       regs[UART_SIZE];
+  void  cpuReadWrite( tlm::tlm_generic_payload &payload,
+		      sc_core::sc_time         &delayTime );
 
-  unsigned short int  divisorLatch;	// Have to hold this outside
-  unsigned char       lastReadByte;	// Got from xterm
+  // Split out CPU read and write for clarity
+
+  void  cpuRead( tlm::tlm_generic_payload &payload,
+		sc_core::sc_time         &delayTime );
+
+  void  cpuWrite( tlm::tlm_generic_payload &payload,
+		 sc_core::sc_time         &delayTime );
+
+  // Utitlity routine to work out the char delay
+
+  void  uartResetCharDelay();
+
+  // UART event triggered by the CPU writing into the Tx buffer.
+
+  sc_core::sc_event  txReceived;	// The event
+
+  // UART registers and internal state
+
+  struct {
+    unsigned char  rbr;		// R: Rx buffer,
+    unsigned char  thr;		// R: Tx hold reg,
+    unsigned char  ier;		// R/W: Interrupt Enable Register
+    unsigned char  iir;		// R: Interrupt ID Register
+    unsigned char  lcr;		// R/W: Line Control Register
+    unsigned char  mcr;		// W: Modem Control Register
+    unsigned char  lsr;		// R: Line Status Register
+    unsigned char  msr;		// R: Modem Status Register
+    unsigned char  scr;		// R/W: Scratch Register
+  } regs;
+
+  struct {
+    unsigned long int   clockRate;	// External clock into UART
+    unsigned short int  divLatch;	// Divisor for ext clock
+    sc_core::sc_time    charDelay;	// Total time to Tx a char
+  } iState;
 
   // UART status info
 

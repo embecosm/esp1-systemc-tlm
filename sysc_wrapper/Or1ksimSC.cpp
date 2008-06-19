@@ -87,16 +87,6 @@ Or1ksimSC::run()
 }	// Or1ksimSC()
 
 
-// Static method, which identifies the endianism of the model
-
-bool
-Or1ksimSC::isLittleEndian()
-{
-  return (1 == or1ksim_is_le());
-
-}	// or1ksimIsLe()
-
-
 // Take a read from the simulator - this is the entry point used by the
 // static callback.
 
@@ -176,7 +166,34 @@ Or1ksimSC::syncTrans( tlm::tlm_generic_payload &trans )
   dataIni->b_transport( trans, delay );
   scLastUpTime += delay;
 
+//   fprintf( stderr, "%s 0x%02x%02x%02x%02x with mask 0x%02x%02x%02x%02x"
+// 	   " from 0x%08lx\n", trans.is_read() ? "Read " : "Write",
+// 	   (trans.get_data_ptr())[3], (trans.get_data_ptr())[2],
+// 	   (trans.get_data_ptr())[1], (trans.get_data_ptr())[0],
+// 	   (trans.get_byte_enable_ptr())[3], (trans.get_byte_enable_ptr())[2],
+// 	   (trans.get_byte_enable_ptr())[1], (trans.get_byte_enable_ptr())[0],
+// 	   (unsigned long int)(trans.get_address()));
+
 }	// syncTrans()
 
+
+// Static method, which identifies the endianism of the model
+
+bool
+Or1ksimSC::isLittleEndian()
+{
+  return (1 == or1ksim_is_le());
+
+}	// or1ksimIsLe()
+
+
+// Static method to return the ISS clock rate
+
+unsigned long int
+Or1ksimSC::getClockRate()
+{
+  return or1ksim_clock_rate();
+
+}	// getClockRate()
 
 // EOF

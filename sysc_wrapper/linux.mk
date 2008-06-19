@@ -49,26 +49,40 @@ LIBS    = -lsim -lsystemc
 # Make the lot
 
 .PHONY: all
-all: NbTopSC
+all: TestSC SocSC
 
 
 # ----------------------------------------------------------------------------
 # 
 
-NbTopSC: NbTopSC.o Or1ksimSC.o UartSC.o XtermSC.o
-	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath -Wl,$(OR1KSIMLIB) \
+TestSC: TestSC.o Or1ksimSC.o LoggerSC.o
+	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 
-NbTopSC.o: NbTopSC.cpp Or1ksimSC.h DataReporterSC.h
+TestSC.o: TestSC.cpp Or1ksimSC.h DataReporterSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 Or1ksimSC.o: Or1ksimSC.cpp Or1ksimSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
+LoggerSC.o: LoggerSC.cpp LoggerSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+
+# ----------------------------------------------------------------------------
+# 
+
+SocSC: SocSC.o Or1ksimSC.o UartSC.o TermSC.o
+	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
+		$(LIBDIRS) $(LIBS) -o $@
+
+SocSC.o: SocSC.cpp Or1ksimSC.h DataReporterSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
 UartSC.o: UartSC.cpp UartSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
-XtermSC.o: XtermSC.cpp XtermSC.h
+TermSC.o: TermSC.cpp TermSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 
@@ -78,4 +92,4 @@ XtermSC.o: XtermSC.cpp XtermSC.h
 .PHONY: clean
 clean:
 	$(RM) *.o
-	$(RM) NbTopSC
+	$(RM) SocSC

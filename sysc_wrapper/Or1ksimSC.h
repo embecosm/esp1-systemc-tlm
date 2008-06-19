@@ -63,9 +63,10 @@ class Or1ksimSC
 
   void               syncTrans( tlm::tlm_generic_payload &trans );
 
-  // Static utility to return the endianism of the model
+  // Static utilities to return the endianism of the model and the clock rate
 
-  static bool  isLittleEndian();
+  static bool               isLittleEndian();
+  static unsigned long int  getClockRate();
 
   // Initiator port for data accesses (no off chip instructions for now)
 

@@ -26,6 +26,8 @@
 
 
 #include <iostream>
+#include <iomanip>
+#include <stdio.h>
 
 #include "UartSC.h"
 #include "Or1ksimSC.h"
@@ -35,17 +37,22 @@
 
 SC_HAS_PROCESS( UartSC );
 
-UartSC::UartSC( sc_core::sc_module_name  name ) :
+UartSC::UartSC( sc_core::sc_module_name  name,
+		unsigned long int        clockRate ) :
   sc_module( name )
 {
+  // Set up the two threads
+
+  SC_THREAD( uartCpuThread );
+  SC_THREAD( uartTermThread );
+
   // Register the blocking transport method
 
-  uartInPort.register_b_transport( this, &UartSC::doReadWrite );
+  uartPort.register_b_transport( this, &UartSC::cpuReadWrite );
 
   // Reset the UART and record whether the ISS is little endian
 
-  uartInit();
-  isLittleEndian = Or1ksimSC::isLittleEndian();
+  uartInit( clockRate );
 
 }	/* UartSC() */
 
@@ -57,10 +64,66 @@ UartSC::~UartSC()
 }	// ~UartSC()
   
 
-// The blocking transport routine.
+// The thread listening for transmit traffic from the CPU
 
 void
-UartSC::doReadWrite( tlm::tlm_generic_payload &payload,
+UartSC::uartCpuThread()
+{
+  // Loop listening for changes on the Tx buffer, waiting for a baud rate
+  // delay then sending to the terminal
+
+  while( true ) {
+
+    wait( txReceived );			// Wait for a Tx to be requested
+    wait( iState.charDelay );		// Wait baud delay
+
+    uartTx.write( regs.thr );		// Send char to terminal
+
+    regs.lsr |= UART_LSR_TEMT;		// Indicate buffer is now empty
+    regs.lsr |= UART_LSR_THRE;
+  }
+}	// uartCpuThread()
+
+
+// The thread listening for data on the Rx port from the terminal
+
+void
+UartSC::uartTermThread()
+{
+  // Loop woken up when a character is written into the fifo from the terminal.
+
+  while( true ) {
+    regs.rbr  = uartRx.read();		// Blocking read of the data
+    regs.lsr |= UART_LSR_DR;		// Mark data ready
+  }
+}	// uartTermThread()
+
+
+// Initialize the Uart.
+
+void
+UartSC::uartInit( unsigned long int  clock_rate )
+{
+  // Clear visible and internal state
+
+  bzero( (void *)&regs,   sizeof( regs ));
+  bzero( (void *)&iState, sizeof( iState ));
+
+  // Set start up values
+
+  iState.clockRate = clock_rate;
+
+  // Note endianism
+
+  isLittleEndian = Or1ksimSC::isLittleEndian();
+
+}	// uartInit()
+
+
+// The blocking transport routine for the CPU facing socket
+
+void
+UartSC::cpuReadWrite( tlm::tlm_generic_payload &payload,
 		      sc_core::sc_time         &delayTime )
 {
   // Which command?
@@ -68,11 +131,11 @@ UartSC::doReadWrite( tlm::tlm_generic_payload &payload,
   switch( payload.get_command() ) {
 
   case tlm::TLM_READ_COMMAND:
-    doRead( payload, delayTime );
+    cpuRead( payload, delayTime );
     break;
 
   case tlm::TLM_WRITE_COMMAND:
-    doWrite( payload, delayTime );
+    cpuWrite( payload, delayTime );
     break;
 
   case tlm::TLM_IGNORE_COMMAND:
@@ -80,379 +143,180 @@ UartSC::doReadWrite( tlm::tlm_generic_payload &payload,
     break;
   }
 
-}	// doReadWrite()
+}	// cpuReadWrite()
 
 
 // Process a read
 
 void
-UartSC::doRead( tlm::tlm_generic_payload &payload,
-		sc_core::sc_time         &delayTime )
-{
-  // Break out the address, mask and data pointer. This should be only a
-  // single byte access.
-
-  unsigned long int  addr   = (unsigned long int)payload.get_address();
-  unsigned long int  offset;
-  unsigned char     *mask   = payload.get_byte_enable_ptr();
-  unsigned char     *dat    = payload.get_data_ptr();
-  unsigned char      res;	// Result to transmit back
-  int                ch;	// Char read from xterm
-
-  for( int i = 0 ; i < 4 ; i++ ) {
-    if( TLM_BYTE_ENABLED == mask[i] ) {
-      offset = i;
-      break;
-    }
-  }
-
-  // Find the address and mask off to just the UART space.
-
-  addr  = isLittleEndian ? addr + offset : addr + (3 - offset);
-  addr &= UART_SIZE - 1;
-
-  // State machine lookup
-
-  switch( addr ) {
-
-  case UART_RXBUF:
-
-    if( (regs[UART_LCR] & UART_LCR_DLAB) != 0 ) {
-
-      // Get the divisor latch low byte
-
-      res = (unsigned char)(divisorLatch & 0x00ff);
-    }
-    else {
-
-      // Read a byte. This should work, since we are only called when the test
-      // has shown there is a byte available. However clear the data ready bit
-      // when done.
-
-      res = lastReadByte;
-      regs[UART_LSR] &= ~UART_LSR_DR;	// No data
-    }
-
-    break;
-
-  case UART_IER:
-
-    if( (regs[UART_LCR] & UART_LCR_DLAB) != 0 ) {
-
-      // Get the divisor latch high byte
-
-      res = (unsigned char)((divisorLatch & 0xff00) >> 8);
-    }
-    else {
-
-      // Read the interrupt enable bits. Not currently meaningful.
-
-      std::cout << "UART interrupts not currently supported" << std::endl;
-      res = regs[UART_IER];
-    }
-
-    break;
-
-  case UART_IIR:
-
-    // Read the interrupt ID bits. Not currently meaningful.
-
-    std::cout << "UART interrupts not currently supported" << std::endl;
-
-    res = regs[UART_IIR];
-    break;
-
-  case UART_LCR:
-
-    // Read the line control status. Not hugely valuable, since it is too much
-    // detail for a TLM.
-
-    res = regs[UART_LCR];
-    break;
-
-  case UART_MCR:
-
-    // Read the modem control register. Of these, only loopback is really
-    // meaningful.
-
-    res = regs[UART_MCR];
-    break;
-
-  case UART_LSR:
-
-    // The interesting register. If there is currently no data available, we
-    // do a read, to see if the xterm has anything, and if so, set the data
-    // ready bit.
-
-    if( 0 == (regs[UART_LSR] & UART_LSR_DR)) {
-
-      ch = remoteRead();		// From xterm
-
-      if( ch < 0 ) {
-	regs[UART_LSR] &= ~UART_LSR_DR;	// No data
-      }
-      else {
-	lastReadByte = (unsigned char)ch;
-	regs[UART_LSR] |= UART_LSR_DR;	// New data
-      }
-    }
-
-    res = regs[UART_LSR];
-    break;
-
-  case UART_MSR:
-
-    // Read the modem status. Not hugely valuable, since it is too much detail
-    // for a TLM.
-
-    res = regs[UART_MSR];
-    break;
-
-  case UART_SCR:
-
-    // Read the scratch regiser.
-
-    res = regs[UART_SCR];
-    break;
-  }
-
-  // Put the result in the right place in the payload and set a response. All
-  // reads are successful.
-
-  dat[offset] = (unsigned char)(res & 0xff);
-  payload.set_response_status( tlm::TLM_OK_RESPONSE );
-
-}	// doRead()
-
-
-void
-UartSC::doWrite( tlm::tlm_generic_payload &payload,
+UartSC::cpuRead( tlm::tlm_generic_payload &payload,
 		 sc_core::sc_time         &delayTime )
 {
   // Break out the address, mask and data pointer. This should be only a
   // single byte access.
 
-  unsigned long int  addr   = (unsigned long int)payload.get_address();
-  unsigned long int  offset;
-  unsigned char     *mask   = payload.get_byte_enable_ptr();
-  unsigned char     *dat    = payload.get_data_ptr();
+  sc_dt::uint64      addr    = payload.get_address();
+  unsigned char     *maskPtr = payload.get_byte_enable_ptr();
+  unsigned char     *dataPtr = payload.get_data_ptr();
 
-  for( int i = 0 ; i < 4 ; i++ ) {
-    if( TLM_BYTE_ENABLED == mask[i] ) {
-      offset = i;
-      break;
-    }
+  int                offset;
+
+  // Deduce the byte address, allowing for endianism of the ISS
+
+  switch( *((uint32_t *)maskPtr) ) {
+  case 0x000000ff: offset = isLittleEndian ? 0 : 3; break;
+  case 0x0000ff00: offset = isLittleEndian ? 1 : 2; break;
+  case 0x00ff0000: offset = isLittleEndian ? 2 : 1; break;
+  case 0xff000000: offset = isLittleEndian ? 3 : 0; break;
+
+  default:		// Invalid request
+
+    std::cerr << "Uart: cpuRead: multiple byte read - ignored\n" << std::endl;
+    payload.set_response_status( tlm::TLM_GENERIC_ERROR_RESPONSE );
+    return;
   }
 
-  unsigned char  ch = dat[offset];
+  // Mask off the address to its range. This ought probably to have been done
+  // already.
 
-  // Find the address and mask off to just the UART space.
+  addr = (addr + offset) & (UART_SIZE - 1);
 
-  addr  = isLittleEndian ? addr + offset : addr + (3 - offset);
-  addr &= UART_SIZE - 1;
+  // State machine lookup on the register
 
-  // State machine lookup
-
-  tlm::tlm_response_status  res = tlm::TLM_OK_RESPONSE;   // Response
+  unsigned char      res;	// Result to transmit back
 
   switch( addr ) {
 
-  case UART_TXBUF:
+  case UART_BUF:	// DLL/RBR
 
-    if( (regs[UART_LCR] & UART_LCR_DLAB) != 0 ) {
-
-      // Set the divisor latch low byte
-
-      divisorLatch &= 0xff00;
-      divisorLatch |= (unsigned short int)ch;
+    if( UART_LCR_DLAB == (regs.lcr & UART_LCR_DLAB) ) {
+      res = (unsigned char)(iState.divLatch & 0x00ff);	// DLL byte
     }
     else {
-
-      // Write a byte. This always works - we immediately drive the character
-      // to the terminal
-
-      remoteWrite( ch );
+      res       = regs.rbr;		// Get the read data
+      regs.lsr &= ~UART_LSR_DR;		// Clear the data ready bit
     }
 
     break;
 
-  case UART_IER:
+  case UART_IER:	// DLH/IER
 
-    if( (regs[UART_LCR] & UART_LCR_DLAB) != 0 ) {
-
-      // Set the divisor latch high byte
-
-      divisorLatch &= 0x00ff;
-      divisorLatch |= ((unsigned short int)ch) << 8;
+    if( UART_LCR_DLAB == (regs.lcr & UART_LCR_DLAB) ) {
+      res = (unsigned char)((iState.divLatch & 0xff00) >> 8);  // DLH byte
     }
     else {
-
-      // Write the interrupt enable bits. Not currently meaningful.
-
-      std::cout << "UART interrupts not currently supported" << std::endl;
-      regs[UART_IER] = ch;
+      res = regs.ier;
     }
 
     break;
 
-  case UART_IIR:
-
-    // Not a writeable register on the 16450 (it is on the 16550). This is an
-    // error.
-
-    std::cout << "UART register " << UART_IIR << " is not writeable"
-	      << std::endl;
-
-    res = tlm::TLM_GENERIC_ERROR_RESPONSE;
-    break;
-
-  case UART_LCR:
-
-    // Write the line control status. Not hugely valuable, since it is too much
-    // detail for a TLM.
-
-    regs[UART_LCR] = ch;
-    break;
-
-  case UART_MCR:
-
-    // Write the modem control register. Of these, only loopback is really
-    // meaningful, but not currently supported.
-
-    regs[UART_MCR] = ch;
-    break;
-
-  case UART_LSR:
-
-    // The interesting register when reading, but not so meaningful when
-    // writing. If the DR bit is set by writing, a character could be dropped.
-
-    regs[UART_LSR] = ch;
-    break;
-
-  case UART_MSR:
-
-    // Write the modem status. Not hugely valuable, since it is too much detail
-    // for a TLM.
-
-    regs[UART_MSR] = ch;
-    break;
-
-  case UART_SCR:
-
-    // Write the scratch regiser.
-
-    regs[UART_SCR];
-    break;
+  case UART_IIR: res = regs.iir; break;
+  case UART_LCR: res = regs.lcr; break;
+  case UART_MCR: res = regs.mcr; break;
+  case UART_LSR: res = regs.lsr; break;
+  case UART_MSR: res = 0;        break;		// Write only
+  case UART_SCR: res = regs.scr; break;
   }
 
-  payload.set_response_status( res );	// Set a response.
+  // Put the result in the right place, allowing for endianism of the ISS. All
+  // reads succeed, even if they are to write only registers!
 
-}	// doWrite()
+  dataPtr[offset] = res;
+  payload.set_response_status( tlm::TLM_OK_RESPONSE );
 
+}	// cpuRead()
 
-// Initialize the Uart. This just means clearing all the registers to zero.
 
 void
-UartSC::uartInit()
+UartSC::cpuWrite( tlm::tlm_generic_payload &payload,
+		 sc_core::sc_time         &delayTime )
 {
-  bzero( (void *)regs, UART_SIZE );
+  // Break out the address, mask and data pointer. This should be only a
+  // single byte access.
 
-}	// uartInit()
+  sc_dt::uint64      addr    = payload.get_address();
+  unsigned char     *maskPtr = payload.get_byte_enable_ptr();
+  unsigned char     *dataPtr = payload.get_data_ptr();
+
+  int                offset;
+
+  // Deduce the byte address, allowing for endianism of the ISS
+
+  switch( *((uint32_t *)maskPtr) ) {
+  case 0x000000ff: offset = isLittleEndian ? 0 : 3; break;
+  case 0x0000ff00: offset = isLittleEndian ? 1 : 2; break;
+  case 0x00ff0000: offset = isLittleEndian ? 2 : 1; break;
+  case 0xff000000: offset = isLittleEndian ? 3 : 0; break;
+
+  default:		// Invalid request
+
+    std::cerr << "Uart: cpuWrite: multiple byte write - ignored\n" << std::endl;
+    payload.set_response_status( tlm::TLM_GENERIC_ERROR_RESPONSE );
+    return;
+  }
+
+  // Get the data to write. Mask off the address to its range. This ought
+  // probably to have been done already.
+
+  unsigned char ch   = dataPtr[offset];
+  addr               = (addr + offset) & UART_SIZE - 1;
+
+  // State machine lookup on the register
+
+  switch( addr ) {
+
+  case UART_BUF:	// DLL/THR
+
+    if( UART_LCR_DLAB == (regs.lcr & UART_LCR_DLAB) ) {
+      iState.divLatch =
+	(iState.divLatch & 0xff00) | (unsigned short int)ch;
+      uartResetCharDelay();
+    }
+    else {
+      regs.thr = ch;
+      regs.lsr &= ~UART_LSR_TEMT;	// Tx buffer now full
+      regs.lsr &= ~UART_LSR_THRE;
+
+      txReceived.notify();		// Tell the CPU thread
+    }
+
+    break;
+
+  case UART_IER:	// DLH/IER
+
+    if( UART_LCR_DLAB == (regs.lcr & UART_LCR_DLAB) ) {
+      iState.divLatch =
+	(iState.divLatch & 0x00ff) | ((unsigned short int)ch << 8);
+      uartResetCharDelay();
+    }
+    else {
+      regs.ier = ch;
+    }
+
+    break;
+
+  case UART_IIR:                break;	// Read only
+  case UART_LCR: regs.lcr = ch; break;
+  case UART_MCR: regs.mcr = ch; break;
+  case UART_LSR:                break;	// Read only
+  case UART_MSR:                break;  // Read only
+  case UART_SCR: regs.scr = ch; break;
+  }
+
+  payload.set_response_status( tlm::TLM_OK_RESPONSE );	// Set a response.
+
+}	// cpuWrite()
 
 
-// Do a remote read from the terminal. -1 if there is no char available.
-
-int
-UartSC::remoteRead()
-{
-  tlm::tlm_generic_payload *trans = new tlm::tlm_generic_payload();
-
-  // Set up the command. The address is irrelevant for the xterm
-
-  trans->set_read();
-
-  // Set up the size (always 4 bytes) and allocate a suitable data pointer
-
-  unsigned char *dataPtr = new unsigned char[4];
-
-  trans->set_data_length( 4 );
-  trans->set_data_ptr( dataPtr );
-
-  // Set up the byte enable mask (always 4 bytes). This always uses byte 0
-
-  unsigned char *byteMask = new unsigned char[4];
-
-  bzero( byteMask, 4 );
-  byteMask[0] = TLM_BYTE_ENABLED;
-
-  trans->set_byte_enable_length( 4 );
-  trans->set_byte_enable_ptr( byteMask );
-
-  // Send it
-
-  sc_core::sc_time  t = sc_core::sc_time( 0.0, sc_core::SC_SEC );
-  uartOutPort->b_transport( *trans, t );
-
-  // The result should be in the data. Copy it for return.
-
-  int                       ch  = (int)dataPtr[0];
-  tlm::tlm_response_status  res = trans->get_response_status();
-
-  // Free up the memory
-
-  delete [] byteMask;
-  delete [] dataPtr;
-  delete trans;
-
-  return  (tlm::TLM_OK_RESPONSE == res) ? ch : -1;
-
-}	// remoteRead()
-
-
-// Write to the remove xterm. Assumed to succeed
+// Recalculate charDelay after a change to the divisor latch
 
 void
-UartSC::remoteWrite( unsigned char  ch )
+UartSC::uartResetCharDelay()
 {
-  tlm::tlm_generic_payload *trans = new tlm::tlm_generic_payload();
+  iState.charDelay = sc_core::sc_time( 1.0 * (double)iState.divLatch /
+				       (double)iState.clockRate,
+				       sc_core::SC_SEC );
 
-  // Set up the command. The address is irrelevant for the xterm
-
-  trans->set_write();
-
-  // Set up the size (always 4 bytes) and allocate a suitable data pointer
-
-  unsigned char *dataPtr = new unsigned char[4];
-
-  bzero( dataPtr, 4 );
-  dataPtr[0] = ch;
-
-  trans->set_data_length( 4 );
-  trans->set_data_ptr( dataPtr );
-
-  // Set up the byte enable mask (always 4 bytes)
-
-  unsigned char *byteMask = new unsigned char[4];
-
-  bzero( byteMask, 4 );
-  byteMask[0] = TLM_BYTE_ENABLED;
-
-  trans->set_byte_enable_length( 4 );
-  trans->set_byte_enable_ptr( byteMask );
-
-  // Send it. We assume it just worked (for now)
-
-  sc_core::sc_time  t = sc_core::sc_time( 0.0, sc_core::SC_SEC );
-  uartOutPort->b_transport( *trans, t );
-
-  // Free up the memory
-
-  delete [] byteMask;
-  delete [] dataPtr;
-  delete trans;
-
-}	// remoteWrite()
-
+}	// uartResetCharDelay()
 
 // EOF

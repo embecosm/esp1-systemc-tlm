@@ -25,52 +25,72 @@
 // $Id$
 
 
-#ifndef XTERM_SC__H
-#define XTERM_SC__H
+#ifndef TERM_SC__H
+#define TERM_SC__H
 
 #include "tlm.h"
 #include "tlm_utils/simple_target_socket.h"
 #include "or1ksim.h"
 
-//! Module class for the Xterm.
 
-class XtermSC
+// A convenience struct for lists of FD -> instance mappings
+
+struct Fd2Inst
+{
+  int           fd;
+  class TermSC *inst;
+  Fd2Inst      *next;
+
+};	// Fd2Inst
+
+
+// Module class for the Term. Talks to the outside world via two systemC
+// fifos. Any data coming in has already been delayed appropriately via the
+// UART. Any data we send out is similarly delayed.
+
+class TermSC
 : public sc_core::sc_module
 {
  public:
 
   // Constructor and destructor
 
-  XtermSC( sc_core::sc_module_name  name );
-  ~XtermSC();
+  TermSC( sc_core::sc_module_name  name,
+	  unsigned long int        baudRate );
+  ~TermSC();
 
-  // Blocking transport method - called whenever an initiator wants to read or
-  // write from/to us.
+  // Fifos for the UART to read/write to us
 
-  void  doReadWrite( tlm::tlm_generic_payload &payload,
-		     sc_core::sc_time         &delayTime );
-
-  // Target port for devices to read or write to us
-  
-  tlm_utils::simple_target_socket<XtermSC>  xtermPort;	// Target port
+  sc_core::sc_fifo_in<unsigned char>   termRx;
+  sc_core::sc_fifo_out<unsigned char>  termTx;
 
 
  private:
 
-  // Split out read and write for clarity
+  // Threads for the Rx and Tx
 
-  void  doRead( tlm::tlm_generic_payload &payload,
-		sc_core::sc_time         &delayTime );
-
-  void  doWrite( tlm::tlm_generic_payload &payload,
-		 sc_core::sc_time         &delayTime );
+  void  termRxThread();
+  void  termTxThread();
 
   // Utility functions to control the xterm
 
   int   xtermInit();
-  void  launchXterm( char *slaveName );
-  int  xtermRead();
-  int  xtermWrite( char  ch );
+  void  killTerm( const char *mess );
+  void  launchTerm( char *slaveName );
+  int   setupTerm();
+  int   xtermRead();
+  void  xtermWrite( char  ch );
+
+  // Signal handling is tricky, since we have to use a static
+  // function. Fortunately each instance has a 1:1 mapping to the FD used for
+  // the xterm, so we can use that for lookup.
+
+  static void  ioHandler( int        signum,
+			  siginfo_t *si,
+			  void      *p );
+
+  static Fd2Inst    *instList;
+  sc_core::sc_event *ioEvent;
 
   // xterm state
 
@@ -78,10 +98,14 @@ class XtermSC
   int  ptSlave;			// FD of the slave (in and out)
   int  xtermPid;		// Process ID of the child
 
-};	/* XtermSC() */
+  // Baud rate delay
+
+  sc_core::sc_time  charDelay;
+
+};	/* TermSC() */
 
 
-#endif	// XTERM_SC__H
+#endif	// TERM_SC__H
 
 
 // EOF
