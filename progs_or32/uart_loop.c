@@ -32,7 +32,7 @@
 
 struct uart16450
 {
-  volatile unsigned char  rxtxbuf;	// R/W: Rx & Tx buffer when DLAB=0  
+  volatile unsigned char  buf;		// R/W: Rx & Tx buffer when DLAB=0  
   volatile unsigned char  ier;		// R/W: Interrupt Enable Register   
   volatile unsigned char  iir;		// R: Interrupt ID Register	    
   volatile unsigned char  lcr;		// R/W: Line Control Register	    
@@ -43,13 +43,22 @@ struct uart16450
 };
 
 #define UART_LSR_DR     0x01		// Receiver data ready
+#define UART_LCR_DLAB   0x80		// Divisor latch access bit
 
 
 main()
 {
   volatile struct uart16450 *uart = (struct uart16450 *)BASEADDR;
+  unsigned short int         divisor;
 
-  // No intialization for now. Read, then write pack
+  divisor = 100000000/9600;
+
+  // Initialize the UART baud rate
+
+  uart->lcr |= UART_LCR_DLAB;
+  uart->buf  = (unsigned char)( divisor       & 0x00ff);
+  uart->ier  = (unsigned char)((divisor >> 8) & 0x00ff);
+  uart->lcr &= ~UART_LCR_DLAB;
 
   while( 1 ) {
 
@@ -60,9 +69,9 @@ main()
 
     do {
       lsr = uart->lsr;
-    } while( 0 == (lsr & UART_LSR_DR) );
+    } while( UART_LSR_DR != (lsr & UART_LSR_DR) );
 
-    ch = uart->rxtxbuf;
+    ch = uart->buf;
 
     // Log and write the char back
 
@@ -70,6 +79,6 @@ main()
     simputc( ch );
     simputs( "'\n" );
 
-    uart->rxtxbuf = ch;
+    uart->buf = ch;
   }
 }

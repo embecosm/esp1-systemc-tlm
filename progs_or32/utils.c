@@ -51,9 +51,9 @@ void  simputc( int  c )
 }	/* simputc() */
 
 
-extern void  simputh( int  i )
+extern void  simputh( unsigned long int  i )
 {
-  int   lsd = i & 0xf;
+  char  lsd = i & 0xf;
   char  ch  = lsd < 10 ? '0' + lsd : 'A' + lsd - 10;
 
   if( i > 0 ) {

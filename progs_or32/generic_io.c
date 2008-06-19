@@ -30,7 +30,7 @@
 
 #define BASEADDR  0x90000000
 
-struct testdev
+struct  testdev
 {
   volatile unsigned char       byte;
   volatile unsigned short int  halfword;
@@ -39,7 +39,7 @@ struct testdev
 
 main()
 {
-  volatile struct testdev *dev = (struct testdev *)BASEADDR;
+  struct testdev *dev = (struct testdev *)BASEADDR;
 
   unsigned char       byteRes;
   unsigned short int  halfwordRes;
@@ -47,25 +47,46 @@ main()
 
   /* Write different sizes */
 
-  simputs( "Writing byte to address\n" );
+  simputs( "Writing byte 0xa5 to address 0x" );
+  simputh( (unsigned long int)(&(dev->byte)) );
+  simputs( "\n" );
   dev->byte     =       0xa5;
-  simputs( "Writing half word to address\n" );
+
+  simputs( "Writing half word 0xbeef to address 0x" );
+  simputh( (unsigned long int)(&(dev->halfword)) );
+  simputs( "\n" );
   dev->halfword =     0xbeef;
-  simputs( "Writing full word to address\n" );
+
+  simputs( "Writing full word 0xdeadbeef to address 0x" );
+  simputh( (unsigned long int)(&(dev->fullword)) );
+  simputs( "\n" );
   dev->fullword = 0xdeadbeef;
 
   /* Read different sizes */
 
-  simputs( "Reading byte from address\n" );
   byteRes = dev->byte;
-  simputs( "Reading half word from address\n" );
+  simputs( "Read byte 0x" );
+  simputh(  byteRes );
+  simputs( " from address 0x" );
+  simputh( (unsigned long int)(&(dev->byte)) );
+  simputs( "\n" );
+
   halfwordRes = dev->halfword;
-  simputs( "Reading full word from address\n" );
+  simputs( "Read half word 0x" );
+  simputh( halfwordRes );
+  simputs( " from address 0x" );
+  simputh( (unsigned long int)(&(dev->halfword)) );
+  simputs( "\n" );
+
   fullwordRes = dev->fullword;
+  simputs( "Read full word 0x" );
+  simputh( fullwordRes );
+  simputs( " from address 0x" );
+  simputh( (unsigned long int)(&(dev->fullword)) );
+  simputs( "\n" );
 
-  /* Just so we can see something happened */
+  // Terminate the simulation
 
-  simputs( "I/O All Done\n" );
   simexit( 0 );
 
-}
+}	// main()
