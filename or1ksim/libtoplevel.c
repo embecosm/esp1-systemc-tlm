@@ -209,3 +209,14 @@ double  or1ksim_time()
   return (double)runtime.sim.cycles * (double)config.sim.clkcycle_ps / 1.0e12;
 
 }	// or1ksim_cycle_count()
+
+
+/* Simple utility to return the clock rate */
+
+unsigned long int  or1ksim_clock_rate()
+{
+  return (unsigned long int)(1000000000000ULL /
+			     (unsigned long long int)(config.sim.clkcycle_ps));
+
+}	// or1ksim_clock_rate()
+

@@ -64,6 +64,8 @@ int  or1ksim_is_le();
 
 double  or1ksim_time();
 
+unsigned long int  or1ksim_clock_rate();
+
 #ifdef __cplusplus
 }
 #endif
