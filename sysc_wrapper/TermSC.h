@@ -35,20 +35,26 @@
 #include "or1ksim.h"
 
 
-// A convenience struct for lists of FD -> instance mappings
+//! A convenience struct for lists of file descriptor -> instance mappings
 
 struct Fd2Inst
 {
-  int           fd;
-  class TermSC *inst;
-  Fd2Inst      *next;
+  int           fd;		//!< The file descriptor
+  class TermSC *inst;		//!< The instance (of class TermSC)
+  Fd2Inst      *next;		//!< Next element in the list
 
 };	// Fd2Inst
 
 
-// Module class for the Term. Talks to the outside world via two systemC
-// fifos. Any data coming in has already been delayed appropriately via the
-// UART. Any data we send out is similarly delayed.
+//! SystemC module class for the Terminal.
+
+//! Talks to the outside world via two systemC FIFOs. Any data coming in has
+//! already been delayed (to represent the baud rate wire delay) via the
+//! UART. Any data we send out is similarly delayed.
+
+//! The terminal is implemented as a separate process running an xterm. Two
+//! threads are required, one to listen for characters typed to the xterm, the
+//! other to listen for characters sent from the UART.
 
 class TermSC
 : public sc_core::sc_module
@@ -57,31 +63,31 @@ class TermSC
 
   // Constructor and destructor
 
-  TermSC( sc_core::sc_module_name  name,
-	  unsigned long int        baudRate );
+  TermSC( sc_core::sc_module_name  name );
   ~TermSC();
 
   // Fifos for the UART to read/write to us
 
-  sc_core::sc_fifo_in<unsigned char>   termRx;
-  sc_core::sc_fifo_out<unsigned char>  termTx;
+  sc_core::sc_fifo_in<unsigned char>   rx;		//!< FIFO for bytes in
+  sc_core::sc_fifo_out<unsigned char>  tx;		//!< FIFO for bytes out
 
 
- private:
+ protected:
 
   // Threads for the Rx and Tx
 
-  void  termRxThread();
-  void  termTxThread();
+  void  rxThread();
+  void  xtermThread();
 
   // Utility functions to control the xterm
 
-  int   xtermInit();
-  void  killTerm( const char *mess );
-  void  launchTerm( char *slaveName );
-  int   setupTerm();
-  int   xtermRead();
-  void  xtermWrite( char  ch );
+  int            xtermInit();
+  void           xtermKill( const char *mess );
+  void           xtermLaunch( char *slaveName );
+  int            xtermSetup();
+
+  unsigned char  xtermRead();
+  void           xtermWrite( unsigned char  ch );
 
   // Signal handling is tricky, since we have to use a static
   // function. Fortunately each instance has a 1:1 mapping to the FD used for
@@ -91,18 +97,21 @@ class TermSC
 			  siginfo_t *si,
 			  void      *p );
 
+  //! The list of mappings of file descriptors to TermSC instances
   static Fd2Inst    *instList;
+
+  //! Pointer to the SystemC event raised when input is available
+
+  //! @note This must be a pointer. If an event were declared here it would be
+  //!       available at elaboration time and cause a crash. It is allocated
+  //!       when the xterm is created.
   sc_core::sc_event *ioEvent;
 
   // xterm state
 
-  int  ptMaster;		// FD of the master
-  int  ptSlave;			// FD of the slave (in and out)
-  int  xtermPid;		// Process ID of the child
-
-  // Baud rate delay
-
-  sc_core::sc_time  charDelay;
+  int  ptMaster;	//!< Master file descriptor
+  int  ptSlave;		//!< Slave file descriptor (for talking to the xterm)
+  int  xtermPid;	//!< Process ID of the child running the xterm
 
 };	/* TermSC() */
 

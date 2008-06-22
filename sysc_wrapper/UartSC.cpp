@@ -20,137 +20,135 @@
 
 // ----------------------------------------------------------------------------
 
-// Implementation of 16450 UART SystemC object.
+// Implementation of 16450 UART SystemC module.
 
 // $Id$
 
 
-#include <iostream>
-#include <iomanip>
-#include <stdio.h>
-
 #include "UartSC.h"
-#include "Or1ksimSC.h"
 
-
-// Constructor
 
 SC_HAS_PROCESS( UartSC );
 
+//! Custom constructor for the UART module
+
+//! Passes the name to the parent constructor. Sets the model endianism
+//! (UartSC::isLittleEndian).
+
+//! Sets up threads listening to the bus (UartSC::busThread()) and the Rx pin
+//! (UartSC::rxThread()).
+
+//! Registers UartSC::busReadWrite() as the callback for blocking transport on
+//! the UartSC::bus socket.
+
+//! Zeros the registers, but leaves the UartSC::divLatch unset - it is
+//! undefined until used.
+
+//! @param name             The SystemC module name, passed to the parent
+//!                         constructor
+//! @param _isLittleEndian  The model endianism
+
 UartSC::UartSC( sc_core::sc_module_name  name,
-		unsigned long int        clockRate ) :
-  sc_module( name )
+		bool                     _isLittleEndian ) :
+  sc_module( name ),
+  isLittleEndian( _isLittleEndian )
 {
   // Set up the two threads
 
-  SC_THREAD( uartCpuThread );
-  SC_THREAD( uartTermThread );
+  SC_THREAD( busThread );
+  SC_THREAD( rxThread );
 
   // Register the blocking transport method
 
-  uartPort.register_b_transport( this, &UartSC::cpuReadWrite );
+  bus.register_b_transport( this, &UartSC::busReadWrite );
 
-  // Reset the UART and record whether the ISS is little endian
+  // Initialize the Uart. Clear regs. Other internal state (divLatch) is
+  // undefined until set.
 
-  uartInit( clockRate );
+  bzero( (void *)&regs, sizeof( regs ));
 
 }	/* UartSC() */
 
 
-// Empty destructor
+//! SystemC thread listening for transmit traffic on the bus
 
-UartSC::~UartSC()
-{
-}	// ~UartSC()
-  
+//! Sits in a loop. Initially sets the line status register to indicate the
+//! buffer is empty (reset will clear these bits) and sends an interrupt (if
+//! enabled) to indicate the buffer is empty.
 
-// The thread listening for transmit traffic from the CPU
+//! Then waits for the UartSC::txReceived event to be triggered (this happens
+//! when new data is written into the transmit buffer by a bus write).
+
+//! On receipt of a character writes the char onto the Tx FIFO.
 
 void
-UartSC::uartCpuThread()
+UartSC::busThread()
 {
   // Loop listening for changes on the Tx buffer, waiting for a baud rate
   // delay then sending to the terminal
 
   while( true ) {
 
-    wait( txReceived );			// Wait for a Tx to be requested
-    wait( iState.charDelay );		// Wait baud delay
+    set( regs.lsr, UART_LSR_THRE | UART_LSR_TEMT );  // Indicate buffer empty
 
-    uartTx.write( regs.thr );		// Send char to terminal
+    if( isSet( regs.ier, UART_IER_ETBEI ) ) {	// Send interrupt if enabled
+      genInt( UART_IIR_THRE );
+    }
 
-    regs.lsr |= UART_LSR_TEMT;		// Indicate buffer is now empty
-    regs.lsr |= UART_LSR_THRE;
+    wait( txReceived );				// Wait for a Tx request
+
+    tx.write( regs.thr );			// Send char to terminal
   }
-}	// uartCpuThread()
+}	// busThread()
 
 
-// The thread listening for data on the Rx port from the terminal
+//! SystemC thread listening for data on the Rx fifo
+
+//! Waits for a character to appear on the Rx fifo and copies into the read
+//! buffer.
+
+//! Sets the data ready flag of the line status register and sends an
+//! interrupt (if enabled) to indicate the data is ready.
+
+//! @note The terminal attached to the FIFO is responsible for modeling any
+//!       wire delay on the Rx.
 
 void
-UartSC::uartTermThread()
+UartSC::rxThread()
 {
   // Loop woken up when a character is written into the fifo from the terminal.
 
   while( true ) {
-    regs.rbr  = uartRx.read();		// Blocking read of the data
-    regs.lsr |= UART_LSR_DR;		// Mark data ready
+    regs.rbr  = rx.read();			// Blocking read of the data
+    set( regs.lsr, UART_LSR_DR );		// Mark data ready
+
+    if( isSet( regs.ier, UART_IER_ERBFI ) ) {	// Send interrupt if enabled
+      genInt( UART_IIR_RDI );
+    }
   }
-}	// uartTermThread()
+}	// rxThread()
 
 
-// Initialize the Uart.
+//! TLM2.0 blocking transport routine for the UART bus socket
 
-void
-UartSC::uartInit( unsigned long int  clock_rate )
-{
-  // Clear visible and internal state
+//! Receives transport requests on the target socket.
 
-  bzero( (void *)&regs,   sizeof( regs ));
-  bzero( (void *)&iState, sizeof( iState ));
+//! Break out the address, data and byte enable mask. Use the byte enable mask
+//! to identify the byte address. Allow for model endianism in calculating
+//! this (see UartSC::isLittleEndian).
 
-  // Set start up values
+//! Switches on the command and calls UartSC::busRead() or UartSC::buswrite()
+//! routines to do the behavior
 
-  iState.clockRate = clock_rate;
+//! Increases the delay as appropriate and sets a success response.
 
-  // Note endianism
-
-  isLittleEndian = Or1ksimSC::isLittleEndian();
-
-}	// uartInit()
-
-
-// The blocking transport routine for the CPU facing socket
+//! @param payload    The transaction payload
+//! @param delayTime  How far the initiator is beyond baseline SystemC
+//!                   time. For use with temporal decoupling.
 
 void
-UartSC::cpuReadWrite( tlm::tlm_generic_payload &payload,
-		      sc_core::sc_time         &delayTime )
-{
-  // Which command?
-
-  switch( payload.get_command() ) {
-
-  case tlm::TLM_READ_COMMAND:
-    cpuRead( payload, delayTime );
-    break;
-
-  case tlm::TLM_WRITE_COMMAND:
-    cpuWrite( payload, delayTime );
-    break;
-
-  case tlm::TLM_IGNORE_COMMAND:
-    std::cerr << "UartSC: Unexpected TLM_IGNORE_COMMAND" << std::endl;
-    break;
-  }
-
-}	// cpuReadWrite()
-
-
-// Process a read
-
-void
-UartSC::cpuRead( tlm::tlm_generic_payload &payload,
-		 sc_core::sc_time         &delayTime )
+UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
+		      sc_core::sc_time         &delay )
 {
   // Break out the address, mask and data pointer. This should be only a
   // single byte access.
@@ -159,7 +157,8 @@ UartSC::cpuRead( tlm::tlm_generic_payload &payload,
   unsigned char     *maskPtr = payload.get_byte_enable_ptr();
   unsigned char     *dataPtr = payload.get_data_ptr();
 
-  int                offset;
+  int                offset;		// Data byte offset in word
+  unsigned char      uaddr;		// UART address
 
   // Deduce the byte address, allowing for endianism of the ISS
 
@@ -171,38 +170,89 @@ UartSC::cpuRead( tlm::tlm_generic_payload &payload,
 
   default:		// Invalid request
 
-    std::cerr << "Uart: cpuRead: multiple byte read - ignored\n" << std::endl;
     payload.set_response_status( tlm::TLM_GENERIC_ERROR_RESPONSE );
     return;
   }
 
-  // Mask off the address to its range. This ought probably to have been done
-  // already.
+  // Mask off the address to its range. This ought to have been done already
+  // by an arbiter/decoder.
 
-  addr = (addr + offset) & (UART_SIZE - 1);
+  uaddr = (unsigned char)((addr + offset) & UART_ADDR_MASK);
+
+  // Which command?
+
+  switch( payload.get_command() ) {
+
+  case tlm::TLM_READ_COMMAND:
+
+    dataPtr[offset] = busRead( uaddr );
+    break;
+
+  case tlm::TLM_WRITE_COMMAND:
+
+    busWrite( uaddr, dataPtr[offset] );
+    break;
+
+  case tlm::TLM_IGNORE_COMMAND:
+
+    payload.set_response_status( tlm::TLM_GENERIC_ERROR_RESPONSE );
+    return;
+  }
+
+  // Single byte accesses always work
+
+  payload.set_response_status( tlm::TLM_OK_RESPONSE );
+
+}	// busReadWrite()
+
+
+//! Process a read on the UART bus
+
+//! Switch on the address to determine behavior
+//! - UART_BUF
+//!   - if UART_LSR_DLAB is set, read the low byte of the clock divisor
+//!   - otherwise get the value from the read buffer and
+//!     clear the data ready flag in the line status register
+//! - UART_IER
+//!   - if UART_LSR_DLAB is set, read the high byte of the clock divisor
+//!   - otherwise get the instruction enable register
+//! - UART_IIR Get the interrupt indicator register and
+//!   clear the most important pending interrupt (UartSC::clearInt())
+//! - UART_LCR Get the line control register
+//! - UART_MCR Ignored - write only register
+//! - UART_LSR Get the line status register
+//! - UART_MSR Get the modem status registe
+//! - UART_SCR Get the scratch register
+
+//! @param uaddr  The address of the register being accessed
+
+//! @return  The value read
+
+unsigned char
+UartSC::busRead( unsigned char  uaddr )
+{
+  unsigned char  res;		// The result to return
 
   // State machine lookup on the register
 
-  unsigned char      res;	// Result to transmit back
+  switch( uaddr ) {
 
-  switch( addr ) {
+  case UART_BUF:
 
-  case UART_BUF:	// DLL/RBR
-
-    if( UART_LCR_DLAB == (regs.lcr & UART_LCR_DLAB) ) {
-      res = (unsigned char)(iState.divLatch & 0x00ff);	// DLL byte
+    if( isSet(regs.lcr, UART_LCR_DLAB ) ) {	// DLL byte
+      res = (unsigned char)(divLatch & 0x00ff);
     }
     else {
-      res       = regs.rbr;		// Get the read data
-      regs.lsr &= ~UART_LSR_DR;		// Clear the data ready bit
+      res = regs.rbr;				// Get the read data
+      clr( regs.lsr, UART_LSR_DR );		// Clear the data ready bit
     }
 
     break;
 
-  case UART_IER:	// DLH/IER
+  case UART_IER:
 
-    if( UART_LCR_DLAB == (regs.lcr & UART_LCR_DLAB) ) {
-      res = (unsigned char)((iState.divLatch & 0xff00) >> 8);  // DLH byte
+    if( isSet( regs.lcr, UART_LCR_DLAB ) ) {	// DLH byte
+      res = (unsigned char)((divLatch & 0xff00) >> 8);
     }
     else {
       res = regs.ier;
@@ -210,113 +260,217 @@ UartSC::cpuRead( tlm::tlm_generic_payload &payload,
 
     break;
 
-  case UART_IIR: res = regs.iir; break;
+  case UART_IIR:
+
+    res = regs.iir;
+    clearInt();				// Clear highest priority interrupt
+    break;
+
   case UART_LCR: res = regs.lcr; break;
-  case UART_MCR: res = regs.mcr; break;
+  case UART_MCR: res = 0;        break;	// Write only
   case UART_LSR: res = regs.lsr; break;
-  case UART_MSR: res = 0;        break;		// Write only
+  case UART_MSR: res = regs.msr; break;
   case UART_SCR: res = regs.scr; break;
   }
 
-  // Put the result in the right place, allowing for endianism of the ISS. All
-  // reads succeed, even if they are to write only registers!
+  return res;
 
-  dataPtr[offset] = res;
-  payload.set_response_status( tlm::TLM_OK_RESPONSE );
+}	// busRead()
 
-}	// cpuRead()
 
+//! Process a write on the UART bus
+
+//! Switch on the address to determine behavior
+//! - UART_BUF
+//!   - if UART_LSR_DLAB is set, write the low byte of the clock divisor and
+//!     recalculate the character delay (UartSC::resetCharDelay())
+//!   - otherwise write the data to the transmit buffer, clear the buffer
+//!     empty flags and notify the UartSC::busThread() using the
+//!     UartSC::txReceived SystemC event.
+//! - UART_IER
+//!   - if UART_LSR_DLAB is set, write the high byte of the clock divisor and
+//!     recalculate the character delay (UartSC::resetCharDelay())
+//!   - otherwise set the instruction enable register
+//! - UART_IIR Ignored - read only
+//! - UART_LCR Set the line control register
+//! - UART_MCR Set the modem control regsiter
+//! - UART_LSR Ignored - read only
+//! - UART_MSR Ignored - read only
+//! - UART_SCR Set the scratch register
+
+//! @param uaddr  The address of the register being accessed
+//! @param wdata  The value to be written
 
 void
-UartSC::cpuWrite( tlm::tlm_generic_payload &payload,
-		 sc_core::sc_time         &delayTime )
+UartSC::busWrite( unsigned char  uaddr,
+		  unsigned char  wdata )
 {
-  // Break out the address, mask and data pointer. This should be only a
-  // single byte access.
+  // State machine lookup on the register
 
-  sc_dt::uint64      addr    = payload.get_address();
-  unsigned char     *maskPtr = payload.get_byte_enable_ptr();
-  unsigned char     *dataPtr = payload.get_data_ptr();
+  switch( uaddr ) {
 
-  int                offset;
+  case UART_BUF:
 
-  // Deduce the byte address, allowing for endianism of the ISS
+    if( isSet( regs.lcr, UART_LCR_DLAB ) ) {	// DLL
+      divLatch = (divLatch & 0xff00) | (unsigned short int)wdata;
+    }
+    else {
+      regs.thr = wdata;
 
-  switch( *((uint32_t *)maskPtr) ) {
-  case 0x000000ff: offset = isLittleEndian ? 0 : 3; break;
-  case 0x0000ff00: offset = isLittleEndian ? 1 : 2; break;
-  case 0x00ff0000: offset = isLittleEndian ? 2 : 1; break;
-  case 0xff000000: offset = isLittleEndian ? 3 : 0; break;
+      clr( regs.lsr, UART_LSR_TEMT );		// Tx buffer now full
+      clr( regs.lsr, UART_LSR_THRE );
 
-  default:		// Invalid request
+      txReceived.notify();			// Tell the bus thread
+    }
 
-    std::cerr << "Uart: cpuWrite: multiple byte write - ignored\n" << std::endl;
-    payload.set_response_status( tlm::TLM_GENERIC_ERROR_RESPONSE );
+    break;
+
+  case UART_IER:
+
+    if( isSet( regs.lcr, UART_LCR_DLAB ) ) {	// DLH
+      divLatch = (divLatch & 0x00ff) | ((unsigned short int)wdata << 8);
+    }
+    else {
+      regs.ier = wdata;
+    }
+
+    break;
+
+  case UART_IIR:                   break;	// Read only
+  case UART_LCR: regs.lcr = wdata; break;
+  case UART_MCR: regs.mcr = wdata; break;
+  case UART_LSR:                   break;	// Read only
+  case UART_MSR:                   break;	// Read only
+  case UART_SCR: regs.scr = wdata; break;
+  }
+
+}	// busWrite()
+
+
+//! Generate an interrupt
+
+//! Set the relevant interrupt indicator flag, mark an interrupt as pending
+//! and write logic high (bool true) to UartSC::intr
+
+//! @param iflag  The interrupt indicator register flag corresponding to the
+//!               interrupt being generated.
+
+void
+UartSC::genInt( unsigned char  iflag )
+{
+  set( regs.iir, iflag );
+  set( regs.iir, UART_IIR_IPEND );
+
+  intr.write( true );
+
+}	// genInt()
+
+
+//! Clear an interrupt
+
+//! Clear the highest priority interrupt (Received Data Ready is higher than
+//! Transmitter Holding Register Empty)
+
+//! If no interrupts remain asserted, clear the interrupt pending flag and
+//! deassert the interrupt by writing logic low (bool false) to UartSC::intr.
+
+void
+UartSC::clearInt()
+{
+  if( isClr( regs.ier, UART_IER_ERBFI | UART_IER_ETBEI ) ) {
+    return;					// No ints enabled => do nothing
+  }
+
+  if( isSet( regs.ier, UART_IER_ERBFI ) &&
+      isClr( regs.ier, UART_IER_ETBEI ) ) {
+
+    clr( regs.iir, UART_IIR_RDI | UART_IIR_IPEND );	// Just RDI => clear it
+    intr.write( false );
     return;
   }
 
-  // Get the data to write. Mask off the address to its range. This ought
-  // probably to have been done already.
+  if( isClr( regs.ier, UART_IER_ERBFI ) &&
+      isSet( regs.ier, UART_IER_ETBEI ) ) {
 
-  unsigned char ch   = dataPtr[offset];
-  addr               = (addr + offset) & UART_SIZE - 1;
-
-  // State machine lookup on the register
-
-  switch( addr ) {
-
-  case UART_BUF:	// DLL/THR
-
-    if( UART_LCR_DLAB == (regs.lcr & UART_LCR_DLAB) ) {
-      iState.divLatch =
-	(iState.divLatch & 0xff00) | (unsigned short int)ch;
-      uartResetCharDelay();
-    }
-    else {
-      regs.thr = ch;
-      regs.lsr &= ~UART_LSR_TEMT;	// Tx buffer now full
-      regs.lsr &= ~UART_LSR_THRE;
-
-      txReceived.notify();		// Tell the CPU thread
-    }
-
-    break;
-
-  case UART_IER:	// DLH/IER
-
-    if( UART_LCR_DLAB == (regs.lcr & UART_LCR_DLAB) ) {
-      iState.divLatch =
-	(iState.divLatch & 0x00ff) | ((unsigned short int)ch << 8);
-      uartResetCharDelay();
-    }
-    else {
-      regs.ier = ch;
-    }
-
-    break;
-
-  case UART_IIR:                break;	// Read only
-  case UART_LCR: regs.lcr = ch; break;
-  case UART_MCR: regs.mcr = ch; break;
-  case UART_LSR:                break;	// Read only
-  case UART_MSR:                break;  // Read only
-  case UART_SCR: regs.scr = ch; break;
+    clr( regs.iir, UART_IIR_THRE | UART_IIR_IPEND );	// Just THRE => clear it
+    intr.write( false );
+    return;
   }
 
-  payload.set_response_status( tlm::TLM_OK_RESPONSE );	// Set a response.
+  // Both enabled. Try highest priority first
 
-}	// cpuWrite()
+  if( isSet( regs.iir, UART_IIR_RDI ) ) {
+    clr( regs.iir, UART_IIR_RDI );		// Clear RDI
+  }
+  else {
+    clr( regs.iir, UART_IIR_THRE );		// Clear THRE
+  }
+
+  if( isClr( regs.iir, UART_IIR_RDI | UART_IIR_THRE ) ) {
+    clr( regs.iir, UART_IIR_IPEND );		// None left => clear pending
+    intr.write( false );			// Deassert
+  }
+}	// clearInt()
 
 
-// Recalculate charDelay after a change to the divisor latch
+//! Set a bits in a register
 
-void
-UartSC::uartResetCharDelay()
+//! @param reg    The register concerned
+//! @param flags  The bits to set
+
+inline void
+UartSC::set( unsigned char &reg,
+	     unsigned char  flags )
 {
-  iState.charDelay = sc_core::sc_time( 1.0 * (double)iState.divLatch /
-				       (double)iState.clockRate,
-				       sc_core::SC_SEC );
+  reg |= flags;
 
-}	// uartResetCharDelay()
+}	// set()
+
+
+//! Clear a bits in a register
+
+//! @param reg    The register concerned
+//! @param flags  The bits to set
+
+inline void
+UartSC::clr( unsigned char &reg,
+	     unsigned char  flags )
+{
+  reg &= ~flags;
+
+}	// clr()
+
+
+//! Report if bits are set in a register
+
+//! @param reg    The register concerned
+//! @param flags  The bit to set
+
+//! @return  True if the bit is set
+
+inline bool
+UartSC::isSet( unsigned char  reg,
+	       unsigned char  flags )
+{
+  return  flags == (reg & flags);
+
+}	// isSet()
+
+
+//! Report if bits are clear in a register
+
+//! @param reg    The register concerned
+//! @param flags  The bit to set
+
+//! @return  True if the bit is clear
+
+inline bool
+UartSC::isClr( unsigned char  reg,
+	       unsigned char  flags )
+{
+  return  flags != (reg & flags);
+
+}	// isClr()
+
 
 // EOF

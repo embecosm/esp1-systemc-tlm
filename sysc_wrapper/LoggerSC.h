@@ -32,8 +32,13 @@
 #include "tlm_utils/simple_target_socket.h"
 
 
-// Module class for the logger. It has a simple target socket for the CPU to
-// read/write registers
+//! SystemC module class providing a simple TLM 2.0 logger
+
+//! Provides a TLM 2.0 simple target convenience socket, and records the
+//! command, address, data, mask and delay in any packets sent to that socket.
+
+//! Assumes all transactions are 32 bits long - this is intended for use with
+//! the Or1ksimSC class.
 
 class LoggerSC
 : public sc_core::sc_module
@@ -44,7 +49,7 @@ class LoggerSC
 
   LoggerSC( sc_core::sc_module_name  name );
 
-  tlm_utils::simple_target_socket<LoggerSC>  loggerPort;
+  tlm_utils::simple_target_socket<LoggerSC>  loggerSocket;
 
 
  private:
@@ -52,7 +57,7 @@ class LoggerSC
   // The blocking transport routine for the port
 
   void  loggerReadWrite( tlm::tlm_generic_payload &payload,
-			 sc_core::sc_time         &delayTime );
+			 sc_core::sc_time         &delay );
 
 
 };	// LoggerSC()

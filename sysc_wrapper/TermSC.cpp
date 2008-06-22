@@ -41,23 +41,27 @@
 #include "TermSC.h"
 
 
-// Constructor
-
 SC_HAS_PROCESS( TermSC );
 
-TermSC::TermSC( sc_core::sc_module_name  name,
-		unsigned long int        baudRate ) :
+//! Custom constructor for the terminal module
+
+//! Passes the name to the parent constructor.
+
+//! Sets up threads listening to the rx port from the UART (TermSC::rxThread)
+//! and waiting for characters from the xterm (TermSC::xtermThread).
+
+//! Initializes the xterm in a separate process, setting up a file descriptor
+//! that can read and write from/to it.
+
+//! @param name      Name of this module - passed to the parent constructor
+
+TermSC::TermSC( sc_core::sc_module_name  name ) :
   sc_module( name )
 {
   // Set up the two threads
 
-  SC_THREAD( termRxThread );
-  SC_THREAD( termTxThread );
-
-  // Calculate the delay. No configurability here - 1 start, 8 data and 1 stop
-  // = total 10 bits.
-
-  charDelay = sc_core::sc_time( 10.0 / (double)baudRate, sc_core::SC_SEC );
+  SC_THREAD( rxThread );
+  SC_THREAD( xtermThread );
 
   // Start up the terminal
 
@@ -66,48 +70,68 @@ TermSC::TermSC( sc_core::sc_module_name  name,
 }	/* TermSC() */
 
 
-// Destructor to kill the xterm process
+//! Custom destructor for the terminal module
+
+//! Custom destructors are not usually needed for SystemC models, but we use
+//! this to kill the child process running the xterm.
 
 TermSC::~TermSC()
 {
-  killTerm( NULL );		// Get rid of the xterm
+  xtermKill( NULL );		// Get rid of the xterm
 
 }	// ~TermSC()
   
 
-// Sit in a loop getting characters and passing them on after the relevant
-// delay.
+//! Thread listening for characters on the Rx FIFO
+
+//! Sit in a loop getting characters from the FIFO connected to the UART and
+//! writing them to the xterm.
 
 void
-TermSC::termRxThread()
+TermSC::rxThread()
 {
   while( true ) {
-    unsigned char  ch = (unsigned char)xtermRead();	// Blocking
-
-    wait( charDelay );		// Allow time for the char to get on the line.
-    termTx.write( ch );		// Send it
-
-    wait( *ioEvent );		// Wait for some I/O on the terminal
-  }
-
-}	// termRxThread()
-
-
-// Loop writing any character that comes in to the screen
-
-void
-TermSC::termTxThread()
-{
-  while( true ) {
-    unsigned char  ch = termRx.read();	// Blocking read from the FIFO
+    unsigned char  ch = rx.read();	// Blocking read from the FIFO
 
     xtermWrite( ch );			// Write it to the screen
   }
-}	// termTxThread()
+}	// rxThread()
 
 
-// Fire up an xTerm as a child process. 0 on success, -1 on failure, with an
-// error code in errno
+//! Thread listening for characters from the xterm
+
+//! Wait to be notified via the SystemC event TermSC::ioEvent that there is a
+//! character available.
+
+//! Read the character, then send it out to the UART
+
+void
+TermSC::xtermThread()
+{
+  while( true ) {
+    wait( *ioEvent );			// Wait for some I/O on the terminal
+
+    int ch = xtermRead();		// Should not block
+
+    tx.write( (unsigned char)ch );	// Send it
+  }
+}	// xtermThread()
+
+
+//! Start an xTerm as a child process.
+
+//! This uses the POSIX routines to obtain a pseudo TTY (pty) and then fire up
+//! an xterm, using that pty for I/O
+
+//! The I/O is set up to be canonical (i.e immediate, not at end of line),
+//! with no echno.
+
+//! Forks a child process to run the xterm, using the -S option to specify the
+//! pty being used.
+
+//! The parent is initalized using TermSC::xtermSetup()
+
+//! @return   0 on success, -1 on failure, with an error code in errno
 
 int
 TermSC::xtermInit()
@@ -127,12 +151,12 @@ TermSC::xtermInit()
   }
 
   if( grantpt( ptMaster ) < 0 ) {
-    killTerm( NULL );
+    xtermKill( NULL );
     return -1;
   }
 
   if( unlockpt( ptMaster ) < 0 ) {
-    killTerm( NULL );
+    xtermKill( NULL );
     return -1;
   }
 
@@ -141,14 +165,14 @@ TermSC::xtermInit()
   char *ptSlaveName = ptsname( ptMaster );
 
   if( NULL == ptSlaveName ) {
-    killTerm( NULL );
+    xtermKill( NULL );
     return -1;
   }
 
   ptSlave = open( ptSlaveName, O_RDWR );	// In and out are the same
 
   if( ptSlave < 0 ) {
-    killTerm( NULL );
+    xtermKill( NULL );
     return -1;
   }
 
@@ -157,7 +181,7 @@ TermSC::xtermInit()
   struct termios  termInfo;
 
   if( tcgetattr( ptSlave, &termInfo ) < 0 ) {
-    killTerm( NULL );
+    xtermKill( NULL );
     return -1;
   }
 
@@ -165,7 +189,7 @@ TermSC::xtermInit()
   termInfo.c_lflag &= ~ICANON;
 
   if( tcsetattr( ptSlave, TCSADRAIN, &termInfo ) < 0 ) {
-    killTerm( NULL );
+    xtermKill( NULL );
     return -1;
   }
 
@@ -177,27 +201,33 @@ TermSC::xtermInit()
 
   case -1:
 
-    killTerm( NULL );				// Failure
+    xtermKill( NULL );				// Failure
     return -1;
 
   case 0:
 
-    launchTerm( ptSlaveName );		// Child opens the terminal
+    xtermLaunch( ptSlaveName );		// Child opens the terminal
     return -1;				// Should be impossible!
 
   default:
 
-    return  setupTerm();		// The parent carries on.
+    return  xtermSetup();		// The parent carries on.
   }
 
 }	// xtermInit()
 
 
-// Close any open file descriptors and shut down the Xterm. If the message is
-// non-null print it with perror.
+//! Kill an open xterm
+
+//!  Remove the mapping from file descriptor to process for this xterm. Close
+//! any open file descriptors and shut down the Xterm process.
+
+//! If the message is non-null print it with perror.
+
+//! @param mess  An error message
 
 void
-TermSC::killTerm( const char *mess )
+TermSC::xtermKill( const char *mess )
 {
   if( -1 != ptSlave ) {			// Close down the slave
     Fd2Inst *prev = NULL;
@@ -211,8 +241,9 @@ TermSC::killTerm( const char *mess )
 	else {
 	  prev->next = cur->next;
 	}
-	delete cur;
-	break;
+	delete cur->inst->ioEvent;	// Free the SystemC event
+	delete cur;			// Free the node
+	break;				// No more expected
       }
     }
 
@@ -233,13 +264,17 @@ TermSC::killTerm( const char *mess )
   if( NULL != mess ) {			// If we really want a message
     perror( mess );
   }
-}	// killTerm()
+}	// xtermKill()
 
 
-// Called in the child to launch the xterm. Should never return - just exit.
+//! Launch an xterm
+
+//! Called in the child to launch the xterm. Should never return - just exit.
+
+//! @param slaveName  The name of the slave pty to pass to xterm
 
 void
-TermSC::launchTerm( char *slaveName )
+TermSC::xtermLaunch( char *slaveName )
 {
   char *arg;
   char *fin = &(slaveName[strlen( slaveName ) - 2]);	// Last 2 chars of name
@@ -272,14 +307,33 @@ TermSC::launchTerm( char *slaveName )
   execvp( "xterm", argv );
   exit( 1 );			// Impossible!!!
 
-}	// launchTerm()
+}	// xtermLaunch()
 
 
-// Called in ther parent to set the terminal up. Return -1 on failure, 0 on
-// success.
+//! Set up xterm I/O for the parent process
+
+//! Called in the parent to set the terminal up. Swallows up the initial
+//! string sent by the xterm.
+
+//! I/O from the xterm MUST be non-blocking, since a thread that waits on an
+//! operating system call will block the SystemC thread scheduling.
+
+//! The I/O is set up to signal data using SIGIO, with a handler that will
+//! then notify a SystemC event (TermSC::ioEvent).
+
+//! The handler must be static, since it uses C, not C++ linkage, so a mapping
+//! is needed to match the file descriptor to the class instance. This is a
+//! linked list (allowing for multiple instances of this module), pointed to
+//! by TermSC::instList.
+
+//! The SystemC event is created here, rather than declared statically as a
+//! member of the class. This avoids it being used during elaboration, which
+//! will crash SystemC.
+
+//! @return  -1 on failure, 0 on success
 
 int
-TermSC::setupTerm()
+TermSC::xtermSetup()
 {
   int   res;
   char  ch;
@@ -291,7 +345,7 @@ TermSC::setupTerm()
   } while( (res >= 0) && (ch != '\n') );
 
   if( res < 0 ) {
-    killTerm( NULL );
+    xtermKill( NULL );
     return -1;
   }
 
@@ -318,35 +372,49 @@ TermSC::setupTerm()
   action.sa_flags     = SA_SIGINFO;
 
   if( sigaction( SIGIO, (const struct sigaction *)&action, NULL ) != 0 ) {
-    killTerm( "Sigaction Failed" );
+    xtermKill( "Sigaction Failed" );
     return -1;
   }
 
   // Make the Slave FD asynchronous with this process.
 
   if( fcntl( ptSlave, F_SETOWN, getpid()) != 0 ) {
-    killTerm( "SETOWN" );
+    xtermKill( "SETOWN" );
     return -1;
   }
 
   int flags = fcntl( ptSlave, F_GETFL );
 
   if( fcntl( ptSlave, F_SETFL, flags | O_ASYNC ) != 0 ) {
-    killTerm( "SETFL" );
+    xtermKill( "SETFL" );
     return -1;
   }
 
   return 0;
 
-}	// setupTerm()
+}	// xtermSetup()
 
 
-// Static pointer to the fd->instance mapping list
+//! Static pointer to the file descriptor to instance mapping list
 
 Fd2Inst *TermSC::instList = NULL;
 
 
-// Static I/O handler, since sigaction cannot cope with a member function
+//! Static handler for SIGIO
+
+//! Must be static, since sigaction cannot cope with a member function. The
+//! static member list TermSC::instList holds details of each instance of this
+//! class and its associated file descriptor for talking to the xterm.
+
+//! POSIX select() is used to identify the source of the SIGIO, and the
+//! appropriate instance is notified using the SystemC event in
+//! TermSC::ioEvent.
+
+//! @param signum  The signal invoking us (SIGIO)
+//! @param si      A siginfo structure with information about the
+//!                signal. According to POSIX, it should contain the FD for
+//!                SIGIO, but that is not working, hence the use of select.
+//! @param p       A ucontext_t structure, passed as void*.
 
 void
 TermSC::ioHandler( int        signum,
@@ -389,10 +457,15 @@ TermSC::ioHandler( int        signum,
 }	// ioHandler()
 
 
-// Native read from the xterm. We'll only be calling this if we already know
-// there is something to read.
+//! Native read from the xterm.
 
-int
+//! We'll only be calling this if we already know there is something to read,
+//! so blocking call is fine.
+
+//! @return The character read. NULL if there was an error - only detected by
+//!         a rude message on the console!
+
+unsigned char
 TermSC::xtermRead()
 {
   // Have we an xterm?
@@ -409,18 +482,22 @@ TermSC::xtermRead()
 
   if( read( ptSlave, &ch, 1 ) != 1 ) {
     perror( "TermSC: Error on read" );
-    return -1;
+    return  0;
   }
   else {
-    return  (int)ch;
+    return  ch;
   }
 }	// xtermRead()
 
 
-// Native write to the xterm. Ignore any errors
+//! Native write to the xterm.
+
+//! Errors are ignored, apart from a rude message on the console.
+
+//! @param ch  The character to be written
 
 void
-TermSC::xtermWrite( char  ch )
+TermSC::xtermWrite( unsigned char  ch )
 {
   // Have we an xterm?
 

@@ -30,6 +30,8 @@ CXX = g++
 
 CXXFLAGS += -ggdb -DSC_INCLUDE_DYNAMIC_PROCESSES
 
+SYSTEMC_HOME=/opt/systemc_debug
+
 # Where stuff is
 
 OR1KSIM = /opt/or1ksim
@@ -49,17 +51,17 @@ LIBS    = -lsim -lsystemc
 # Make the lot
 
 .PHONY: all
-all: TestSC SimpleSocSC
+all: TestSC SimpleSocSC SyncSocSC
 
 
 # ----------------------------------------------------------------------------
-# 
+# Logger test of the basic ISS
 
 TestSC: TestSC.o Or1ksimSC.o LoggerSC.o
 	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 
-TestSC.o: TestSC.cpp Or1ksimSC.h DataReporterSC.h
+TestSC.o: TestSC.cpp Or1ksimSC.h LoggerSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 Or1ksimSC.o: Or1ksimSC.cpp Or1ksimSC.h
@@ -70,13 +72,16 @@ LoggerSC.o: LoggerSC.cpp LoggerSC.h
 
 
 # ----------------------------------------------------------------------------
-# 
+# Simple SoC with the basic ISS
 
-SimpleSocSC: SimpleSocSC.o Or1ksimSC.o UartSC.o TermSC.o
+SimpleSocSC: SimpleSocSC.o Or1ksimSC.o Or1ksimExtSC.o UartSC.o TermSC.o
 	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 
-SimpleSocSC.o: SimpleSocSC.cpp Or1ksimSC.h DataReporterSC.h
+SimpleSocSC.o: SimpleSocSC.cpp Or1ksimExtSC.h UartSC.h TermSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+Or1ksimExtSC.o: Or1ksimExtSC.cpp Or1ksimExtSC.h Or1ksimSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 UartSC.o: UartSC.cpp UartSC.h
@@ -87,10 +92,39 @@ TermSC.o: TermSC.cpp TermSC.h
 
 
 # ----------------------------------------------------------------------------
+# Synchronous SoC with the synchronous ISS
+
+SyncSocSC: SyncSocSC.o Or1ksimSyncSC.o UartSyncSC.o TermSyncSC.o
+	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
+		$(LIBDIRS) $(LIBS) -o $@
+
+SyncSocSC.o: SyncSocSC.cpp Or1ksimSC.h UartSC.h TermSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+Or1ksimSyncSC.o: Or1ksimSyncSC.cpp Or1ksimSyncSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+UartSyncSC.o: UartSyncSC.cpp UartSyncSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+TermSyncSC.o: TermSyncSC.cpp TermSyncSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+
+# ----------------------------------------------------------------------------
+# Documentation
+
+doc:
+	doxygen doxygen.config
+
+
+# ----------------------------------------------------------------------------
 # Clean up
 
 .PHONY: clean
 clean:
-	$(RM) *.o
-	$(RM) TestSC
-	$(RM) SimpleSocSC
+	$(RM)    *.o
+	$(RM) -r doc
+	$(RM)    TestSC
+	$(RM)    SimpleSocSC
+	$(RM)    SyncSocSC

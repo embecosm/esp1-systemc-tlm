@@ -42,7 +42,7 @@ int  sc_main( int   argc,
 
   // Connect up the TLM ports
 
-  iss.dataIni( logger.loggerPort );
+  iss.dataBus( logger.loggerSocket );
 
   // Run it forever
 

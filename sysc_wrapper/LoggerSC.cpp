@@ -32,22 +32,38 @@
 #include "LoggerSC.h"
 
 
-// Constructor, which registers the transport call
+//! Custom constructor for the OSCI TLM 2.0 logger
+
+//! Registers the blocking callback procedure, ::loggerReadWrite with the
+//! target socket.
+
+//! @param name  The SystemC module name, passed to the parent constructor.
 
 LoggerSC::LoggerSC( sc_core::sc_module_name  name ) :
   sc_module( name )
 {
-  loggerPort.register_b_transport( this, &LoggerSC::loggerReadWrite );
+  loggerSocket.register_b_transport( this, &LoggerSC::loggerReadWrite );
 
 }	// Or1ksimSC()
 
 
-// The blocking transport routine for the CPU facing socket. This is only for
-// single word read/write
+//! Blocking transport routine the target socket
+
+//! Receives payloads for any transport on this socket. Assumes all payloads
+//! are 32 bit only (this is intended for use with the Or1ksimSC class).
+
+//! Break out the command, address, data (for write only) and mask and report
+//! them.
+
+//! Set a successful response (tlm::TLM_OK_RESPONSE) to the call.
+
+//! @param payload  The generic TLM payload
+//! @param delay    How far the initiator is beyond baseline SystemC time.
+//!                 Ignored here.
 
 void
 LoggerSC::loggerReadWrite( tlm::tlm_generic_payload &payload,
-			   sc_core::sc_time         &delayTime )
+			   sc_core::sc_time         &delay )
 {
   // Break out the address, mask and data pointer.
 
@@ -56,7 +72,7 @@ LoggerSC::loggerReadWrite( tlm::tlm_generic_payload &payload,
   unsigned char     *maskPtr = payload.get_byte_enable_ptr();
   unsigned char     *dataPtr = payload.get_data_ptr();
 
-  // Which command?
+  // Record the payload fields (data only if it's a write)
 
   const char *commStr;
 
@@ -65,8 +81,6 @@ LoggerSC::loggerReadWrite( tlm::tlm_generic_payload &payload,
   case tlm::TLM_WRITE_COMMAND:  commStr = "Write";  break;
   case tlm::TLM_IGNORE_COMMAND: commStr = "Ignore"; break;
   }
-
-  // Log the lot (data only if its a write)
 
   std::cout << "Logging" << std::endl;
   std::cout << "  Command:      "   << commStr << std::endl;
@@ -80,14 +94,11 @@ LoggerSC::loggerReadWrite( tlm::tlm_generic_payload &payload,
 	      <<std::hex << *((uint32_t *)dataPtr) << std::endl;
   }
 
-  std::cout << "  Delay:        " << std::setprecision( 9 ) << std::fixed
-	    << delayTime.to_seconds() << "s" << std::endl;
   std::cout << std::endl;
 
-  // Set a response before returning
-
-  payload.set_response_status( tlm::TLM_OK_RESPONSE );
+  payload.set_response_status( tlm::TLM_OK_RESPONSE );  // Always OK
 
 }	// loggerReadWrite()
+
 
 // EOF

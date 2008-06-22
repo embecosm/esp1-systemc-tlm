@@ -20,7 +20,7 @@
 
 // ----------------------------------------------------------------------------
 
-// Definition of main SystemC wrapper for the OSCI SystemC wrapper project
+// Definition of the basic SystemC wrapper for Or1ksim
 
 
 // $Id$
@@ -35,7 +35,10 @@
 #include "tlm_utils/simple_initiator_socket.h"
 #include "or1ksim.h"
 
-//! Module class for the Or1ksim ISS
+
+//! SystemC module class wrapping Or1ksim ISS
+
+//! Provides a single thread (::run) which runs the underlying Or1ksim ISS.
 
 class Or1ksimSC
 : public sc_core::sc_module
@@ -48,34 +51,44 @@ class Or1ksimSC
 	     const char              *configFile,
 	     const char              *imageFile );
 
-  // Thread that will run the model
+  //! Initiator port for data accesses
 
-  void  run();
+  tlm_utils::simple_initiator_socket<Or1ksimSC>  dataBus;
 
-  // I/O upcalls from Or1ksim, with a common synchronized transport utility.
 
-  uint32_t           readUpcall( sc_dt::uint64  addr,
-				 uint32_t       mask );
+ protected:
 
-  void               writeUpcall( sc_dt::uint64  addr,
-				  uint32_t       mask,
-				  uint32_t       wdata );
+  // Thread which will run the model. This will be refined in later derived
+  // classes to deal with timing.
 
-  void               syncTrans( tlm::tlm_generic_payload &trans );
+  virtual void  run();
 
-  // Static utilities to return the endianism of the model and the clock rate
+  // The common thread to make the transport calls. This will be refined in
+  // later derived classes to deal with timing.
 
-  static bool               isLittleEndian();
-  static unsigned long int  getClockRate();
+  virtual void  doTrans( tlm::tlm_generic_payload &trans );
 
-  // Initiator port for data accesses (no off chip instructions for now)
 
-  tlm_utils::simple_initiator_socket<Or1ksimSC>  dataIni;
+private:
 
-  // Timestamp by SystemC and Or1ksim at the last upcall.
+  // I/O upcalls from Or1ksim, with a common synchronized transport
+  // utility. These are not changed in later derived classes.
 
-  sc_core::sc_time  scLastUpTime;
-  double            or1kLastUpTime;
+  static unsigned long int  staticReadUpcall( void              *instancePtr,
+					      unsigned long int  addr,
+					      unsigned long int  mask );
+
+  static void               staticWriteUpcall( void              *instancePtr,
+					       unsigned long int  addr,
+					       unsigned long int  mask,
+					       unsigned long int  wdata );
+
+  uint32_t                  readUpcall( sc_dt::uint64  addr,
+					uint32_t       mask );
+
+  void                      writeUpcall( sc_dt::uint64  addr,
+					 uint32_t       mask,
+					 uint32_t       wdata );
 
 };	/* Or1ksimSC() */
 
