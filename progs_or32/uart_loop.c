@@ -49,6 +49,7 @@ struct uart16450
 #define UART_LSR_DR     0x01		// Receiver data ready
 
 #define UART_LCR_DLAB   0x80		// Divisor latch access bit
+#define UART_LCR_8BITS  0x03		// 8 bit data bits
 
 
 /* Utility routines to set and get flags */
@@ -100,6 +101,8 @@ main()
   uart->buf  = (unsigned char)( divisor       & 0x00ff);
   uart->ier  = (unsigned char)((divisor >> 8) & 0x00ff);
   clr( &(uart->lcr), UART_LCR_DLAB );
+
+  set( &(uart->lcr), UART_LCR_8BITS );		// Set 8 bit data packet
 
   // Loop echoing characters
 
