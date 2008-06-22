@@ -37,6 +37,7 @@
 #include <sys/wait.h>
 
 #include <iostream>
+#include <iomanip>
 
 #include "TermSC.h"
 
@@ -94,6 +95,9 @@ TermSC::rxThread()
     unsigned char  ch = rx.read();	// Blocking read from the FIFO
 
     xtermWrite( ch );			// Write it to the screen
+
+    sc_core::sc_time  now = sc_core::sc_time_stamp();
+    printf( "Char written at %12.9f sec\n", now.to_seconds());
   }
 }	// rxThread()
 

@@ -25,6 +25,9 @@
 // $Id$
 
 
+#include <iostream>
+#include <iomanip>
+
 #include "UartSC.h"
 
 
@@ -120,6 +123,10 @@ UartSC::rxThread()
 
   while( true ) {
     regs.rbr  = rx.read();			// Blocking read of the data
+
+    sc_core::sc_time  now = sc_core::sc_time_stamp();
+    printf( "Char read at    %12.9f sec\n", now.to_seconds());
+
     set( regs.lsr, UART_LSR_DR );		// Mark data ready
 
     if( isSet( regs.ier, UART_IER_ERBFI ) ) {	// Send interrupt if enabled

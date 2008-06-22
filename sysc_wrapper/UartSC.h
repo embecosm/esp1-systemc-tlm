@@ -140,6 +140,11 @@ class UartSC
   bool  isClr( unsigned char  reg,
 	       unsigned char  flag );
 
+  //! UART event triggered by the CPU writing into the Tx buffer. This is
+  //! reused by later derived classes.
+
+  sc_core::sc_event  txReceived;
+
   //! UART registers. These will be reused in later derived classes
   //! - rbr: R: Rx buffer,		      
   //! - thr: R: Tx hold reg,		      
@@ -168,18 +173,13 @@ class UartSC
 
   unsigned short int  divLatch;		//!< Divisor for ext clock
 
+
 private:
-
-  //! UART event triggered by the CPU writing into the Tx buffer. This is
-  //! never reused by late derived subclasses, so can remain private.
-
-  sc_core::sc_event  txReceived;
 
   // Endianism is only used by routines in this class that will not be
   // replaced in later derived subclasses, to can remain private.
 
   bool                isLittleEndian;	//!< Is ISS little endian?
-
 
 };	// UartSC()
 

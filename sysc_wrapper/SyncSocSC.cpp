@@ -20,7 +20,7 @@
 
 // ----------------------------------------------------------------------------
 
-// Top level simple SoC.
+// Top level simple SoC with synchronized timing.
 
 // $Id$
 

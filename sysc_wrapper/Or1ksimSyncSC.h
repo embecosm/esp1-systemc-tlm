@@ -30,66 +30,42 @@
 #ifndef OR1KSIM_SYNC_SC__H
 #define OR1KSIM_SYNC_SC__H
 
-#include <stdint.h>
-
-#include "tlm.h"
-#include "tlm_utils/simple_initiator_socket.h"
-#include "or1ksim.h"
+#include "Or1ksimExtSC.h"
 
 
-//! SystemC module class wrapping Or1ksim ISS
+//! SystemC module class wrapping Or1ksim ISS with synchronized timing
 
-//! Provides a single thread (::run) which runs the underlying Or1ksim ISS.
+//! Provides a single thread (::run) which runs the underlying Or1ksim
+//! ISS. Derived from the earlier Or1ksimExtSC class.
 
 class Or1ksimSyncSC
-: public sc_core::sc_module
+: public Or1ksimExtSC
 {
  public:
 
   // Constructor
 
   Or1ksimSyncSC( sc_core::sc_module_name  name,
-	     const char              *configFile,
-	     const char              *imageFile );
+		 const char              *configFile,
+		 const char              *imageFile );
 
-  // Public utilities to return the endianism of the model and the
-  // clock rate
+  // Public utility to return the clock rate
 
-  bool               isLittleEndian();
   unsigned long int  getClockRate();
 
-  //! Initiator port for data accesses
 
-  tlm_utils::simple_initiator_socket<Or1ksimSyncSC>  dataBus;
+ protected:
+
+  // The common thread to make the transport calls. This has static timing. It
+  // will be further modified in later calls to add termporal decoupling.
+
+  virtual void  doTrans( tlm::tlm_generic_payload &trans );
 
 
  private:
 
-  // Thread which will run the model
-
-  void  run();
-
-  // I/O upcalls from Or1ksim, with a common synchronized transport utility.
-
-  static unsigned long int  staticReadUpcall( void              *instancePtr,
-					      unsigned long int  addr,
-					      unsigned long int  mask );
-
-  static void  staticWriteUpcall( void              *instancePtr,
-				  unsigned long int  addr,
-				  unsigned long int  mask,
-				  unsigned long int  wdata );
-
-  uint32_t           readUpcall( sc_dt::uint64  addr,
-				 uint32_t       mask );
-
-  void               writeUpcall( sc_dt::uint64  addr,
-				  uint32_t       mask,
-				  uint32_t       wdata );
-
-  void               syncTrans( tlm::tlm_generic_payload &trans );
-
-  // Timestamp by SystemC and Or1ksim at the last upcall.
+  // Timestamp by SystemC and Or1ksim at the last upcall. Used only by this
+  // class
 
   sc_core::sc_time  scLastUpTime;	//!< SystemC time stamp of last upcall
   double            or1kLastUpTime;	//!< Or1ksim time stamp of last upcall

@@ -30,7 +30,7 @@ CXX = g++
 
 CXXFLAGS += -ggdb -DSC_INCLUDE_DYNAMIC_PROCESSES
 
-SYSTEMC_HOME=/opt/systemc_debug
+# SYSTEMC_HOME=/opt/systemc_debug
 
 # Where stuff is
 
@@ -74,7 +74,7 @@ LoggerSC.o: LoggerSC.cpp LoggerSC.h
 # ----------------------------------------------------------------------------
 # Simple SoC with the basic ISS
 
-SimpleSocSC: SimpleSocSC.o Or1ksimSC.o Or1ksimExtSC.o UartSC.o TermSC.o
+SimpleSocSC: SimpleSocSC.o Or1ksimExtSC.o Or1ksimSC.o UartSC.o TermSC.o
 	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 
@@ -94,7 +94,8 @@ TermSC.o: TermSC.cpp TermSC.h
 # ----------------------------------------------------------------------------
 # Synchronous SoC with the synchronous ISS
 
-SyncSocSC: SyncSocSC.o Or1ksimSyncSC.o UartSyncSC.o TermSyncSC.o
+SyncSocSC: SyncSocSC.o Or1ksimSyncSC.o Or1ksimExtSC.o Or1ksimSC.o \
+	   UartSyncSC.o UartSC.o TermSyncSC.o TermSC.o
 	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 

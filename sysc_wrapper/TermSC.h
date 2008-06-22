@@ -48,9 +48,7 @@ struct Fd2Inst
 
 //! SystemC module class for the Terminal.
 
-//! Talks to the outside world via two systemC FIFOs. Any data coming in has
-//! already been delayed (to represent the baud rate wire delay) via the
-//! UART. Any data we send out is similarly delayed.
+//! Talks to the outside world via two systemC FIFOs.
 
 //! The terminal is implemented as a separate process running an xterm. Two
 //! threads are required, one to listen for characters typed to the xterm, the
@@ -74,10 +72,11 @@ class TermSC
 
  protected:
 
-  // Threads for the Rx and Tx
+  // Threads for the Rx and xterm. The xterm thread will be replaced in a
+  // later derived class.
 
-  void  rxThread();
-  void  xtermThread();
+  void          rxThread();
+  virtual void  xtermThread();
 
   // Utility functions to control the xterm
 
@@ -105,6 +104,7 @@ class TermSC
   //! @note This must be a pointer. If an event were declared here it would be
   //!       available at elaboration time and cause a crash. It is allocated
   //!       when the xterm is created.
+
   sc_core::sc_event *ioEvent;
 
   // xterm state
