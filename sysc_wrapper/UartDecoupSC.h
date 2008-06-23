@@ -20,51 +20,49 @@
 
 // ----------------------------------------------------------------------------
 
-// Definition of main SystemC wrapper for the OSCI SystemC wrapper project
-// with SystemC time synchronization
-
+// Definition of 16450 UART Temporally Decoupled SystemC module.
 
 // $Id$
 
 
-#ifndef OR1KSIM_SYNC_SC__H
-#define OR1KSIM_SYNC_SC__H
+#ifndef UART_DECOUP_SC__H
+#define UART_DECOUP_SC__H
 
-#include "Or1ksimExtSC.h"
+#include "UartSyncSC.h"
 
+//! SystemC module class for a 16450 UART with temporal decoupling
 
-//! SystemC module class wrapping Or1ksim ISS with synchronized timing
+//! Provides a TLM 2.0 simple target convenience socket for access to the UART
+//! regsters, unsigned char SystemC FIFO ports (to a 1 byte FIFO) for the Rx
+//! and Tx pins and a bool SystemC signal for the interrupt pin.
 
-//! Provides a single thread (::run) which runs the underlying Or1ksim
-//! ISS. Derived from the earlier Or1ksimExtSC class.
+//! Two threads are provided, one waiting for transmit requests from the bus,
+//! the other waiting for data on the Rx pin.
 
-class Or1ksimSyncSC
-: public Or1ksimExtSC
+class UartDecoupSC
+: public UartSyncSC
 {
  public:
 
   // Constructor
 
-  Or1ksimSyncSC( sc_core::sc_module_name  name,
-		 const char              *configFile,
-		 const char              *imageFile );
-
-  // Public utility to return the clock rate
-
-  unsigned long int  getClockRate();
+  UartDecoupSC( sc_core::sc_module_name  name,
+		unsigned long int        _clockRate,
+		bool                     _isLittleEndian );
 
 
  protected:
 
-  // The common thread to make the transport calls. This has static timing. It
-  // will be further modified in later calls to add termporal decoupling.
+  // Updated blocking transport function, which adds decoupled timing
+  // delay.
 
-  virtual void  doTrans( tlm::tlm_generic_payload &trans );
+  virtual void  busReadWrite( tlm::tlm_generic_payload &payload,
+			      sc_core::sc_time         &delay );
 
-};	/* Or1ksimSyncSC() */
+};	// UartDecoupSC()
 
 
-#endif	// OR1KSIM_SYNC_SC__H
+#endif	// UART_DECOUP_SC__H
 
 
 // EOF

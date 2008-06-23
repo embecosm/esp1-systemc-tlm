@@ -21,50 +21,59 @@
 // ----------------------------------------------------------------------------
 
 // Definition of main SystemC wrapper for the OSCI SystemC wrapper project
-// with SystemC time synchronization
+// with SystemC temporal decoupling
 
 
 // $Id$
 
 
-#ifndef OR1KSIM_SYNC_SC__H
-#define OR1KSIM_SYNC_SC__H
+#ifndef OR1KSIM_DECOUP_SC__H
+#define OR1KSIM_DECOUP_SC__H
 
-#include "Or1ksimExtSC.h"
+#include "Or1ksimSyncSC.h"
+#include "tlm_utils/tlm_quantumkeeper.h"
 
 
-//! SystemC module class wrapping Or1ksim ISS with synchronized timing
+//! SystemC module class wrapping Or1ksim ISS with temporal decoupling
 
 //! Provides a single thread (::run) which runs the underlying Or1ksim
-//! ISS. Derived from the earlier Or1ksimExtSC class.
+//! ISS. Derived from the earlier Or1ksimSyncSC class.
 
-class Or1ksimSyncSC
-: public Or1ksimExtSC
+class Or1ksimDecoupSC
+: public Or1ksimSyncSC
 {
  public:
 
   // Constructor
 
-  Or1ksimSyncSC( sc_core::sc_module_name  name,
-		 const char              *configFile,
-		 const char              *imageFile );
-
-  // Public utility to return the clock rate
-
-  unsigned long int  getClockRate();
+  Or1ksimDecoupSC( sc_core::sc_module_name  name,
+		   const char              *configFile,
+		   const char              *imageFile );
 
 
  protected:
 
-  // The common thread to make the transport calls. This has static timing. It
-  // will be further modified in later calls to add termporal decoupling.
+  // Thread which will run the model, with temporal decoupling.
+
+  virtual void  run();
+
+  // The common thread to make the transport calls. This has temporal
+  // decoupling.
 
   virtual void  doTrans( tlm::tlm_generic_payload &trans );
 
-};	/* Or1ksimSyncSC() */
+
+ private:
+
+  //! TLM 2.0 Quantum keeper for the ISS model thread. Won't be used in any
+  //! derived classes.
+
+  tlm_utils::tlm_quantumkeeper  issQk;
+
+};	/* Or1ksimDecoupSC() */
 
 
-#endif	// OR1KSIM_SYNC_SC__H
+#endif	// OR1KSIM_DECOUP_SC__H
 
 
 // EOF

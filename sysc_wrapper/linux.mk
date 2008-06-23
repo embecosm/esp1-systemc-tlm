@@ -51,7 +51,7 @@ LIBS    = -lsim -lsystemc
 # Make the lot
 
 .PHONY: all
-all: TestSC SimpleSocSC SyncSocSC
+all: TestSC SimpleSocSC SyncSocSC DecoupSocSC
 
 
 # ----------------------------------------------------------------------------
@@ -78,7 +78,7 @@ SimpleSocSC: SimpleSocSC.o Or1ksimExtSC.o Or1ksimSC.o UartSC.o TermSC.o
 	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 
-SimpleSocSC.o: SimpleSocSC.cpp Or1ksimExtSC.h UartSC.h TermSC.h
+SimpleSocSC.o: SimpleSocSC.cpp Or1ksimExtSC.h Or1ksimSC.h UartSC.h TermSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 Or1ksimExtSC.o: Or1ksimExtSC.cpp Or1ksimExtSC.h Or1ksimSC.h
@@ -99,7 +99,8 @@ SyncSocSC: SyncSocSC.o Or1ksimSyncSC.o Or1ksimExtSC.o Or1ksimSC.o \
 	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 
-SyncSocSC.o: SyncSocSC.cpp Or1ksimSC.h UartSC.h TermSC.h
+SyncSocSC.o: SyncSocSC.cpp Or1ksimSyncSC.h Or1ksimExtSC.h Or1ksimSC.h \
+	     UartSyncSC.h UartSC.h TermSyncSC.h TermSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 Or1ksimSyncSC.o: Or1ksimSyncSC.cpp Or1ksimSyncSC.h
@@ -109,6 +110,26 @@ UartSyncSC.o: UartSyncSC.cpp UartSyncSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 TermSyncSC.o: TermSyncSC.cpp TermSyncSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+
+# ----------------------------------------------------------------------------
+# Temporally decoupled SoC
+
+DecoupSocSC: DecoupSocSC.o Or1ksimDecoupSC.o Or1ksimSyncSC.o Or1ksimExtSC.o \
+	     Or1ksimSC.o UartDecoupSC.o UartSyncSC.o UartSC.o TermSyncSC.o \
+	     TermSC.o
+	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
+		$(LIBDIRS) $(LIBS) -o $@
+
+DecoupSocSC.o: DecoupSocSC.cpp Or1ksimDecoupSC.h Or1ksimSyncSC.h Or1ksimSC.h \
+	       UartDecoupSC.h UartSyncSC.h UartSC.h TermSyncSC.h TermSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+Or1ksimDecoupSC.o: Or1ksimDecoupSC.cpp Or1ksimDecoupSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+UartDecoupSC.o: UartDecoupSC.cpp UartDecoupSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 
@@ -129,3 +150,4 @@ clean:
 	$(RM)    TestSC
 	$(RM)    SimpleSocSC
 	$(RM)    SyncSocSC
+	$(RM)    DecoupSocSC

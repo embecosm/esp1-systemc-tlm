@@ -31,7 +31,8 @@
 
 //! Custom constructor for the Or1ksimSyncSC SystemC module
 
-//! This just calls the constructor of the base class, Or1ksimExtSC::.
+//! This calls the constructor of the base class, Or1ksimExtSC::. Then sets an
+//! initial time point in the underlying ISS.
 
 //! @param name        SystemC module name
 //! @param configFile  Config file for the underlying ISS
@@ -43,6 +44,8 @@ Or1ksimSyncSC::Or1ksimSyncSC ( sc_core::sc_module_name  name,
 		       const char              *imageFile ) :
   Or1ksimExtSC( name, configFile, imageFile )
 {
+  or1ksim_set_time_point();		// Mark the start time
+
 }	/* Or1ksimSyncSC() */
 
 
@@ -61,20 +64,14 @@ Or1ksimSyncSC::doTrans( tlm::tlm_generic_payload &trans )
   // Synchronize with SystemC for the amount of time that the ISS has used
   // since the last upcall.
 
-  double  or1kGap = or1ksim_time() - or1kLastUpTime;
-
-  scLastUpTime   += sc_core::sc_time( or1kGap, sc_core::SC_SEC );
-  or1kLastUpTime += or1kGap;
-
-  wait( scLastUpTime - sc_core::sc_time_stamp());
+  wait( sc_core::sc_time( or1ksim_get_time_period(), sc_core::SC_SEC ) );
 
   // Call the transport. Since this is a synchronous model, the target should
-  // have synchronized, and no additional delay be added on return. However we
-  // should update the scLastUpTime with a new time stamp.
+  // have synchronized, and no additional delay be added on return.
 
   sc_core::sc_time  delay = sc_core::sc_time( 0.0, sc_core::SC_SEC );
   dataBus->b_transport( trans, delay );
-  scLastUpTime = sc_core::sc_time_stamp();
+  or1ksim_set_time_point();		// Mark start of new time point in ISS
 
 }	// doTrans()
 
