@@ -60,9 +60,13 @@ int  or1ksim_init( const char         *config_file,
 
 int  or1ksim_run( double  duration );
 
-int  or1ksim_is_le();
+void  or1ksim_reset_duration( double duration );
 
-double  or1ksim_time();
+void  or1ksim_set_time_point();
+
+double  or1ksim_get_time_period();
+
+int  or1ksim_is_le();
 
 unsigned long int  or1ksim_clock_rate();
 

@@ -193,6 +193,8 @@ struct runtime {
     int iprompt;                      /* Interactive prompt */
     int iprompt_run;                  /* Interactive prompt is running */
     long long cycles;                 /* Cycles counts fetch stages */
+    long long int  end_cycles;	      /* JPB. Cycles to end of quantum */
+    double         time_point;	      /* JPB. Time point in the simulation */
 
     int mem_cycles;                   /* Each cycle has counter of mem_cycles;
                                          this value is joined with cycles

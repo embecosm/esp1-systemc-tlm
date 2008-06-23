@@ -143,7 +143,16 @@ int  or1ksim_init( const char         *config_file,
 
 
 /* Run the simulator. The argument is a time in seconds, which is converted to
-   a number of cycles, if positive. A negative value means "run for ever".
+ * a number of cycles, if positive. A negative value means "run for ever".
+
+ * The semantics are that the duration for which the run may occur may be
+ * changed mid-run by a call to or1ksim_reset_duration(). This is to allow for
+ * the upcalls to generic components adding time, and reducing the time
+ * permitted for ISS execution before synchronization of the parent SystemC
+ * wrapper. 
+
+ * This is over-ridden if the call was for a negative duration, which means
+ * run forever!
 
  * Uses a simplified version of the old main program loop. Returns success if
  * the requested number of cycles were run and an error code otherwise.
@@ -151,15 +160,13 @@ int  or1ksim_init( const char         *config_file,
 
 int  or1ksim_run( double  duration )
 {
-  long long int duration_cycles = 
-    (long long int)duration * (long long int)config.sim.clkcycle_ps;
-  long long int time_all_done = runtime.sim.cycles + duration_cycles;
+  or1ksim_reset_duration( duration );
 
   /* Loop until we have done enough cycles (or forever if we had a negative
    *  duration.
    */
 
-  while( duration < 0.0 || (runtime.sim.cycles < time_all_done) ) {
+  while( duration < 0.0 || (runtime.sim.cycles < runtime.sim.end_cycles) ) {
 
     long long time_start = runtime.sim.cycles;
     /* Each cycle has counter of mem_cycles; this value is joined with cycles
@@ -187,6 +194,45 @@ int  or1ksim_run( double  duration )
 }	/* or1ksim_run() */
 
 
+/* Reset the run-time simulation end point */
+
+void  or1ksim_reset_duration( double duration )
+{
+  runtime.sim.end_cycles = 
+    runtime.sim.cycles +
+    (long long int)(duration * 1.0e12 / (double)config.sim.clkcycle_ps);
+
+}	/* or1ksim_reset_duration() */
+
+
+/* Internal utility to return the time (in seconds) executed so far. Note that
+   this is a re-entrant routine. */
+
+static double  internal_or1ksim_time()
+{
+  return (double)runtime.sim.cycles * (double)config.sim.clkcycle_ps / 1.0e12;
+
+}	// or1ksim_cycle_count()
+
+
+/* Mark a time point in the simulation */
+
+void  or1ksim_set_time_point()
+{
+  runtime.sim.time_point = internal_or1ksim_time();
+
+}	/* or1ksim_set_time_point() */
+
+
+/* Return the time since the time point was set */
+
+double  or1ksim_get_time_period()
+{
+  return  internal_or1ksim_time() - runtime.sim.time_point;
+
+}	/* or1ksim_get_time_period() */
+
+
 /* Simple utility to return the endianism of the model. Return 1 if the model
    is little endian, 0 otherwise. Note that this is a re-entrant routine. */
 
@@ -199,16 +245,6 @@ int  or1ksim_is_le()
 #endif
 
 }	// or1ksim_is_le()
-
-
-/* Simple utility to return the time (in seconds) executed so far. Note that
-   this is a re-entrant routine. */
-
-double  or1ksim_time()
-{
-  return (double)runtime.sim.cycles * (double)config.sim.clkcycle_ps / 1.0e12;
-
-}	// or1ksim_cycle_count()
 
 
 /* Simple utility to return the clock rate */
