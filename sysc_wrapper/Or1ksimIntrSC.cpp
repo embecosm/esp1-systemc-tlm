@@ -47,74 +47,34 @@ Or1ksimIntrSC::Or1ksimIntrSC ( sc_core::sc_module_name  name,
 			       const char              *imageFile ) :
   Or1ksimDecoupSC( name, configFile, imageFile )
 {
-//   SC_THREAD( intr0Thread );
-//   sensitive << intr0.pos();
-//   dont_initialize();
+  int  i;
 
-//   SC_THREAD( intr1Thread );
-//   sensitive << intr1.pos();
-//   dont_initialize();
-
-  SC_METHOD( intr2Thread );
-  sensitive << intr2.pos();
+  SC_METHOD( intrMethod );
+  for( i = 0 ; i < NUM_INTR ; i++ ) {
+    sensitive << intr[i].posedge_event();
+  }
   dont_initialize();
-
-//   SC_THREAD( intr3Thread );
-//   sensitive << intr3.pos();
-//   dont_initialize();
 
 }	/* Or1ksimIntrSC() */
 
 
-//! The SystemC thread listening for interrupt 0
+//! Method to handle interrupt triggers.
 
-//! Triggers the underlying interrupt system.
-
-// void
-// Or1ksimIntrSC::intr0Thread()
-// {
-//   printf( "Got interrupt 0\n" );
-//   or1ksim_interrupt( 0 );
-
-// }	// intrThread()
-
-
-//! The SystemC thread listening for interrupt 1
-
-//! Triggers the underlying interrupt system.
-
-// void
-// Or1ksimIntrSC::intr1Thread()
-// {
-//   printf( "Got interrupt 1\n" );
-//   or1ksim_interrupt( 1 );
-
-// }	// intrThread()
-
-
-//! The SystemC thread listening for interrupt 2
-
-//! Triggers the underlying interrupt system.
+//! Triggered statically on posedge write to any interrupt. Identifies the
+//! generating trigger and signals the underlying Or1ksim ISS.
 
 void
-Or1ksimIntrSC::intr2Thread()
+Or1ksimIntrSC::intrMethod()
 {
-  or1ksim_interrupt( 2 );
+  int  i;
 
-}	// intrThread()
+  for( i = 0 ; i < NUM_INTR ; i++ ) {
+    if( intr[i].event()) {
+      or1ksim_interrupt( i );
+    }
+  }
 
-
-//! The SystemC thread listening for interrupt 3
-
-//! Triggers the underlying interrupt system.
-
-// void
-// Or1ksimIntrSC::intr3Thread()
-// {
-//   printf( "Got interrupt 3\n" );
-//   or1ksim_interrupt( 3 );
-
-// }	// intrThread()
+}	// intrMethod()
 
 
 // EOF

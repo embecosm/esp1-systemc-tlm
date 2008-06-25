@@ -35,15 +35,13 @@
 
 //! SystemC module class wrapping Or1ksim ISS with synchronized timing
 
-//! Provides a single thread (::run) which runs the underlying Or1ksim
-//! ISS. Derived from the earlier Or1ksimExtSC class.
+//! Derived from the earlier Or1ksimExtSC class. Reimplements
+//! Or1ksimExtSC::doTrans() to provide synchronized timing.
 
 class Or1ksimSyncSC
-: public Or1ksimExtSC
+  : public Or1ksimExtSC
 {
- public:
-
-  // Constructor
+public:
 
   Or1ksimSyncSC( sc_core::sc_module_name  name,
 		 const char              *configFile,
@@ -54,10 +52,11 @@ class Or1ksimSyncSC
   unsigned long int  getClockRate();
 
 
- protected:
+protected:
 
-  // The common thread to make the transport calls. This has static timing. It
-  // will be further modified in later calls to add termporal decoupling.
+  // The common thread to make the transport calls. This has synchronized
+  // timing. It will be further reimplemented in later calls to add termporal
+  // decoupling.
 
   virtual void  doTrans( tlm::tlm_generic_payload &trans );
 

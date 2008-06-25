@@ -48,45 +48,66 @@ struct Fd2Inst
 
 //! SystemC module class for the Terminal.
 
-//! Talks to the outside world via two systemC FIFOs.
+//! Talks to the outside world via a buffer (for Rx in) and a port to a buffer
+//! in another module (Tx out).
 
-//! The terminal is implemented as a separate process running an xterm. Two
-//! threads are required, one to listen for characters typed to the xterm, the
-//! other to listen for characters sent from the UART.
+//! The terminal is implemented as a separate process running an xterm. A 
+//! thread listens for characters typed to the xterm, a method is sensitive to
+//! characters sent from the UART.
 
 class TermSC
-: public sc_core::sc_module
+  : public sc_core::sc_module
 {
- public:
-
-  // Constructor and destructor
+public:
 
   TermSC( sc_core::sc_module_name  name );
   ~TermSC();
 
-  // Fifos for the UART to read/write to us
+  // Buffer for input to the terminal and port to connect to the UART buffer
+  // for output
 
-  sc_core::sc_fifo_in<unsigned char>   rx;		//!< FIFO for bytes in
-  sc_core::sc_fifo_out<unsigned char>  tx;		//!< FIFO for bytes out
+  sc_core::sc_buffer<unsigned char>  rx;	//!< Buffer for Rx in
+  sc_core::sc_out<unsigned char>     tx;	//!< Port to UART for Tx
 
 
- protected:
+protected:
 
-  // Threads for the Rx and xterm. The xterm thread will be replaced in a
-  // later derived class.
+  // Thread to handle I/O for the xterm. Will be reimplemented in a derived
+  // class.
 
-  void          rxThread();
   virtual void  xtermThread();
+
+  // Utility function to read from the xterm. Will be reused in a derived
+  // class.
+
+  unsigned char  xtermRead();
+
+  //! Pointer to the SystemC event raised when input is available. Reused in a
+  //! derived class.
+
+  //! @note This must be a pointer. If an event were declared here it would be
+  //!       available at elaboration time and cause a crash. It is allocated
+  //!       when the xterm is created.
+
+  sc_core::sc_event *ioEvent;
+
+
+private:
+
+  // Method to handle I/O on the Rx buffer from the UART
+
+  void  rxMethod();
 
   // Utility functions to control the xterm
 
-  int            xtermInit();
-  void           xtermKill( const char *mess );
-  void           xtermLaunch( char *slaveName );
-  int            xtermSetup();
+  int   xtermInit();
+  void  xtermKill( const char *mess );
+  void  xtermLaunch( char *slaveName );
+  int   xtermSetup();
 
-  unsigned char  xtermRead();
-  void           xtermWrite( unsigned char  ch );
+  // Function to write tot he xterm. Only used in this class.
+
+  void  xtermWrite( unsigned char  ch );
 
   // Signal handling is tricky, since we have to use a static
   // function. Fortunately each instance has a 1:1 mapping to the FD used for
@@ -97,15 +118,8 @@ class TermSC
 			  void      *p );
 
   //! The list of mappings of file descriptors to TermSC instances
+
   static Fd2Inst    *instList;
-
-  //! Pointer to the SystemC event raised when input is available
-
-  //! @note This must be a pointer. If an event were declared here it would be
-  //!       available at elaboration time and cause a crash. It is allocated
-  //!       when the xterm is created.
-
-  sc_core::sc_event *ioEvent;
 
   // xterm state
 

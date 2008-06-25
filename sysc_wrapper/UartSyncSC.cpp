@@ -107,12 +107,12 @@ UartSyncSC::busReadWrite( tlm::tlm_generic_payload &payload,
 
   case tlm::TLM_READ_COMMAND:
     wait( sc_core::sc_time( UART_READ_NS, sc_core::SC_NS ));
-    delay = sc_core::sc_time( 0.0, sc_core::SC_SEC );
+    delay = sc_core::SC_ZERO_TIME;
     break;
 
   case tlm::TLM_WRITE_COMMAND:
     wait( sc_core::sc_time( UART_WRITE_NS, sc_core::SC_NS ));
-    delay = sc_core::sc_time( 0.0, sc_core::SC_SEC );
+    delay = sc_core::SC_ZERO_TIME;
     break;
   }
 

@@ -30,20 +30,17 @@
 
 #include "TermSC.h"
 
+
 //! SystemC module class for the Terminal with synchronization
 
 //! Talks to the outside world via two systemC FIFOs. Any data coming in has
 //! already been delayed (to represent the baud rate wire delay) via the
 //! UART. Any data we send out is similarly delayed.
 
-//! The terminal is implemented as a separate process running an xterm. Two
-//! threads are required, one to listen for characters typed to the xterm, the
-//! other to listen for characters sent from the UART.
-
 class TermSyncSC
-: public TermSC
+  : public TermSC
 {
- public:
+public:
 
   // Constructor
 
@@ -51,7 +48,7 @@ class TermSyncSC
 	      unsigned long int        baudRate );
 
 
- private:
+private:
 
   // Updated thread with timing to model the baud rate delay. Will not be
   // modified further in derived classes.

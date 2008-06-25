@@ -41,11 +41,9 @@
 //! Provides a single thread (::run) which runs the underlying Or1ksim ISS.
 
 class Or1ksimSC
-: public sc_core::sc_module
+  : public sc_core::sc_module
 {
- public:
-
-  // Constructor
+public:
 
   Or1ksimSC( sc_core::sc_module_name  name,
 	     const char              *configFile,
@@ -56,15 +54,15 @@ class Or1ksimSC
   tlm_utils::simple_initiator_socket<Or1ksimSC>  dataBus;
 
 
- protected:
+protected:
 
-  // Thread which will run the model. This will be refined in later derived
-  // classes to deal with timing.
+  // Thread which will run the model. This will be reimplemented in later
+  // derived classes to deal with timing.
 
   virtual void  run();
 
-  // The common thread to make the transport calls. This will be refined in
-  // later derived classes to deal with timing.
+  // The common thread to make the transport calls. This will be reimplemented
+  // in later derived classes to deal with timing.
 
   virtual void  doTrans( tlm::tlm_generic_payload &trans );
 

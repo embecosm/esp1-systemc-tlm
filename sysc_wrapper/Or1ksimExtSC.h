@@ -35,15 +35,13 @@
 //! Extended SystemC module class wrapping Or1ksim ISS
 
 //! Derived from Or1ksimSC:: to add the Or1ksimExtSC::isLittleEndian() utility
-//! to the interface and redefine Or1ksimSC::doTrans(). Everything else
+//! to the interface and reimplement Or1ksimSC::doTrans(). Everything else
 //! comes from the parent module.
 
 class Or1ksimExtSC
-: public Or1ksimSC
+  : public Or1ksimSC
 {
- public:
-
-  // Constructor (will map directly on to parent)
+public:
 
   Or1ksimExtSC( sc_core::sc_module_name  name,
 		const char              *configFile,
@@ -53,10 +51,12 @@ class Or1ksimExtSC
 
   bool  isLittleEndian();
 
- protected:
 
-  // Updated version of the common thread to make the transport calls. This
-  // will be further refined in later derived classes to deal with timing.
+protected:
+
+  // Reimplmented version of the common thread to make the transport
+  // calls. This will be further reimplemented in later derived classes to
+  // deal with timing.
 
   virtual void  doTrans( tlm::tlm_generic_payload &trans );
 

@@ -69,7 +69,7 @@ Or1ksimSyncSC::doTrans( tlm::tlm_generic_payload &trans )
   // Call the transport. Since this is a synchronous model, the target should
   // have synchronized, and no additional delay be added on return.
 
-  sc_core::sc_time  delay = sc_core::sc_time( 0.0, sc_core::SC_SEC );
+  sc_core::sc_time  delay = sc_core::SC_ZERO_TIME;
   dataBus->b_transport( trans, delay );
   or1ksim_set_time_point();		// Mark start of new time point in ISS
 

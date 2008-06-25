@@ -36,34 +36,34 @@
 
 //! SystemC module class wrapping Or1ksim ISS with temporal decoupling
 
-//! Provides a single thread (::run) which runs the underlying Or1ksim
-//! ISS. Derived from the earlier Or1ksimSyncSC class.
+//! Derived from the earlier Or1ksimSyncSC class. Reimplements the
+//! Or1ksimSyncSC::run() thread to support temporal decoupling. Reimplements
+//! the Or1ksimSynSC::doTrans() method to support temporal decoupling.
 
 class Or1ksimDecoupSC
-: public Or1ksimSyncSC
+  : public Or1ksimSyncSC
 {
- public:
-
-  // Constructor
+public:
 
   Or1ksimDecoupSC( sc_core::sc_module_name  name,
 		   const char              *configFile,
 		   const char              *imageFile );
 
 
- protected:
-
-  // Thread which will run the model, with temporal decoupling.
-
-  virtual void  run();
+protected:
 
   // The common thread to make the transport calls. This has temporal
-  // decoupling.
+  // decoupling. Will be reimplemented in later calls
 
   virtual void  doTrans( tlm::tlm_generic_payload &trans );
 
 
- private:
+private:
+
+  // Thread which will run the model, with temporal decoupling. No more
+  // reimplementation.
+
+  void  run();
 
   //! TLM 2.0 Quantum keeper for the ISS model thread. Won't be used in any
   //! derived classes.

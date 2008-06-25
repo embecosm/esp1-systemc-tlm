@@ -57,12 +57,14 @@ UartSC::UartSC( sc_core::sc_module_name  name,
   isLittleEndian( _isLittleEndian ),
   intrPending( 0 )
 {
-  // Set up the three threads
+  // Set up the thread for the bus side, method for terminal side
+  // (statically sensitive to Rx)
 
   SC_THREAD( busThread );
-  SC_THREAD( rxThread );
 
-  SC_THREAD( intrThread );
+  SC_METHOD( rxMethod );
+  sensitive << rx;
+  dont_initialize();
 
   // Register the blocking transport method
 
@@ -106,10 +108,9 @@ UartSC::busThread()
 }	// busThread()
 
 
-//! SystemC thread listening for data on the Rx fifo
+//! SystemC method sensitive to data on the Rx buffer
 
-//! Waits for a character to appear on the Rx fifo and copies into the read
-//! buffer.
+//! Copies the character received into the read buffer.
 
 //! Sets the data ready flag of the line status register and sends an
 //! interrupt (if enabled) to indicate the data is ready.
@@ -118,35 +119,17 @@ UartSC::busThread()
 //!       wire delay on the Rx.
 
 void
-UartSC::rxThread()
+UartSC::rxMethod()
 {
-  // Loop woken up when a character is written into the fifo from the terminal.
+  regs.rbr  = rx.read();
 
-  while( true ) {
-    regs.rbr  = rx.read();			// Blocking read of the data
+  sc_core::sc_time  now = sc_core::sc_time_stamp();
+  printf( "Char read at    %12.9f sec\n", now.to_seconds());
 
-    sc_core::sc_time  now = sc_core::sc_time_stamp();
-    // printf( "Char read at    %12.9f sec\n", now.to_seconds());
+  set( regs.lsr, UART_LSR_DR );		// Mark data ready
+  genIntr( UART_IER_RBFI );		// Interrupt if enabled
 
-    set( regs.lsr, UART_LSR_DR );		// Mark data ready
-    genIntr( UART_IER_RBFI );			// Interrupt if enabled
-  }
-}	// rxThread()
-
-
-//! SystemC thread driving the interrupt signal
-
-//! If true is read, assert the interrupt, otherwise deassert
-
-void
-UartSC::intrThread()
-{
-  intr.write( false );				// Deassert at startup
-
-  while( true ) {
-    intr.write( intrQueue.read() );
-  }
-}	// intrThread()
+}	// rxMethod()
 
 
 //! TLM2.0 blocking transport routine for the UART bus socket
@@ -511,8 +494,10 @@ UartSC::setIntrFlags()
 //! Generate an interrupt
 
 //! If the particular interrupt is enabled, set the relevant interrupt
-//! indicator flag, mark an interrupt as pending and request the intr flag to
-//! queue the interrupt.
+//! indicator flag, mark an interrupt as pending.
+
+//! @note There is no actual interrupt port in this class. The interrupt
+//!       signal driving functionality will be added in a derived class
 
 //! @param ierFlag  Indicator of which interrupt is to be cleared (as IER bit).
 
@@ -525,7 +510,6 @@ UartSC::genIntr( unsigned char  ierFlag )
     (void)setIntrFlags();		// Show highest priority
 
     clr( regs.iir, UART_IIR_IPEND );	// Mark (0 = pending) and queue
-    intrQueue.write( true );
   }
 }	// genIntr()
 
@@ -534,8 +518,10 @@ UartSC::genIntr( unsigned char  ierFlag )
 
 //! Clear the interrupts in priority order.
 
-//! If no interrupts remain asserted, clear the interrupt pending flag and
-//! request the interrupt thread to deassert the interrupt
+//! If no interrupts remain asserted, clear the interrupt pending flag
+
+//! @note There is no actual interrupt port in this class. The interrupt
+//!       signal driving functionality will be added in a derived class
 
 //! @param ierFlag  Indicator of which interrupt is to be cleared (as IER bit).
 
@@ -546,7 +532,6 @@ UartSC::clrIntr( unsigned char ierFlag )
 
   if( !setIntrFlags()) {		// Deassert if none left
     set( regs.iir, UART_IIR_IPEND );	// 1 = not pending
-    intrQueue.write( false );
   }
 }	// clrIntr()
 

@@ -109,73 +109,54 @@
 //! regsters, unsigned char SystemC FIFO ports (to a 1 byte FIFO) for the Rx
 //! and Tx pins and a bool SystemC signal for the interrupt pin.
 
-//! Three threads are provided, one waiting for transmit requests from the bus,
-//! the second waiting for data on the Rx pin and the third driving the
-//! interrupt pin
-
-//! @note Either of the other two threads may want to drive an interrupt, but
-//!       only one thread can drive a signal, so a separate thread is created
-//!       and notified by either of the other threads when it wishes to drive
-//!       a signal.
+//! A thread (UartSC::busThread()) is provided to wait for transmit requests
+//! from the bus. A method (UartSC::rxMethod) is provided to wait for data on
+//! the Rx pin.
 
 class UartSC
-: public sc_core::sc_module
+  : public sc_core::sc_module
 {
- public:
-
-  // Constructor
+public:
 
   UartSC( sc_core::sc_module_name  name,
 	  bool                     _isLittleEndian );
 
   //! Simple target convenience socket for UART bus access to registers
   
-  tlm_utils::simple_target_socket<UartSC>     bus;
+  tlm_utils::simple_target_socket<UartSC>  bus;
 
-  // Fifos for the terminal to read/write to us
+  // Buffer for input to the UART and port to connect to the terminal buffer
+  // for output.
 
-  sc_core::sc_fifo_in<unsigned char>          rx;	//!< FIFO in from Rx
-  sc_core::sc_fifo_out<unsigned char>         tx;	//!< FIFO out to Tx
-
-  // Signal for the interrupt pin
-
-  sc_core::sc_out<bool>                       intr;	//!< Interrupt output
+  sc_core::sc_buffer<unsigned char>        rx;	 //!< Buffer for Rx in
+  sc_core::sc_out<unsigned char>           tx;	 //!< Port to terminal for Tx
 
 
- protected:
+protected:
 
-  // The two threads running the main behavior of the UART. These will be
-  // replaced by later derived classes, so are declared virtual.
+  // A thread to run interaction with the bus side of the UART. This will be
+  // reimplemented later in derived classes, so is declared virtual.
 
   virtual void  busThread();
-  virtual void  rxThread();
-
-  // A single thread for driving interrupts.
-
-  void          intrThread();
 
   // Blocking transport function. Split out separate read and write
-  // functions. The busReadWrite() and busWrite() functions will be replaced
-  // by later derived classes, so are declared virtual. The busRead()
-  // function will be used by later derived classes, but not replaced.
+  // functions. The busReadWrite() and busWrite() functions will be
+  // reimplemented in derived classes, so are declared virtual. The
+  // busRead() function is only used here, so declared private (below).
 
   virtual void   busReadWrite( tlm::tlm_generic_payload &payload,
 			       sc_core::sc_time         &delay );
 
-  unsigned char  busRead( unsigned char  uaddr );
-
   virtual void   busWrite( unsigned char  uaddr,
 			   unsigned char  wdata );
 
-  // Modem loopback utility
+  // Utility routines for interrupt handling. The setIntrFlags function is
+  // needed in derived class. Generate and clear functions will be
+  // reimplemented in derived classes.
 
-  void  modemLoopback();
-
-  // Utility routines for interrupt handling. Reused in later derived classes.
-
-  bool  setIntrFlags();
-  void  genIntr( unsigned char  ierFlag );
-  void  clrIntr( unsigned char  ierFlag );
+  bool          setIntrFlags();
+  virtual void  genIntr( unsigned char  ierFlag );
+  virtual void  clrIntr( unsigned char  ierFlag );
 
   // Flag handling utilities. Also reused in later derived classes.
 
@@ -189,15 +170,9 @@ class UartSC
 	       unsigned char  flag );
 
   //! UART event triggered by the CPU writing into the Tx buffer. This is
-  //! reused by later derived classes.
+  //! reused by derived classes.
 
   sc_core::sc_event  txReceived;
-
-  //! A boolean fifo is used to communicate with the interrupt thread, to
-  //! ensure that requests to set/clear are taken in the order they are sent.
-  //! Non-zero value is the interrupt to set, zero means clear an interrupt.
-
-  sc_core::sc_fifo<bool>  intrQueue;
 
   //! UART registers. These will be reused in later derived classes
   //! - rbr: R: Rx buffer,		      
@@ -231,12 +206,27 @@ class UartSC
 
   unsigned char intrPending;	//!< which interrupts are pending
 
+
 private:
 
-  // Endianism is only used by routines in this class that will not be
-  // replaced in later derived subclasses, to can remain private.
+  // The method to listen to the terminal side is only used in this class and
+  // never reimplemented.
 
-  bool                isLittleEndian;	//!< Is ISS little endian?
+  void  rxMethod();
+
+  //The busRead() function supports busReadWrite, and is only used in this
+  //class, so declared private
+
+  unsigned char  busRead( unsigned char  uaddr );
+
+  // Modem loopback utility. Only used in this class.
+
+  void  modemLoopback();
+
+  //! Flag to indicate endianism of underlying Or1ksim ISS model. Endianism is
+  // only used in this class.
+
+  bool  isLittleEndian;		//!< Is ISS little endian?
 
 };	// UartSC()
 

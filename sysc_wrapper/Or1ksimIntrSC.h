@@ -31,16 +31,19 @@
 #define OR1KSIM_INTR_SC__H
 
 #include "Or1ksimDecoupSC.h"
-#include "tlm_utils/tlm_quantumkeeper.h"
 
 
-//! SystemC module class wrapping Or1ksim ISS with temporal decoupling
+#define  NUM_INTR  32
 
-//! Provides ports for the interrupts and additional threads sensitive to
-//! the interrupt inputs.
+//! SystemC module class wrapping Or1ksim ISS with temporal decoupling and
+//! interrupts.
+
+//! Provides signals for the interrupts and additional threads sensitive to
+//! the interrupt inputs. All other functionality comes from the base class,
+//! Or1ksimDecoupSC::.
 
 class Or1ksimIntrSC
-: public Or1ksimDecoupSC
+  : public Or1ksimDecoupSC
 {
 public:
 
@@ -50,22 +53,18 @@ public:
 		 const char              *configFile,
 		 const char              *imageFile );
 
-  // Signal ports for interrupts
+  //! An array of signals for interrupts to the processor. The Or1ksim ISS has
+  //! a built in programmable interrupt controller (PIC), which manages all
+  //! these.
 
-//   sc_core::sc_in<bool>  intr0;
-//   sc_core::sc_in<bool>  intr1;
-  sc_core::sc_in<bool>  intr2;
-//   sc_core::sc_in<bool>  intr3;
+  sc_core::sc_signal<bool>  intr[NUM_INTR];
 
   
-protected:
+private:
 
-  // Thread which will handle interrupts.
+  // Method which will handle interrupts.
 
-//   virtual void  intr0Thread();
-//   virtual void  intr1Thread();
-  virtual void  intr2Thread();
-//   virtual void  intr3Thread();
+  void  intrMethod();
 
 };	/* Or1ksimIntrSC() */
 

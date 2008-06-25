@@ -59,9 +59,13 @@ SC_HAS_PROCESS( TermSC );
 TermSC::TermSC( sc_core::sc_module_name  name ) :
   sc_module( name )
 {
-  // Set up the two threads
+  // Set up the method for the Rx with static sensitivity and the thread for
+  // the xterm.
 
-  SC_THREAD( rxThread );
+  SC_METHOD( rxMethod );
+  sensitive << rx;
+  dont_initialize();
+
   SC_THREAD( xtermThread );
 
   // Start up the terminal
@@ -83,23 +87,20 @@ TermSC::~TermSC()
 }	// ~TermSC()
   
 
-//! Thread listening for characters on the Rx FIFO
+//! Method handling characters on the Rx buffer
 
-//! Sit in a loop getting characters from the FIFO connected to the UART and
-//! writing them to the xterm.
+//! Statically sensitive to characters being written from the UART. When they
+//! arrive, write them to the xterm.
 
 void
-TermSC::rxThread()
+TermSC::rxMethod()
 {
-  while( true ) {
-    unsigned char  ch = rx.read();	// Blocking read from the FIFO
+  xtermWrite( rx.read() );		// Write it to the screen
 
-    xtermWrite( ch );			// Write it to the screen
+  sc_core::sc_time  now = sc_core::sc_time_stamp();
+  printf( "Char written at %12.9f sec\n", now.to_seconds());
 
-    sc_core::sc_time  now = sc_core::sc_time_stamp();
-    // printf( "Char written at %12.9f sec\n", now.to_seconds());
-  }
-}	// rxThread()
+}	// rxMethod()
 
 
 //! Thread listening for characters from the xterm

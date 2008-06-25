@@ -224,7 +224,7 @@ Or1ksimSC::writeUpcall( sc_dt::uint64  addr,
 void
 Or1ksimSC::doTrans( tlm::tlm_generic_payload &trans )
 {
-  sc_core::sc_time  dummyDelay = sc_core::sc_time( 0.0, sc_core::SC_SEC );
+  sc_core::sc_time  dummyDelay = sc_core::SC_ZERO_TIME;
 
   // Call the transport
 

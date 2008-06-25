@@ -26,11 +26,13 @@
 
 #include "tlm.h"
 #include "Or1ksimIntrSC.h"
-#include "UartDecoupSC.h"
+#include "UartIntrSC.h"
 #include "TermSyncSC.h"
 
-#define BAUD_RATE   115200		// Baud rate of the console
+#define BAUD_RATE   115200		// Baud rate of the Linux console
 #define QUANTUM_US      10		// Enough time for approx one bit
+
+#define INTR_UART        2		// Interrupt line used by the UART
 
 int  sc_main( int   argc,
 	      char *argv[] )
@@ -48,29 +50,23 @@ int  sc_main( int   argc,
   // Instantiate the modules
 
   Or1ksimIntrSC    iss( "or1ksim", argv[1], argv[2] );
-  UartDecoupSC     uart( "uart", iss.getClockRate(), iss.isLittleEndian() );
+  UartIntrSC       uart( "uart", iss.getClockRate(), iss.isLittleEndian() );
   TermSyncSC       term( "terminal", BAUD_RATE );
 
   // Connect up the TLM ports
 
   iss.dataBus( uart.bus );
 
-  // Connect up the UART and terminal via a 1-byte fifo.
+  // Connect up the UART and terminal Tx and Rx
 
-  sc_core::sc_fifo<unsigned char>  u2t(1);
-  sc_core::sc_fifo<unsigned char>  t2u(1);
-
-  uart.rx( t2u );
-  uart.tx( u2t );
-  term.rx( u2t );
-  term.tx( t2u );
+  uart.tx( term.rx );
+  term.tx( uart.rx );
 
   // Signals for the interrupts. Number 2 connects the Uart to the iss
 
   sc_core::sc_signal<bool>  intr2Wire;
 
-  uart.intr( intr2Wire );
-  iss.intr2( intr2Wire );
+  uart.intr( iss.intr[INTR_UART] );
 
   // Run it forever
 

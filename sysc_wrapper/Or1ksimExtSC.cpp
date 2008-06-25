@@ -72,13 +72,13 @@ Or1ksimExtSC::isLittleEndian()
 void
 Or1ksimExtSC::doTrans( tlm::tlm_generic_payload &trans )
 {
-  sc_core::sc_time  dummyDelay = sc_core::sc_time( 0.0, sc_core::SC_SEC );
+  sc_core::sc_time  dummyDelay = sc_core::SC_ZERO_TIME;
 
   // Call the transport and wait for no time, which allows the thread to yield
   // and others to get a look in!
 
   dataBus->b_transport( trans, dummyDelay );
-  wait( sc_core::sc_time( 0.0, sc_core::SC_SEC ));
+  wait( sc_core::SC_ZERO_TIME );
 
 }	// doTrans()
 

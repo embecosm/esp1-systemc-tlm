@@ -45,21 +45,10 @@ int  sc_main( int   argc,
 
   iss.dataBus( uart.bus );
 
-  // Connect up the UART and terminal via a 1-byte fifo.
+  // Connect up the UART and terminal Tx and Rx
 
-  sc_core::sc_fifo<unsigned char>  u2t(1);
-  sc_core::sc_fifo<unsigned char>  t2u(1);
-
-  uart.rx( t2u );
-  uart.tx( u2t );
-  term.rx( u2t );
-  term.tx( t2u );
-
-  // Signal for the interrupt, which is just left dangling for now
-
-  sc_core::sc_signal<bool>  intWire;
-
-  uart.intr( intWire );
+  uart.tx( term.rx );
+  term.tx( uart.rx );
 
   // Run it forever
 

@@ -32,29 +32,25 @@
 
 //! SystemC module class for a 16450 UART with temporal decoupling
 
-//! Provides a TLM 2.0 simple target convenience socket for access to the UART
-//! regsters, unsigned char SystemC FIFO ports (to a 1 byte FIFO) for the Rx
-//! and Tx pins and a bool SystemC signal for the interrupt pin.
-
-//! Two threads are provided, one waiting for transmit requests from the bus,
-//! the other waiting for data on the Rx pin.
+//! Adds support for temporal decoupling to UartSyncSC::. Only the blocking
+//! TLM callack, UartSyncSC::busReadWrite() is replaced, to support temporal
+//! decoupling in the intitiator (Or1ksimDecoupSC::). The thread in this class
+//! is not temporally decoupled, since it is not a TLM initiator.
 
 class UartDecoupSC
-: public UartSyncSC
+  : public UartSyncSC
 {
- public:
-
-  // Constructor
+public:
 
   UartDecoupSC( sc_core::sc_module_name  name,
 		unsigned long int        _clockRate,
 		bool                     _isLittleEndian );
 
 
- protected:
+private:
 
-  // Updated blocking transport function, which adds decoupled timing
-  // delay.
+  // Reimplemnted blocking transport function, which adds decoupled timing
+  // delay. Will not be reimplemented further.
 
   virtual void  busReadWrite( tlm::tlm_generic_payload &payload,
 			      sc_core::sc_time         &delay );

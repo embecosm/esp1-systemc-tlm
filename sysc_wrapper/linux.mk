@@ -140,8 +140,8 @@ UartDecoupSC.o: UartDecoupSC.cpp UartDecoupSC.h UartSyncSC.h UartSC.h
 # SoC which handles interrupts
 
 IntrSocSC: IntrSocSC.o Or1ksimIntrSC.o Or1ksimDecoupSC.o Or1ksimSyncSC.o \
-	   Or1ksimExtSC.o Or1ksimSC.o UartDecoupSC.o UartSyncSC.o UartSC.o \
-	   TermSyncSC.o TermSC.o
+	   Or1ksimExtSC.o Or1ksimSC.o UartIntrSC.o UartDecoupSC.o \
+	   UartSyncSC.o UartSC.o TermSyncSC.o TermSC.o
 	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 
@@ -152,6 +152,9 @@ IntrSocSC.o: IntrSocSC.cpp Or1ksimIntrSC.h Or1ksimDecoupSC.h Or1ksimSyncSC.h \
 
 Or1ksimIntrSC.o: Or1ksimIntrSC.cpp Or1ksimIntrSC.h Or1ksimDecoupSC.h \
 		 Or1ksimSyncSC.h Or1ksimExtSC.h Or1ksimSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+UartIntrSC.o: UartIntrSC.cpp UartIntrSC.h UartDecoupSC.h UartSyncSC.h UartSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 
