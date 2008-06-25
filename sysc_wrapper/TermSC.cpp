@@ -97,7 +97,7 @@ TermSC::rxThread()
     xtermWrite( ch );			// Write it to the screen
 
     sc_core::sc_time  now = sc_core::sc_time_stamp();
-    printf( "Char written at %12.9f sec\n", now.to_seconds());
+    // printf( "Char written at %12.9f sec\n", now.to_seconds());
   }
 }	// rxThread()
 

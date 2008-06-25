@@ -28,7 +28,8 @@
 
 CXX = g++
 
-CXXFLAGS += -ggdb -DSC_INCLUDE_DYNAMIC_PROCESSES
+CXXFLAGS += -DSC_INCLUDE_DYNAMIC_PROCESSES
+#CXXFLAGS += -ggdb -DSC_INCLUDE_DYNAMIC_PROCESSES
 
 # SYSTEMC_HOME=/opt/systemc_debug
 
@@ -51,7 +52,7 @@ LIBS    = -lsim -lsystemc
 # Make the lot
 
 .PHONY: all
-all: TestSC SimpleSocSC SyncSocSC DecoupSocSC
+all: TestSC SimpleSocSC SyncSocSC DecoupSocSC IntrSocSC
 
 
 # ----------------------------------------------------------------------------
@@ -103,13 +104,13 @@ SyncSocSC.o: SyncSocSC.cpp Or1ksimSyncSC.h Or1ksimExtSC.h Or1ksimSC.h \
 	     UartSyncSC.h UartSC.h TermSyncSC.h TermSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
-Or1ksimSyncSC.o: Or1ksimSyncSC.cpp Or1ksimSyncSC.h
+Or1ksimSyncSC.o: Or1ksimSyncSC.cpp Or1ksimSyncSC.h Or1ksimExtSC.h Or1ksimSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
-UartSyncSC.o: UartSyncSC.cpp UartSyncSC.h
+UartSyncSC.o: UartSyncSC.cpp UartSyncSC.h UartSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
-TermSyncSC.o: TermSyncSC.cpp TermSyncSC.h
+TermSyncSC.o: TermSyncSC.cpp TermSyncSC.h TermSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
 
@@ -122,15 +123,37 @@ DecoupSocSC: DecoupSocSC.o Or1ksimDecoupSC.o Or1ksimSyncSC.o Or1ksimExtSC.o \
 	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
 		$(LIBDIRS) $(LIBS) -o $@
 
-DecoupSocSC.o: DecoupSocSC.cpp Or1ksimDecoupSC.h Or1ksimSyncSC.h Or1ksimSC.h \
-	       UartDecoupSC.h UartSyncSC.h UartSC.h TermSyncSC.h TermSC.h
+DecoupSocSC.o: DecoupSocSC.cpp Or1ksimDecoupSC.h Or1ksimSyncSC.h \
+	       Or1ksimExtSC.h Or1ksimSC.h UartDecoupSC.h UartSyncSC.h \
+	       UartSC.h TermSyncSC.h TermSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
-Or1ksimDecoupSC.o: Or1ksimDecoupSC.cpp Or1ksimDecoupSC.h
+Or1ksimDecoupSC.o: Or1ksimDecoupSC.cpp Or1ksimDecoupSC.h Or1ksimSyncSC.h \
+	           Or1ksimExtSC.h Or1ksimSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
 
-UartDecoupSC.o: UartDecoupSC.cpp UartDecoupSC.h
+UartDecoupSC.o: UartDecoupSC.cpp UartDecoupSC.h UartSyncSC.h UartSC.h
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+
+# ----------------------------------------------------------------------------
+# SoC which handles interrupts
+
+IntrSocSC: IntrSocSC.o Or1ksimIntrSC.o Or1ksimDecoupSC.o Or1ksimSyncSC.o \
+	   Or1ksimExtSC.o Or1ksimSC.o UartDecoupSC.o UartSyncSC.o UartSC.o \
+	   TermSyncSC.o TermSC.o
+	$(CXX) $(CXXFLAGS) $^ -Wl,--rpath,$(OR1KSIMLIB) \
+		$(LIBDIRS) $(LIBS) -o $@
+
+IntrSocSC.o: IntrSocSC.cpp Or1ksimIntrSC.h Or1ksimDecoupSC.h Or1ksimSyncSC.h \
+	       Or1ksimExtSC.h Or1ksimSC.h UartDecoupSC.h UartSyncSC.h \
+	       UartSC.h TermSyncSC.h TermSC.h 
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
+Or1ksimIntrSC.o: Or1ksimIntrSC.cpp Or1ksimIntrSC.h Or1ksimDecoupSC.h \
+		 Or1ksimSyncSC.h Or1ksimExtSC.h Or1ksimSC.h
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $<
+
 
 
 # ----------------------------------------------------------------------------
@@ -151,3 +174,4 @@ clean:
 	$(RM)    SimpleSocSC
 	$(RM)    SyncSocSC
 	$(RM)    DecoupSocSC
+	$(RM)    IntrSocSC

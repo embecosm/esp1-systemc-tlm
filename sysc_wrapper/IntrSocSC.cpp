@@ -25,12 +25,12 @@
 // $Id$
 
 #include "tlm.h"
-#include "Or1ksimDecoupSC.h"
+#include "Or1ksimIntrSC.h"
 #include "UartDecoupSC.h"
 #include "TermSyncSC.h"
 
-#define BAUD_RATE    9600UL		// Baud rate of the terminal
-#define QUANTUM_US   1000		// Enough time for 100K instructions
+#define BAUD_RATE   115200		// Baud rate of the console
+#define QUANTUM_US      10		// Enough time for approx one bit
 
 int  sc_main( int   argc,
 	      char *argv[] )
@@ -47,7 +47,7 @@ int  sc_main( int   argc,
 
   // Instantiate the modules
 
-  Or1ksimDecoupSC  iss( "or1ksim", argv[1], argv[2] );
+  Or1ksimIntrSC    iss( "or1ksim", argv[1], argv[2] );
   UartDecoupSC     uart( "uart", iss.getClockRate(), iss.isLittleEndian() );
   TermSyncSC       term( "terminal", BAUD_RATE );
 
@@ -65,11 +65,12 @@ int  sc_main( int   argc,
   term.rx( u2t );
   term.tx( t2u );
 
-  // Signal for the interrupt, which is just left dangling for now
+  // Signals for the interrupts. Number 2 connects the Uart to the iss
 
-  sc_core::sc_signal<bool>  intWire;
+  sc_core::sc_signal<bool>  intr2Wire;
 
-  uart.intr( intWire );
+  uart.intr( intr2Wire );
+  iss.intr2( intr2Wire );
 
   // Run it forever
 

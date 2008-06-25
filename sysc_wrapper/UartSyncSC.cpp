@@ -75,16 +75,14 @@ UartSyncSC::busThread()
 
   while( true ) {
 
-    set( regs.lsr, UART_LSR_THRE | UART_LSR_TEMT );  // Indicate buffer empty
+    set( regs.lsr, UART_LSR_THRE );	// Indicate buffer empty
+    set( regs.lsr, UART_LSR_TEMT );
+    genIntr( UART_IER_TBEI );		// Interrupt if enabled
 
-    if( isSet( regs.ier, UART_IER_ETBEI ) ) {	// Send interrupt if enabled
-      genInt( UART_IIR_THRE );
-    }
+    wait( txReceived );			// Wait for a Tx request
+    wait( charDelay );			// Wait baud delay
 
-    wait( txReceived );				// Wait for a Tx request
-    wait( charDelay );				// Wait baud delay
-
-    tx.write( regs.thr );			// Send char to terminal
+    tx.write( regs.thr );		// Send char to terminal
   }
 }	// busThread()
 

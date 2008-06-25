@@ -54,12 +54,15 @@ SC_HAS_PROCESS( UartSC );
 UartSC::UartSC( sc_core::sc_module_name  name,
 		bool                     _isLittleEndian ) :
   sc_module( name ),
-  isLittleEndian( _isLittleEndian )
+  isLittleEndian( _isLittleEndian ),
+  intrPending( 0 )
 {
-  // Set up the two threads
+  // Set up the three threads
 
   SC_THREAD( busThread );
   SC_THREAD( rxThread );
+
+  SC_THREAD( intrThread );
 
   // Register the blocking transport method
 
@@ -92,15 +95,13 @@ UartSC::busThread()
 
   while( true ) {
 
-    set( regs.lsr, UART_LSR_THRE | UART_LSR_TEMT );  // Indicate buffer empty
+    set( regs.lsr, UART_LSR_THRE );	// Indicate buffer empty
+    set( regs.lsr, UART_LSR_TEMT );
+    genIntr( UART_IER_TBEI );		// Interrupt if enabled
 
-    if( isSet( regs.ier, UART_IER_ETBEI ) ) {	// Send interrupt if enabled
-      genInt( UART_IIR_THRE );
-    }
+    wait( txReceived );			// Wait for a Tx request
 
-    wait( txReceived );				// Wait for a Tx request
-
-    tx.write( regs.thr );			// Send char to terminal
+    tx.write( regs.thr );		// Send char to terminal
   }
 }	// busThread()
 
@@ -125,15 +126,27 @@ UartSC::rxThread()
     regs.rbr  = rx.read();			// Blocking read of the data
 
     sc_core::sc_time  now = sc_core::sc_time_stamp();
-    printf( "Char read at    %12.9f sec\n", now.to_seconds());
+    // printf( "Char read at    %12.9f sec\n", now.to_seconds());
 
     set( regs.lsr, UART_LSR_DR );		// Mark data ready
-
-    if( isSet( regs.ier, UART_IER_ERBFI ) ) {	// Send interrupt if enabled
-      genInt( UART_IIR_RDI );
-    }
+    genIntr( UART_IER_RBFI );			// Interrupt if enabled
   }
 }	// rxThread()
+
+
+//! SystemC thread driving the interrupt signal
+
+//! If true is read, assert the interrupt, otherwise deassert
+
+void
+UartSC::intrThread()
+{
+  intr.write( false );				// Deassert at startup
+
+  while( true ) {
+    intr.write( intrQueue.read() );
+  }
+}	// intrThread()
 
 
 //! TLM2.0 blocking transport routine for the UART bus socket
@@ -224,7 +237,7 @@ UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
 //!   - if UART_LSR_DLAB is set, read the high byte of the clock divisor
 //!   - otherwise get the instruction enable register
 //! - UART_IIR Get the interrupt indicator register and
-//!   clear the most important pending interrupt (UartSC::clearInt())
+//!   clear the most important pending interrupt (UartSC::clrIntr())
 //! - UART_LCR Get the line control register
 //! - UART_MCR Ignored - write only register
 //! - UART_LSR Get the line status register
@@ -252,6 +265,7 @@ UartSC::busRead( unsigned char  uaddr )
     else {
       res = regs.rbr;				// Get the read data
       clr( regs.lsr, UART_LSR_DR );		// Clear the data ready bit
+      clrIntr( UART_IER_RBFI );
     }
 
     break;
@@ -270,13 +284,29 @@ UartSC::busRead( unsigned char  uaddr )
   case UART_IIR:
 
     res = regs.iir;
-    clearInt();				// Clear highest priority interrupt
+    clrIntr( UART_IER_TBEI );
     break;
 
   case UART_LCR: res = regs.lcr; break;
-  case UART_MCR: res = 0;        break;	// Write only
-  case UART_LSR: res = regs.lsr; break;
-  case UART_MSR: res = regs.msr; break;
+  case UART_MCR: res = 0;        break;		// Write only
+  case UART_LSR:
+
+    res = regs.lsr;
+    clr( regs.lsr, UART_LSR_BI );
+    clr( regs.lsr, UART_LSR_FE );
+    clr( regs.lsr, UART_LSR_PE );
+    clr( regs.lsr, UART_LSR_OE );
+    clrIntr( UART_IER_RLSI );
+    break;
+
+  case UART_MSR:
+
+    res      = regs.msr;
+    regs.msr = 0;
+    clrIntr( UART_IER_MSI );
+    modemLoopback();				// May need resetting
+    break;
+
   case UART_SCR: res = regs.scr; break;
   }
 
@@ -301,6 +331,7 @@ UartSC::busRead( unsigned char  uaddr )
 //! - UART_IIR Ignored - read only
 //! - UART_LCR Set the line control register
 //! - UART_MCR Set the modem control regsiter
+//!   - if loopback is set, set the MSR registers to correspond
 //! - UART_LSR Ignored - read only
 //! - UART_MSR Ignored - read only
 //! - UART_SCR Set the scratch register
@@ -326,6 +357,7 @@ UartSC::busWrite( unsigned char  uaddr,
 
       clr( regs.lsr, UART_LSR_TEMT );		// Tx buffer now full
       clr( regs.lsr, UART_LSR_THRE );
+      clrIntr( UART_IER_TBEI );
 
       txReceived.notify();			// Tell the bus thread
     }
@@ -345,7 +377,12 @@ UartSC::busWrite( unsigned char  uaddr,
 
   case UART_IIR:                   break;	// Read only
   case UART_LCR: regs.lcr = wdata; break;
-  case UART_MCR: regs.mcr = wdata; break;
+  case UART_MCR: 
+
+    regs.mcr = wdata;
+    modemLoopback();
+    break;
+
   case UART_LSR:                   break;	// Read only
   case UART_MSR:                   break;	// Read only
   case UART_SCR: regs.scr = wdata; break;
@@ -354,70 +391,164 @@ UartSC::busWrite( unsigned char  uaddr,
 }	// busWrite()
 
 
-//! Generate an interrupt
+//! Generate modem loopback signals
 
-//! Set the relevant interrupt indicator flag, mark an interrupt as pending
-//! and write logic high (bool true) to UartSC::intr
-
-//! @param iflag  The interrupt indicator register flag corresponding to the
-//!               interrupt being generated.
+//! Software relies on this to detect the UART type. Set the modem status bits
+//! as defined for modem loopback
 
 void
-UartSC::genInt( unsigned char  iflag )
+UartSC::modemLoopback()
 {
-  set( regs.iir, iflag );
-  set( regs.iir, UART_IIR_IPEND );
+  // Only if we are in loopback state
 
-  intr.write( true );
+  if( isClr( regs.mcr, UART_MCR_LOOP )) {
+    return;
+  }
 
-}	// genInt()
+  // Delta status bits for what is about to change.
+
+  if( (isSet( regs.mcr, UART_MCR_RTS ) && isClr( regs.msr, UART_MSR_CTS )) ||
+      (isClr( regs.mcr, UART_MCR_RTS ) && isSet( regs.msr, UART_MSR_CTS )) ) {
+    set( regs.msr, UART_MSR_DCTS );
+  }
+  else {
+    clr( regs.msr, UART_MSR_DCTS );
+  }
+
+  if( (isSet( regs.mcr, UART_MCR_DTR ) && isClr( regs.msr, UART_MSR_DSR )) ||
+      (isClr( regs.mcr, UART_MCR_DTR ) && isSet( regs.msr, UART_MSR_DSR )) ) {
+    set( regs.msr, UART_MSR_DDSR );
+  }
+  else {
+    clr( regs.msr, UART_MSR_DDSR );
+  }
+
+  if( (isSet( regs.mcr, UART_MCR_OUT1 ) && isClr( regs.msr, UART_MSR_RI )) ||
+      (isClr( regs.mcr, UART_MCR_OUT1 ) && isSet( regs.msr, UART_MSR_RI )) ) {
+    set( regs.msr, UART_MSR_TERI );
+  }
+  else {
+    clr( regs.msr, UART_MSR_TERI );
+  }
+
+  if( (isSet( regs.mcr, UART_MCR_OUT2 ) && isClr( regs.msr, UART_MSR_DCD )) ||
+      (isClr( regs.mcr, UART_MCR_OUT2 ) && isSet( regs.msr, UART_MSR_DCD )) ) {
+    set( regs.msr, UART_MSR_DDCD );
+  }
+  else {
+    clr( regs.msr, UART_MSR_DDCD );
+  }
+
+  // Loopback status bits
+
+  if( isSet( regs.mcr, UART_MCR_RTS )) {	// CTS = RTS
+    set( regs.msr, UART_MSR_CTS );
+  }
+  else {
+    clr( regs.msr, UART_MSR_CTS );
+  }
+
+  if( isSet( regs.mcr, UART_MCR_DTR )) {	// DSR = DTR
+    set( regs.msr, UART_MSR_DSR );
+  }
+  else {
+    clr( regs.msr, UART_MSR_DSR );
+  }
+
+  if( isSet( regs.mcr, UART_MCR_OUT1 )) {	// RI = OUT1
+    set( regs.msr, UART_MSR_RI );
+  }
+  else {
+    clr( regs.msr, UART_MSR_RI );
+  }
+
+  if( isSet( regs.mcr, UART_MCR_OUT2 )) {	// DSR = DTR
+    set( regs.msr, UART_MSR_DCD );
+  }
+  else {
+    clr( regs.msr, UART_MSR_DCD );
+  }
+
+  if( isSet( regs.msr, UART_MSR_DCTS ) |
+      isSet( regs.msr, UART_MSR_DDSR ) |
+      isSet( regs.msr, UART_MSR_TERI ) |
+      isSet( regs.msr, UART_MSR_DDCD ) ) {
+    genIntr( UART_IER_MSI );
+  }
+
+}	// modemLoopback()
+
+
+//! Internal utility to set the IIR flags
+
+//! The IIR bits are set for the highest priority outstanding interrupt.
+
+//! @return  True if any interrupts are pending
+
+bool
+UartSC::setIntrFlags()
+{
+    clr( regs.iir, UART_IIR_MASK );			// Clear current
+
+    if( isSet( intrPending, UART_IER_RLSI )) {		// Priority order
+      set( regs.iir, UART_IIR_RLS );
+    }
+    else if( isSet( intrPending, UART_IER_RBFI )) {
+      set( regs.iir, UART_IIR_RDA );
+    }
+    else if( isSet( intrPending, UART_IER_TBEI )) {
+      set( regs.iir, UART_IIR_THRE );
+    }
+    else{
+      set( regs.iir, UART_IIR_MOD );
+    }
+
+    return 0 != (intrPending & UART_IER_VALID);
+
+}	// setIntrFlags()
+
+
+//! Generate an interrupt
+
+//! If the particular interrupt is enabled, set the relevant interrupt
+//! indicator flag, mark an interrupt as pending and request the intr flag to
+//! queue the interrupt.
+
+//! @param ierFlag  Indicator of which interrupt is to be cleared (as IER bit).
+
+void
+UartSC::genIntr( unsigned char  ierFlag )
+{
+  if( isSet( regs.ier, ierFlag )) {
+    set( intrPending, ierFlag );	// Mark this interrupt as pending.
+
+    (void)setIntrFlags();		// Show highest priority
+
+    clr( regs.iir, UART_IIR_IPEND );	// Mark (0 = pending) and queue
+    intrQueue.write( true );
+  }
+}	// genIntr()
 
 
 //! Clear an interrupt
 
-//! Clear the highest priority interrupt (Received Data Ready is higher than
-//! Transmitter Holding Register Empty)
+//! Clear the interrupts in priority order.
 
 //! If no interrupts remain asserted, clear the interrupt pending flag and
-//! deassert the interrupt by writing logic low (bool false) to UartSC::intr.
+//! request the interrupt thread to deassert the interrupt
+
+//! @param ierFlag  Indicator of which interrupt is to be cleared (as IER bit).
 
 void
-UartSC::clearInt()
+UartSC::clrIntr( unsigned char ierFlag )
 {
-  if( isClr( regs.ier, UART_IER_ERBFI | UART_IER_ETBEI ) ) {
-    return;					// No ints enabled => do nothing
+  clr( intrPending, ierFlag );
+
+  if( !setIntrFlags()) {		// Deassert if none left
+    set( regs.iir, UART_IIR_IPEND );	// 1 = not pending
+    intrQueue.write( false );
   }
-
-  if( isSet( regs.ier, UART_IER_ERBFI ) &&
-      isClr( regs.ier, UART_IER_ETBEI ) ) {
-
-    clr( regs.iir, UART_IIR_RDI | UART_IIR_IPEND );	// Just RDI => clear it
-    intr.write( false );
-    return;
-  }
-
-  if( isClr( regs.ier, UART_IER_ERBFI ) &&
-      isSet( regs.ier, UART_IER_ETBEI ) ) {
-
-    clr( regs.iir, UART_IIR_THRE | UART_IIR_IPEND );	// Just THRE => clear it
-    intr.write( false );
-    return;
-  }
-
-  // Both enabled. Try highest priority first
-
-  if( isSet( regs.iir, UART_IIR_RDI ) ) {
-    clr( regs.iir, UART_IIR_RDI );		// Clear RDI
-  }
-  else {
-    clr( regs.iir, UART_IIR_THRE );		// Clear THRE
-  }
-
-  if( isClr( regs.iir, UART_IIR_RDI | UART_IIR_THRE ) ) {
-    clr( regs.iir, UART_IIR_IPEND );		// None left => clear pending
-    intr.write( false );			// Deassert
-  }
-}	// clearInt()
+}	// clrIntr()
 
 
 //! Set a bits in a register

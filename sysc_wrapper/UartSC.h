@@ -47,14 +47,22 @@
 
 // Interrupt Enable register bits of interest
 
-#define UART_IER_ETBEI  0x02  	//!< Enable transmitter holding register int.
-#define UART_IER_ERBFI  0x01  	//!< Enable receiver data interrupt
+#define UART_IER_VALID  0x0f	//!< Mask for the valid bits
+
+#define UART_IER_MSI    0x08    //!< Enable Modem status interrupt
+#define UART_IER_RLSI   0x04    //!< Enable receiver line status interrupt
+#define UART_IER_TBEI   0x02  	//!< Enable transmitter holding register int.
+#define UART_IER_RBFI   0x01  	//!< Enable receiver data interrupt
 
 // Interrupt Identification register bits and interrupt masks of interest
 
-#define UART_IIR_RDI    0x04  	//!< Receiver data interrupt
-#define UART_IIR_THRE   0x02  	//!< Transmitter holding reg empty interrupt
-#define UART_IIR_IPEND  0x00  	//!< Interrupt pending
+#define UART_IIR_IPEND  0x01  	//!< Interrupt pending
+
+#define UART_IIR_MASK   0x06  	//!< the IIR status bits
+#define UART_IIR_RLS    0x06  	//!< Receiver line status
+#define UART_IIR_RDA    0x04  	//!< Receiver data available
+#define UART_IIR_THRE   0x02  	//!< Transmitter holding reg empty
+#define UART_IIR_MOD    0x00  	//!< Modem status
 
 // Line Control register bits of interest and data word length mask
 
@@ -65,9 +73,34 @@
 
 // Line Status register bits of interest
 
+#define UART_LSR_VALID  0x7f    //!< Valid bits for LSR
+
 #define UART_LSR_TEMT   0x40  	//!< Transmitter serial register empty
 #define UART_LSR_THRE   0x20  	//!< Transmitter holding register empty
+#define UART_LSR_BI     0x10    //!< Break interrupt indicator
+#define UART_LSR_FE     0x08    //!< Frame error indicator
+#define UART_LSR_PE     0x04    //!< Parity error indicator
+#define UART_LSR_OE     0x02    //!< Overrun error indicator
 #define UART_LSR_DR     0x01  	//!< Receiver data ready
+
+// Modem Control register bits of interest
+
+#define UART_MCR_LOOP   0x10	//!< Enable loopback mode
+#define UART_MCR_OUT2   0x08    //!< Auxilary output 2
+#define UART_MCR_OUT1   0x04    //!< Auxilary output 1
+#define UART_MCR_RTS    0x02    //!< Force RTS
+#define UART_MCR_DTR    0x01    //!< Force DTR
+
+// Modem Status register bits of interest
+
+#define UART_MSR_DCD    0x80    //!< Data Carrier Detect
+#define UART_MSR_RI     0x40    //!< Ring Indicator
+#define UART_MSR_DSR    0x20    //!< Data Set Ready
+#define UART_MSR_CTS    0x10    //!< Clear to Send
+#define UART_MSR_DDCD   0x08    //!< Delta DCD
+#define UART_MSR_TERI   0x04    //!< Trailing edge ring indicator
+#define UART_MSR_DDSR   0x02    //!< Delta DSR
+#define UART_MSR_DCTS   0x01    //!< Delta CTS
 
 
 //! SystemC module class for a 16450 UART.
@@ -76,8 +109,14 @@
 //! regsters, unsigned char SystemC FIFO ports (to a 1 byte FIFO) for the Rx
 //! and Tx pins and a bool SystemC signal for the interrupt pin.
 
-//! Two threads are provided, one waiting for transmit requests from the bus,
-//! the other waiting for data on the Rx pin.
+//! Three threads are provided, one waiting for transmit requests from the bus,
+//! the second waiting for data on the Rx pin and the third driving the
+//! interrupt pin
+
+//! @note Either of the other two threads may want to drive an interrupt, but
+//!       only one thread can drive a signal, so a separate thread is created
+//!       and notified by either of the other threads when it wishes to drive
+//!       a signal.
 
 class UartSC
 : public sc_core::sc_module
@@ -105,11 +144,15 @@ class UartSC
 
  protected:
 
-  // The two threads running the behavior of the UART. These will be replaced
-  // by later derived classes, so are declared virtual.
+  // The two threads running the main behavior of the UART. These will be
+  // replaced by later derived classes, so are declared virtual.
 
   virtual void  busThread();
   virtual void  rxThread();
+
+  // A single thread for driving interrupts.
+
+  void          intrThread();
 
   // Blocking transport function. Split out separate read and write
   // functions. The busReadWrite() and busWrite() functions will be replaced
@@ -124,10 +167,15 @@ class UartSC
   virtual void   busWrite( unsigned char  uaddr,
 			   unsigned char  wdata );
 
+  // Modem loopback utility
+
+  void  modemLoopback();
+
   // Utility routines for interrupt handling. Reused in later derived classes.
 
-  void  genInt( unsigned char  iflag );
-  void  clearInt();
+  bool  setIntrFlags();
+  void  genIntr( unsigned char  ierFlag );
+  void  clrIntr( unsigned char  ierFlag );
 
   // Flag handling utilities. Also reused in later derived classes.
 
@@ -144,6 +192,12 @@ class UartSC
   //! reused by later derived classes.
 
   sc_core::sc_event  txReceived;
+
+  //! A boolean fifo is used to communicate with the interrupt thread, to
+  //! ensure that requests to set/clear are taken in the order they are sent.
+  //! Non-zero value is the interrupt to set, zero means clear an interrupt.
+
+  sc_core::sc_fifo<bool>  intrQueue;
 
   //! UART registers. These will be reused in later derived classes
   //! - rbr: R: Rx buffer,		      
@@ -171,8 +225,11 @@ class UartSC
   // The divisor latch is really an extra 16 bit register. It will be reused
   // in later derived classes.
 
-  unsigned short int  divLatch;		//!< Divisor for ext clock
+  unsigned short int  divLatch;	//!< Divisor for ext clock
 
+  // Which interrupts are currently set?
+
+  unsigned char intrPending;	//!< which interrupts are pending
 
 private:
 
