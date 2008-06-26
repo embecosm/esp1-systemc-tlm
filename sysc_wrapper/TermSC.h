@@ -1,26 +1,25 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
-// Definition of xterm terminal emulator SystemC object
+// Definition of a xterm terminal emulator SystemC module class
 
 // $Id$
 
@@ -74,12 +73,10 @@ protected:
 
   // Thread to handle I/O for the xterm. Will be reimplemented in a derived
   // class.
-
   virtual void  xtermThread();
 
   // Utility function to read from the xterm. Will be reused in a derived
   // class.
-
   unsigned char  xtermRead();
 
   //! Pointer to the SystemC event raised when input is available. Reused in a
@@ -88,14 +85,12 @@ protected:
   //! @note This must be a pointer. If an event were declared here it would be
   //!       available at elaboration time and cause a crash. It is allocated
   //!       when the xterm is created.
-
   sc_core::sc_event *ioEvent;
 
 
 private:
 
   // Method to handle I/O on the Rx buffer from the UART
-
   void  rxMethod();
 
   // Utility functions to control the xterm
@@ -105,20 +100,17 @@ private:
   void  xtermLaunch( char *slaveName );
   int   xtermSetup();
 
-  // Function to write tot he xterm. Only used in this class.
-
+  // Function to write to the xterm. Only used in this class.
   void  xtermWrite( unsigned char  ch );
 
   // Signal handling is tricky, since we have to use a static
   // function. Fortunately each instance has a 1:1 mapping to the FD used for
   // the xterm, so we can use that for lookup.
-
   static void  ioHandler( int        signum,
 			  siginfo_t *si,
 			  void      *p );
 
   //! The list of mappings of file descriptors to TermSC instances
-
   static Fd2Inst    *instList;
 
   // xterm state
@@ -131,6 +123,5 @@ private:
 
 
 #endif	// TERM_SC__H
-
 
 // EOF

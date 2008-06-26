@@ -1,26 +1,26 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
-// Implementation of 16450 UART Synchronous SystemC module.
+// Implementation of 16450 UART SystemC module with temporal decoupling and
+// interrupt support.
 
 // $Id$
 
@@ -30,10 +30,11 @@
 
 SC_HAS_PROCESS( UartIntrSC );
 
+
 //! Custom constructor for the UART module
 
-//! Calls the parent constructor and marks the size of interrupt FIFO, then
-//! sets up the thread handling interrupt generation.
+//! Call the parent constructor and mark the size of interrupt FIFO, then set
+//! up the thread handling interrupt generation.
 
 //! @param name             The SystemC module name, passed to the parent
 //!                         constructor
@@ -47,7 +48,6 @@ UartIntrSC::UartIntrSC( sc_core::sc_module_name  name,
   UartDecoupSC( name, _clockRate, _isLittleEndian ),
   intrQueue( 1 )
 {
-
   SC_THREAD( intrThread );
 
 }	/* UartIntrSC() */
@@ -107,7 +107,6 @@ UartIntrSC::clrIntr( unsigned char ierFlag )
     intrQueue.write( false );
   }
 }	// clrIntr()
-
 
 
 // EOF

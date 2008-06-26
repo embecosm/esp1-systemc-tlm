@@ -1,22 +1,21 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
@@ -29,6 +28,7 @@
 
 
 SC_HAS_PROCESS( Or1ksimSC );
+
 
 //! Custom constructor for the Or1ksimSC SystemC module
 
@@ -102,7 +102,6 @@ Or1ksimSC::staticReadUpcall( void              *instancePtr,
 			     unsigned long int  mask )
 {
   Or1ksimSC *classPtr = (Or1ksimSC *)instancePtr;
-
   return (unsigned long int)classPtr->readUpcall( (sc_dt::uint64)addr,
 						  (uint32_t)mask );
 }	// staticReadUpcall()
@@ -136,7 +135,6 @@ Or1ksimSC::staticWriteUpcall( void              *instancePtr,
 			      unsigned long int  wdata )
 {
   Or1ksimSC *classPtr = (Or1ksimSC *)instancePtr;
-
   classPtr->writeUpcall( (sc_dt::uint64)addr, (uint32_t)mask, (uint32_t)wdata );
 
 }	// staticWriteUpcall()
@@ -208,7 +206,6 @@ Or1ksimSC::writeUpcall( sc_dt::uint64  addr,
   trans.set_byte_enable_ptr( (unsigned char *)&mask );
 
   // Transport.
-
   doTrans( trans );
 
 }	// writeUpcall()
@@ -217,7 +214,7 @@ Or1ksimSC::writeUpcall( sc_dt::uint64  addr,
 //! TLM transport to the target
 
 //! Calls the blocking transport routine for the initiator socket (@see
-//! ::dataBus).
+//! ::dataBus). Passes in a dummy time delay of zero.
 
 //! @param trans  The transaction payload
 
@@ -225,9 +222,6 @@ void
 Or1ksimSC::doTrans( tlm::tlm_generic_payload &trans )
 {
   sc_core::sc_time  dummyDelay = sc_core::SC_ZERO_TIME;
-
-  // Call the transport
-
   dataBus->b_transport( trans, dummyDelay );
 
 }	// doTrans()

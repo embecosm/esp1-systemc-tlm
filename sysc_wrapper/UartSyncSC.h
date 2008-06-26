@@ -1,26 +1,25 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
-// Definition of 16450 UART Synchronous SystemC module.
+// Definition of 16450 UART SystemC module with syncrhonous timing
 
 // $Id$
 
@@ -43,7 +42,6 @@
 //! The UartSC::busWrite() function is extended to update the baud rate timing
 //! based on changes to the UART registers.
 
-
 class UartSyncSC
   : public UartSC
 {
@@ -57,14 +55,13 @@ public:
 protected:
 
   // Reimplemetned blocking transport function, which adds timing, further
-  // reimplmented in derived classes. New version of the busWrite function, to
-  // update the character delay if relevant registers are update will not be
-  // reimplemented further.
-
+  // reimplmented in derived classes.
   virtual void  busReadWrite( tlm::tlm_generic_payload &payload,
 			      sc_core::sc_time         &delay );
 
-          void  busWrite( unsigned char  uaddr,
+  // New version of the busWrite function, to update the character delay if
+  // relevant registers are update will not be reimplemented further.
+  void          busWrite( unsigned char  uaddr,
 			  unsigned char  wdata );
 
 
@@ -72,12 +69,10 @@ private:
 
   // Reimplemented bus thread, which adds a timing delay before passing on hte
   // character read. Not reimplemented again.
-
   void          busThread();
 
   // Function to work out the baud rate character delay. Won't be reused in
   // derived classes.
-
   void  resetCharDelay();
 
   // Additional status info for this class only
@@ -89,6 +84,5 @@ private:
 
 
 #endif	// UART_SYNC_SC__H
-
 
 // EOF

@@ -1,22 +1,21 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
@@ -29,6 +28,7 @@
 #define UART_INTR_SC__H
 
 #include "UartDecoupSC.h"
+
 
 //! SystemC module class for a 16450 UART with temporal decoupling and
 //! external interrupt.
@@ -48,8 +48,8 @@ class UartIntrSC
 public:
 
   UartIntrSC( sc_core::sc_module_name  name,
-		unsigned long int        _clockRate,
-		bool                     _isLittleEndian );
+	      unsigned long int        _clockRate,
+	      bool                     _isLittleEndian );
 
   sc_core::sc_out<bool>  intr;		//!< Interrupt output port
 
@@ -57,7 +57,6 @@ public:
 private:
 
   // A single thread for driving interrupts. Only used in this class
-
   void  intrThread();
 
   // Reimplemented utility routines for interrupt handling, which drive the real
@@ -69,16 +68,12 @@ private:
   //! A boolean fifo is used to communicate with the interrupt thread, to
   //! ensure that requests to set/clear are taken in the order they are sent.
   //! True to set, false to clear.
-
   sc_core::sc_fifo<bool>  intrQueue;
-
-
 
 
 };	// UartIntrSC()
 
 
 #endif	// UART_INTR_SC__H
-
 
 // EOF

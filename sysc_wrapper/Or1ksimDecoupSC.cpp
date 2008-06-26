@@ -1,22 +1,21 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
@@ -37,7 +36,6 @@
 //! @param name           SystemC module name
 //! @param configFile     Config file for the underlying ISS
 //! @param imageFile      Binary image to run on the ISS
-
 
 Or1ksimDecoupSC::Or1ksimDecoupSC ( sc_core::sc_module_name  name,
 				   const char              *configFile,
@@ -92,12 +90,10 @@ Or1ksimDecoupSC::run()
     // synchronize.
 
     (void)or1ksim_run( timeLeft.to_seconds() );
-
     issQk.inc( sc_core::sc_time( or1ksim_get_time_period(), sc_core::SC_SEC ));
     or1ksim_set_time_point();
 
     // Sync if needed
-
     if( issQk.need_sync() ) {
       issQk.sync();
     }
@@ -138,7 +134,6 @@ Or1ksimDecoupSC::doTrans( tlm::tlm_generic_payload &trans )
   tlm::tlm_global_quantum &refTgq = tlm::tlm_global_quantum::instance();
   sc_core::sc_time  timeLeft      =
     refTgq.compute_local_quantum() - issQk.get_local_time();
-
   or1ksim_reset_duration ( timeLeft.to_seconds() );
 
 }	// doTrans()

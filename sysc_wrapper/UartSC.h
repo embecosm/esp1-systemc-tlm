@@ -1,22 +1,21 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
@@ -122,7 +121,6 @@ public:
 	  bool                     _isLittleEndian );
 
   //! Simple target convenience socket for UART bus access to registers
-  
   tlm_utils::simple_target_socket<UartSC>  bus;
 
   // Buffer for input to the UART and port to connect to the terminal buffer
@@ -136,14 +134,12 @@ protected:
 
   // A thread to run interaction with the bus side of the UART. This will be
   // reimplemented later in derived classes, so is declared virtual.
-
   virtual void  busThread();
 
   // Blocking transport function. Split out separate read and write
   // functions. The busReadWrite() and busWrite() functions will be
   // reimplemented in derived classes, so are declared virtual. The
   // busRead() function is only used here, so declared private (below).
-
   virtual void   busReadWrite( tlm::tlm_generic_payload &payload,
 			       sc_core::sc_time         &delay );
 
@@ -171,7 +167,6 @@ protected:
 
   //! UART event triggered by the CPU writing into the Tx buffer. This is
   //! reused by derived classes.
-
   sc_core::sc_event  txReceived;
 
   //! UART registers. These will be reused in later derived classes
@@ -197,41 +192,34 @@ protected:
     unsigned char  scr;		// R/W: Scratch Register            
   } regs;
 
-  // The divisor latch is really an extra 16 bit register. It will be reused
-  // in later derived classes.
+  //! The divisor latch is really an extra 16 bit register. It will be reused
+  //! in derived classes.
+  unsigned short int  divLatch;
 
-  unsigned short int  divLatch;	//!< Divisor for ext clock
-
-  // Which interrupts are currently set?
-
-  unsigned char intrPending;	//!< which interrupts are pending
+  //! Which interrupts are currently pending
+  unsigned char intrPending;
 
 
 private:
 
   // The method to listen to the terminal side is only used in this class and
   // never reimplemented.
-
   void  rxMethod();
 
   //The busRead() function supports busReadWrite, and is only used in this
   //class, so declared private
-
   unsigned char  busRead( unsigned char  uaddr );
 
   // Modem loopback utility. Only used in this class.
-
   void  modemLoopback();
 
   //! Flag to indicate endianism of underlying Or1ksim ISS model. Endianism is
-  // only used in this class.
-
-  bool  isLittleEndian;		//!< Is ISS little endian?
+  //! only used in this class.
+  bool  isLittleEndian;
 
 };	// UartSC()
 
 
 #endif	// UART_SC__H
-
 
 // EOF

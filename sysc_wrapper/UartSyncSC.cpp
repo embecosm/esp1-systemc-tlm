@@ -1,26 +1,25 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
-// Implementation of 16450 UART Synchronous SystemC module.
+// Implementation of 16450 UART SystemC module with synchronous timing.
 
 // $Id$
 
@@ -49,7 +48,6 @@ UartSyncSC::UartSyncSC( sc_core::sc_module_name  name,
   UartSC( name, _isLittleEndian ),
   clockRate( _clockRate )
 {
-
 }	/* UartSyncSC() */
 
 
@@ -72,16 +70,13 @@ UartSyncSC::busThread()
 {
   // Loop listening for changes on the Tx buffer, waiting for a baud rate
   // delay then sending to the terminal
-
   while( true ) {
-
     set( regs.lsr, UART_LSR_THRE );	// Indicate buffer empty
     set( regs.lsr, UART_LSR_TEMT );
     genIntr( UART_IER_TBEI );		// Interrupt if enabled
 
     wait( txReceived );			// Wait for a Tx request
     wait( charDelay );			// Wait baud delay
-
     tx.write( regs.thr );		// Send char to terminal
   }
 }	// busThread()
@@ -102,14 +97,11 @@ UartSyncSC::busReadWrite( tlm::tlm_generic_payload &payload,
   UartSC::busReadWrite( payload, delay );	// base method
 
   // Delay as appropriate.
-
   switch( payload.get_command() ) {
-
   case tlm::TLM_READ_COMMAND:
     wait( sc_core::sc_time( UART_READ_NS, sc_core::SC_NS ));
     delay = sc_core::SC_ZERO_TIME;
     break;
-
   case tlm::TLM_WRITE_COMMAND:
     wait( sc_core::sc_time( UART_WRITE_NS, sc_core::SC_NS ));
     delay = sc_core::SC_ZERO_TIME;
@@ -133,21 +125,16 @@ UartSyncSC::busWrite( unsigned char  uaddr,
 {
   UartSC::busWrite( uaddr, wdata );		// base function
 
-  // State machine lookup on the register to see if update to delay is needed
-
+  // Lookup on the register to see if update to delay is needed
   switch( uaddr ) {
-
   case UART_BUF:		// Only change if divisorLatch update (DLAB=1)
   case UART_IER:
-
     if( isSet( regs.lcr, UART_LCR_DLAB ) ) {
       resetCharDelay();
     }
-
     break;
 
   case UART_LCR:
-
     resetCharDelay();		// Could change baud delay
     break;
 
@@ -168,13 +155,11 @@ void
 UartSyncSC::resetCharDelay()
 {
   if( clockRate > 0 ) {		// Avoid divide by zero!
-
     int  dataBits  = (regs.lcr & UART_LCR_MASK) + 5;
     int  parityBit = isSet( regs.lcr, UART_LCR_PEN ) ? 1 : 0;
     int  stopBits  = isSet( regs.lcr, UART_LCR_STB ) ? 2 : 1;
 
     // 5 bit data has max 1.5 stop bits
-
     double totBits = (double)(1 + dataBits + parityBit + stopBits) -
                      (((5 == dataBits) && (1 == stopBits)) ? 0.5 : 0.0);
     double baudRate = (double)clockRate / (double)divLatch / 16.0;

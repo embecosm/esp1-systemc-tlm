@@ -1,26 +1,26 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
-// Implementation of xterm terminal emulator synchronous SystemC module
+// Implementation of a xterm terminal emulator SystemC module class with
+// synchronous timing
 
 // $Id$
 
@@ -34,8 +34,9 @@ SC_HAS_PROCESS( TermSyncSC );
 
 //! Passes the name to the parent constructor.
 
-//! Sets up threads listening to the rx port from the UART (TermSyncSC::rxThread)
-//! and waiting for characters from the xterm (TermSyncSC::xtermThread).
+//! Sets up threads listening to the rx port from the UART
+//! (TermSyncSC::rxThread) and waiting for characters from the xterm
+//! (TermSyncSC::xtermThread).
 
 //! Calculates the character delay appropriate for the baud rate. Fixed
 //! behavior of 1 start bit, 8 data bits and and 1 stop bit.
@@ -52,7 +53,6 @@ TermSyncSC::TermSyncSC( sc_core::sc_module_name  name,
 {
   // Calculate the delay. No configurability here - 1 start, 8 data and 1 stop
   // = total 10 bits.
-
   charDelay = sc_core::sc_time( 10.0 / (double)baudRate, sc_core::SC_SEC );
 
 }	/* TermSyncSC() */

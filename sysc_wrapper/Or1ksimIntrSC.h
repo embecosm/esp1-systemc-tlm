@@ -1,28 +1,26 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
 // Definition of main SystemC wrapper for the OSCI SystemC wrapper project
-// with SystemC temporal intrling and interrupt support
-
+// with SystemC temporal decoupling and interrupt support
 
 // $Id$
 
@@ -47,8 +45,6 @@ class Or1ksimIntrSC
 {
 public:
 
-  // Constructor.
-
   Or1ksimIntrSC( sc_core::sc_module_name  name,
 		 const char              *configFile,
 		 const char              *imageFile );
@@ -56,20 +52,17 @@ public:
   //! An array of signals for interrupts to the processor. The Or1ksim ISS has
   //! a built in programmable interrupt controller (PIC), which manages all
   //! these.
-
   sc_core::sc_signal<bool>  intr[NUM_INTR];
 
   
 private:
 
   // Method which will handle interrupts.
-
   void  intrMethod();
 
 };	/* Or1ksimIntrSC() */
 
 
 #endif	// OR1KSIM_INTR_SC__H
-
 
 // EOF

@@ -1,22 +1,21 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
@@ -32,6 +31,7 @@
 
 
 SC_HAS_PROCESS( UartSC );
+
 
 //! Custom constructor for the UART module
 
@@ -57,22 +57,19 @@ UartSC::UartSC( sc_core::sc_module_name  name,
   isLittleEndian( _isLittleEndian ),
   intrPending( 0 )
 {
-  // Set up the thread for the bus side, method for terminal side
-  // (statically sensitive to Rx)
-
+  // Set up the thread for the bus side
   SC_THREAD( busThread );
 
+  // Set up the method for the terminal side (statically sensitive to Rx)
   SC_METHOD( rxMethod );
   sensitive << rx;
   dont_initialize();
 
   // Register the blocking transport method
-
   bus.register_b_transport( this, &UartSC::busReadWrite );
 
   // Initialize the Uart. Clear regs. Other internal state (divLatch) is
   // undefined until set.
-
   bzero( (void *)&regs, sizeof( regs ));
 
 }	/* UartSC() */
@@ -94,15 +91,12 @@ UartSC::busThread()
 {
   // Loop listening for changes on the Tx buffer, waiting for a baud rate
   // delay then sending to the terminal
-
   while( true ) {
-
     set( regs.lsr, UART_LSR_THRE );	// Indicate buffer empty
     set( regs.lsr, UART_LSR_TEMT );
     genIntr( UART_IER_TBEI );		// Interrupt if enabled
 
     wait( txReceived );			// Wait for a Tx request
-
     tx.write( regs.thr );		// Send char to terminal
   }
 }	// busThread()
@@ -155,7 +149,6 @@ UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
 {
   // Break out the address, mask and data pointer. This should be only a
   // single byte access.
-
   sc_dt::uint64      addr    = payload.get_address();
   unsigned char     *maskPtr = payload.get_byte_enable_ptr();
   unsigned char     *dataPtr = payload.get_data_ptr();
@@ -164,7 +157,6 @@ UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
   unsigned char      uaddr;		// UART address
 
   // Deduce the byte address, allowing for endianism of the ISS
-
   switch( *((uint32_t *)maskPtr) ) {
   case 0x000000ff: offset = isLittleEndian ? 0 : 3; break;
   case 0x0000ff00: offset = isLittleEndian ? 1 : 2; break;
@@ -179,31 +171,18 @@ UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
 
   // Mask off the address to its range. This ought to have been done already
   // by an arbiter/decoder.
-
   uaddr = (unsigned char)((addr + offset) & UART_ADDR_MASK);
 
   // Which command?
-
   switch( payload.get_command() ) {
-
-  case tlm::TLM_READ_COMMAND:
-
-    dataPtr[offset] = busRead( uaddr );
-    break;
-
-  case tlm::TLM_WRITE_COMMAND:
-
-    busWrite( uaddr, dataPtr[offset] );
-    break;
-
+  case tlm::TLM_READ_COMMAND:  dataPtr[offset] = busRead( uaddr ); break;
+  case tlm::TLM_WRITE_COMMAND: busWrite( uaddr, dataPtr[offset] ); break;
   case tlm::TLM_IGNORE_COMMAND:
-
     payload.set_response_status( tlm::TLM_GENERIC_ERROR_RESPONSE );
     return;
   }
 
   // Single byte accesses always work
-
   payload.set_response_status( tlm::TLM_OK_RESPONSE );
 
 }	// busReadWrite()
@@ -237,11 +216,8 @@ UartSC::busRead( unsigned char  uaddr )
   unsigned char  res;		// The result to return
 
   // State machine lookup on the register
-
   switch( uaddr ) {
-
   case UART_BUF:
-
     if( isSet(regs.lcr, UART_LCR_DLAB ) ) {	// DLL byte
       res = (unsigned char)(divLatch & 0x00ff);
     }
@@ -250,22 +226,18 @@ UartSC::busRead( unsigned char  uaddr )
       clr( regs.lsr, UART_LSR_DR );		// Clear the data ready bit
       clrIntr( UART_IER_RBFI );
     }
-
     break;
 
   case UART_IER:
-
     if( isSet( regs.lcr, UART_LCR_DLAB ) ) {	// DLH byte
       res = (unsigned char)((divLatch & 0xff00) >> 8);
     }
     else {
       res = regs.ier;
     }
-
     break;
 
   case UART_IIR:
-
     res = regs.iir;
     clrIntr( UART_IER_TBEI );
     break;
@@ -273,7 +245,6 @@ UartSC::busRead( unsigned char  uaddr )
   case UART_LCR: res = regs.lcr; break;
   case UART_MCR: res = 0;        break;		// Write only
   case UART_LSR:
-
     res = regs.lsr;
     clr( regs.lsr, UART_LSR_BI );
     clr( regs.lsr, UART_LSR_FE );
@@ -283,7 +254,6 @@ UartSC::busRead( unsigned char  uaddr )
     break;
 
   case UART_MSR:
-
     res      = regs.msr;
     regs.msr = 0;
     clrIntr( UART_IER_MSI );
@@ -327,11 +297,8 @@ UartSC::busWrite( unsigned char  uaddr,
 		  unsigned char  wdata )
 {
   // State machine lookup on the register
-
   switch( uaddr ) {
-
   case UART_BUF:
-
     if( isSet( regs.lcr, UART_LCR_DLAB ) ) {	// DLL
       divLatch = (divLatch & 0xff00) | (unsigned short int)wdata;
     }
@@ -344,24 +311,20 @@ UartSC::busWrite( unsigned char  uaddr,
 
       txReceived.notify();			// Tell the bus thread
     }
-
     break;
 
   case UART_IER:
-
     if( isSet( regs.lcr, UART_LCR_DLAB ) ) {	// DLH
       divLatch = (divLatch & 0x00ff) | ((unsigned short int)wdata << 8);
     }
     else {
       regs.ier = wdata;
     }
-
     break;
 
   case UART_IIR:                   break;	// Read only
   case UART_LCR: regs.lcr = wdata; break;
   case UART_MCR: 
-
     regs.mcr = wdata;
     modemLoopback();
     break;
@@ -383,7 +346,6 @@ void
 UartSC::modemLoopback()
 {
   // Only if we are in loopback state
-
   if( isClr( regs.mcr, UART_MCR_LOOP )) {
     return;
   }
@@ -506,9 +468,7 @@ UartSC::genIntr( unsigned char  ierFlag )
 {
   if( isSet( regs.ier, ierFlag )) {
     set( intrPending, ierFlag );	// Mark this interrupt as pending.
-
     (void)setIntrFlags();		// Show highest priority
-
     clr( regs.iir, UART_IIR_IPEND );	// Mark (0 = pending) and queue
   }
 }	// genIntr()

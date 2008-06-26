@@ -1,22 +1,21 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
@@ -37,7 +36,6 @@
 //! @param name        SystemC module name
 //! @param configFile  Config file for the underlying ISS
 //! @param imageFile   Binary image to run on the ISS
-
 
 Or1ksimSyncSC::Or1ksimSyncSC ( sc_core::sc_module_name  name,
 		       const char              *configFile,
@@ -63,7 +61,6 @@ Or1ksimSyncSC::doTrans( tlm::tlm_generic_payload &trans )
 {
   // Synchronize with SystemC for the amount of time that the ISS has used
   // since the last upcall.
-
   wait( sc_core::sc_time( or1ksim_get_time_period(), sc_core::SC_SEC ) );
 
   // Call the transport. Since this is a synchronous model, the target should

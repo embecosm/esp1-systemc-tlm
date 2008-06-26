@@ -1,26 +1,25 @@
 // ----------------------------------------------------------------------------
 
-//                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-//                  ========================================
+// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-// Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+// Copyright (C) 2008  Embecosm Limited
 
-// This file contains confidential and proprietary information of Embecosm and
-// is protected by copyright, trade secret and other regional, national and
-// international laws, and may be embodied in patents issued or pending.
-
-// Receipt or possession of this file does not convey any rights to use,
-// reproduce, disclose its contents, or to manufacture, or sell anything it may
-// describe.
-
-// Reproduction, disclosure or use without specific written authorization of
-// Embecosm is strictly forbidden.
-
-// Reverse engineering is prohibited.
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+// License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
 
-// Implementation of xterm terminal emulator SystemC object
+// Implementation of a xterm terminal emulator SystemC module class
 
 // $Id$
 
@@ -59,17 +58,15 @@ SC_HAS_PROCESS( TermSC );
 TermSC::TermSC( sc_core::sc_module_name  name ) :
   sc_module( name )
 {
-  // Set up the method for the Rx with static sensitivity and the thread for
-  // the xterm.
-
+  // Method for the Rx with static sensitivity
   SC_METHOD( rxMethod );
   sensitive << rx;
   dont_initialize();
 
+  // Thread for the xterm
   SC_THREAD( xtermThread );
 
   // Start up the terminal
-
   xtermInit();
 
 }	/* TermSC() */
@@ -90,7 +87,7 @@ TermSC::~TermSC()
 //! Method handling characters on the Rx buffer
 
 //! Statically sensitive to characters being written from the UART. When they
-//! arrive, write them to the xterm.
+//! arrive, write them to the xterm. Print a time stamp
 
 void
 TermSC::rxMethod()
@@ -103,22 +100,19 @@ TermSC::rxMethod()
 }	// rxMethod()
 
 
-//! Thread listening for characters from the xterm
+//! Thread listening for characters from the xterm.
 
 //! Wait to be notified via the SystemC event TermSC::ioEvent that there is a
 //! character available.
 
-//! Read the character, then send it out to the UART
+//! Read the character, then send it out to the UART.
 
 void
 TermSC::xtermThread()
 {
   while( true ) {
-    wait( *ioEvent );			// Wait for some I/O on the terminal
-
-    int ch = xtermRead();		// Should not block
-
-    tx.write( (unsigned char)ch );	// Send it
+    wait( *ioEvent );		// Wait for some I/O on the terminal
+    tx.write( xtermRead());	// Get the char and sent it on
   }
 }	// xtermThread()
 
@@ -246,6 +240,7 @@ TermSC::xtermKill( const char *mess )
 	else {
 	  prev->next = cur->next;
 	}
+
 	delete cur->inst->ioEvent;	// Free the SystemC event
 	delete cur;			// Free the node
 	break;				// No more expected
@@ -367,7 +362,6 @@ TermSC::xtermSetup()
   instList     = newMap;
 
   // Dynamically create the SystemC event we will use.
-
   ioEvent = new sc_core::sc_event();
 
   // Install a signal handler
@@ -395,13 +389,12 @@ TermSC::xtermSetup()
     return -1;
   }
 
-  return 0;
+  return 0;		// Success
 
 }	// xtermSetup()
 
 
 //! Static pointer to the file descriptor to instance mapping list
-
 Fd2Inst *TermSC::instList = NULL;
 
 
@@ -441,19 +434,15 @@ TermSC::ioHandler( int        signum,
   }
 
   // Non-blocking select, in case there is nothing there!!
-
   switch( select( maxFd + 1, &readFdSet, NULL, NULL, &timeout ) ) {
-
   case -1:
     perror( "TermSC: Error on handler select" );
     return;
-
   case 0:
     return;		// Nothing to read - ignore
   }
 
   // Now trigger the handlers of any FD's that were set
-
   for( Fd2Inst *cur = instList; cur != NULL ; cur = cur->next ) {
     if( FD_ISSET( cur->fd, &readFdSet )) {
       (cur->inst)->ioEvent->notify();
@@ -474,7 +463,6 @@ unsigned char
 TermSC::xtermRead()
 {
   // Have we an xterm?
-
   if( ptSlave < 0 ) {
     std::cerr << "TermSC: No channel available for read" << std::endl;
     return -1;
@@ -505,14 +493,12 @@ void
 TermSC::xtermWrite( unsigned char  ch )
 {
   // Have we an xterm?
-
   if( ptSlave < 0 ) {
     std::cerr << "TermSC: No channel available for write" << std::endl;
     return;
   }
 
   // Blocking write should be fine. Note any error!
-
   if( write( ptSlave, &ch, 1 ) != 1 ) {
     std::cerr << "TermSC: Error on write" << std::endl;
   }
