@@ -137,6 +137,8 @@ int  or1ksim_init( const char         *config_file,
 
   sim_init ();
 
+  runtime.sim.ext_int = 0;		/* No interrupts pending */
+
   return  OR1KSIM_RC_OK;
 
 }	/* or1ksim_init() */
@@ -168,7 +170,9 @@ int  or1ksim_run( double  duration )
 
   while( duration < 0.0 || (runtime.sim.cycles < runtime.sim.end_cycles) ) {
 
-    long long time_start = runtime.sim.cycles;
+    long long int  time_start = runtime.sim.cycles;
+    int            i;					/* Interrupt # */
+
     /* Each cycle has counter of mem_cycles; this value is joined with cycles
      * at the end of the cycle; no sim originated memory accesses should be
      * performed inbetween.
@@ -181,6 +185,18 @@ int  or1ksim_run( double  duration )
     }
 
     runtime.sim.cycles += runtime.sim.mem_cycles;
+
+    /* Taken any external interrupts. Outer test is for the common case for
+       efficiency. */
+
+    if( 0 != runtime.sim.ext_int ) {
+      for( i = 0 ; i < sizeof (runtime.sim.ext_int) ; i++ ) {
+	if( 0x1 == ((runtime.sim.ext_int >> i) & 0x1) ) {
+	  report_interrupt( i );
+	  runtime.sim.ext_int &= ~(1 << i);	/* Clear int */
+	}
+      }
+    }
 
     /* Update the scheduler queue */
 
@@ -256,3 +272,11 @@ unsigned long int  or1ksim_clock_rate()
 
 }	// or1ksim_clock_rate()
 
+
+/* Take an interrupt */
+
+void or1ksim_interrupt( int  i )
+{
+  runtime.sim.ext_int |= 1 << i;		// Better not be > 31!
+
+}	/* or1ksim_interrupt() */

@@ -195,6 +195,7 @@ struct runtime {
     long long cycles;                 /* Cycles counts fetch stages */
     long long int  end_cycles;	      /* JPB. Cycles to end of quantum */
     double         time_point;	      /* JPB. Time point in the simulation */
+    unsigned long int  ext_int;	      /* JPB. External interrupt flags */
 
     int mem_cycles;                   /* Each cycle has counter of mem_cycles;
                                          this value is joined with cycles

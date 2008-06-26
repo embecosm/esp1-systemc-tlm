@@ -70,6 +70,8 @@ int  or1ksim_is_le();
 
 unsigned long int  or1ksim_clock_rate();
 
+void or1ksim_interrupt( int  i );
+
 #ifdef __cplusplus
 }
 #endif
