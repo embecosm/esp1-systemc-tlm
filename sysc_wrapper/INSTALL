@@ -1,0 +1,35 @@
+Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+
+The Example Programs
+====================
+
+To compile all the example models use:
+
+   make all
+
+There are separate targets to compile each individual program:
+
+  make TestSC
+  make SimpleSocSC
+  make SyncSocSC
+  make DecoupSocSC
+  make IntrSocSC
+
+Docbook documentation can be compiled with
+
+  make doc
+
+The directory can be cleaned with
+
+  make clean
+
+
+Test Programs
+=============
+
+The subdirectory "progs_or32" contains example programs for use with the
+models. See the INSTALL file in that directory for details of those programs.
+
+The IntrSocSC model can also run a Linux kernel. See the Embecosm
+Application Note "The OpenCores OpenRISC 1000 Simulator and Tool Chain:
+Installation Guide" for details of how to build this.
