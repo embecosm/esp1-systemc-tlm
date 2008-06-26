@@ -19,7 +19,7 @@
  *
  * ----------------------------------------------------------------------------
  *
- * Simple loopback test of the external UART.
+ * Simple loopback test of the external UART with interrupts
  *
  * $Id$
  *
@@ -27,12 +27,10 @@
 
 #include "utils.h"
 
-
 #define BASEADDR   0x90000000
 #define BAUD_RATE        9600
 #define CLOCK_RATE  100000000		// 100 Mhz
 
-/*! A structure representing the UART registers */
 struct uart16450
 {
   volatile unsigned char  buf;		// R/W: Rx & Tx buffer when DLAB=0  
@@ -44,6 +42,13 @@ struct uart16450
   volatile unsigned char  msr;		// R: Modem Status Register	    
   volatile unsigned char  scr;		// R/W: Scratch Register	    
 };
+
+#define UART_IER_ETBEI  0x02		// Enable trans holding register int.
+#define UART_IER_ERBFI  0x01		// Enable receiver data interrupt
+
+#define UART_IIR_RDI    0x04		// Receiver data interrupt
+#define UART_IIR_THRE   0x02	  	// Trans holding reg empty interrupt
+#define UART_IIR_IPEND  0x01		// Interrupt pending
 
 #define UART_LSR_TEMT   0x40		// Transmitter serial register empty
 #define UART_LSR_THRE   0x20		// Transmitter holding register empty
@@ -61,30 +66,36 @@ main()
   volatile struct uart16450 *uart = (struct uart16450 *)BASEADDR;
   unsigned short int         divisor;
 
-  divisor = CLOCK_RATE/16/BAUD_RATE;		// DL is for 16x baud rate
+  divisor = CLOCK_RATE/16/BAUD_RATE;		/* DL is for 16x baud rate */
 
-  set( &(uart->lcr), UART_LCR_DLAB );		// Set the divisor latch
+  set( &(uart->lcr), UART_LCR_DLAB );		/* Set the divisor latch */
   uart->buf  = (unsigned char)( divisor       & 0x00ff);
   uart->ier  = (unsigned char)((divisor >> 8) & 0x00ff);
   clr( &(uart->lcr), UART_LCR_DLAB );
 
-  set( &(uart->lcr), UART_LCR_8BITS );		// Set 8 bit data packet
+  set( &(uart->lcr), UART_LCR_8BITS );		/* Set 8 bit data packet */
+  
+  set( &(uart->ier), UART_IER_ERBFI | UART_IER_ETBEI );  /* Both Intrs */
 
   // Loop echoing characters
   while( 1 ) {
     unsigned char  ch;
 
-    do {			// Loop until a char is available
+    do {			/* Loop until a char is available */
       ;
     } while( is_clr(uart->lsr, UART_LSR_DR) );
 
     ch = uart->buf;
 
-    simputs( "Read: '" );	// Log what was read
+    simputs( "Read: '" );	/* Log what was read */
     simputc( ch );
     simputs( "'\n" );
 
-    do {			// Loop until the transmit register is free
+    do {			/* Wait for interrupts to clear */
+      ;
+    } while( is_set( uart->iir, UART_IIR_IPEND ) );
+
+    do {			/* Loop until the trasmit register is free */
       ;
     } while( is_clr( uart->lsr, UART_LSR_TEMT | UART_LSR_THRE ) );
       

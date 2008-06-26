@@ -1,0 +1,28 @@
+Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+
+The OpenRISC 1000 Test Programs
+===============================
+
+To compile all the test programs use:
+
+   make all
+
+There are separate targets to compile each individual program:
+
+  make hello
+  make logger_test
+  make uart_loop
+  make uart_loop_intr
+
+The directory can be cleaned with
+
+  make clean
+
+
+The OpenRISC 1000 Tool Chain
+============================
+
+These programs make use of the (freely available) OpenRISC 1000 toolchain (see
+<http://www.opencores.org>). The Embecosm Application Note "The OpenCores
+OpenRISC 1000 Simulator and Tool Chain: Installation Guide" gives a set of
+instrutions for building this tool chain.

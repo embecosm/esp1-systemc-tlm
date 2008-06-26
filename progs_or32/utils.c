@@ -1,26 +1,25 @@
 /* ----------------------------------------------------------------------------
  *
- *                  CONFIDENTIAL AND PROPRIETARY INFORMATION
- *                  ========================================
+ * Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
  *
- * Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+ * Copyright (C) 2008  Embecosm Limited
  *
- * This file contains confidential and proprietary information of Embecosm and
- * is protected by copyright, trade secret and other regional, national and
- * international laws, and may be embodied in patents issued or pending.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * Receipt or possession of this file does not convey any rights to use,
- * reproduce, disclose its contents, or to manufacture, or sell anything it may
- * describe.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+ * License for more details.
  *
- * Reproduction, disclosure or use without specific written authorization of
- * Embecosm is strictly forbidden.
- *
- * Reverse engineering is prohibited.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * ----------------------------------------------------------------------------
  *
- * Simple test of the generic I/O device.
+ * Utility printing routines.
  *
  * $Id$
  *
@@ -37,6 +36,11 @@
 #define NOP_CNT_RESET   0x0005	    /* Reset statistics counters */
 
 
+/*! Exit the simulator
+ *!
+ *! @param  rc Return code (not used)
+ */
+
 void  simexit( int  rc )
 {
   __asm__ __volatile__ ( "\tl.nop\t%0" : : "K"( NOP_EXIT ));
@@ -44,12 +48,22 @@ void  simexit( int  rc )
 }	/* simexit() */
 
 
+/*! Print a character
+ *!
+ *! @param  c Character to print
+ */
+
 void  simputc( int  c )
 {
   __asm__ __volatile__ ( "\tl.nop\t%0" : : "K"( NOP_PUTC ));
 
 }	/* simputc() */
 
+
+/*! Print a hex number
+ *!
+ *! @param  i Number to print
+ */
 
 extern void  simputh( unsigned long int  i )
 {
@@ -65,6 +79,10 @@ extern void  simputh( unsigned long int  i )
 }	/* simputh() */
   
     
+/*! Print a string
+ *!
+ *! @param  str String to print
+ */
 void  simputs( char *str )
 {
   int  i;

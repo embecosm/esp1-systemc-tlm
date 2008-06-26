@@ -1,26 +1,25 @@
 # ----------------------------------------------------------------------------
 
-#                  CONFIDENTIAL AND PROPRIETARY INFORMATION
-#                  ========================================
+# Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-# Unpublished copyright (c) 2008 Embecosm. All Rights Reserved.
+# Copyright (C) 2008  Embecosm Limited
 
-# This file contains confidential and proprietary information of Embecosm and
-# is protected by copyright, trade secret and other regional, national and
-# international laws, and may be embodied in patents issued or pending.
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
 
-# Receipt or possession of this file does not convey any rights to use,
-# reproduce, disclose its contents, or to manufacture, or sell anything it may
-# describe.
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+# License for more details.
 
-# Reproduction, disclosure or use without specific written authorization of
-# Embecosm is strictly forbidden.
-
-# Reverse engineering is prohibited.
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # ----------------------------------------------------------------------------
 
-# Linux makefile for OSCI SystemC wrapper project example programs
+# Linux makefile for OSCI SystemC wrapper project test programs
 
 # $Id$
 
@@ -35,7 +34,7 @@ LD = or32-uclinux-ld
 # Make the lot
 
 .PHONY: all
-all: hello logger_test uart_loop
+all: hello logger_test uart_loop uart_loop_intr
 
 
 # ----------------------------------------------------------------------------
@@ -73,12 +72,22 @@ logger_test.o: logger_test.c
 
 
 # ----------------------------------------------------------------------------
-# Generic I/O. Ensure start.o is first!
+# UART loop test. Ensure start.o is first!
 
 uart_loop: start.o utils.o uart_loop.o 
 	$(LD) -Ttext 0x0 $^ -o $@
 
 uart_loop.o: uart_loop.c
+	$(CC) $(CFLAGS) -c $<
+
+
+# ----------------------------------------------------------------------------
+# UART loop test with interrupts. Ensure start.o is first!
+
+uart_loop_intr: start.o utils.o uart_loop_intr.o 
+	$(LD) -Ttext 0x0 $^ -o $@
+
+uart_loop_intr.o: uart_loop_intr.c
 	$(CC) $(CFLAGS) -c $<
 
 
@@ -91,3 +100,4 @@ clean:
 	$(RM) hello
 	$(RM) logger_test
 	$(RM) uart_loop
+	$(RM) uart_loop_intr
