@@ -199,8 +199,10 @@ void ic_enabled(union param_val val, void *dat)
   config.ic.enabled = val.int_val;
   if(val.int_val)
     cpu_state.sprs[SPR_UPR] |= SPR_UPR_ICP;
-  else
+  else {
     cpu_state.sprs[SPR_UPR] &= ~SPR_UPR_ICP;
+    config.cpu.upr          &= ~SPR_UPR_ICP;	/* JBP patch */
+  }
 }
 
 void ic_nsets(union param_val val, void *dat)

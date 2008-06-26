@@ -320,8 +320,10 @@ void dc_enabled(union param_val val, void *dat)
   config.dc.enabled = val.int_val;
   if(val.int_val)
     cpu_state.sprs[SPR_UPR] |= SPR_UPR_DCP;
-  else
+  else {
     cpu_state.sprs[SPR_UPR] &= ~SPR_UPR_DCP;
+    config.cpu.upr          &= ~SPR_UPR_DCP;	/* JPB patch */
+  }
 }
 
 void dc_nsets(union param_val val, void *dat)
