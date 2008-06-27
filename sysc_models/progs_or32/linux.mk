@@ -92,12 +92,20 @@ uart_loop_intr.o: uart_loop_intr.c
 
 
 # ----------------------------------------------------------------------------
+# Documentation
+
+doc: doxygen.config mainpage start.s utils.h utils.c bitutils.c hello.c \
+     logger_test.c uart_loop.c uart_loop_intr.c
+	doxygen doxygen.config
+
+# ----------------------------------------------------------------------------
 # Clean up
 
 .PHONY: clean
 clean:
-	$(RM) *.o
-	$(RM) hello
-	$(RM) logger_test
-	$(RM) uart_loop
-	$(RM) uart_loop_intr
+	$(RM)    *.o
+	$(RM) -r doc
+	$(RM)    hello
+	$(RM)    logger_test
+	$(RM)    uart_loop
+	$(RM)    uart_loop_intr

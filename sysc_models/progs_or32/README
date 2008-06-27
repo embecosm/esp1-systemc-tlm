@@ -1,9 +1,10 @@
-Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+  Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+  ===========================================================================
 
 ABOUT
 =====
 
-These are a set of programs that can be compiled with the OpenRISC 1000
+This is a set of programs that can be compiled with the OpenRISC 1000
 toolchain to run on the models described in the Embecosm Application Note
 "Building a Loosely Timed SoC Model with OSCI TLM 2.0: A Case Study Using the
 OpenRISC 1000 Or1ksim ISS".
