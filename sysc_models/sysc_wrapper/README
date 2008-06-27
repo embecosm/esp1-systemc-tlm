@@ -1,0 +1,47 @@
+Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+
+ABOUT
+=====
+
+This is a set of example programs to accompany the Embecosm Application Note
+"Building a Loosely Timed SoC Model with OSCI TLM 2.0: A Case Study Using the
+OpenRISC 1000 Or1ksim ISS".
+
+They are a set of SystemC models encapsulating the OpenCores or1ksim ISS and
+building it into a complete SystemC SoC model.
+
+A subdirectory, progs_or32, contains test programs that can be compiled with
+the OpenRISC 1000 tool chain for use with these models.
+
+One model (the IntrSocSC model) can also run a Linux kernel. See the Embecosm
+Application Note "The OpenCores OpenRISC 1000 Simulator and Tool Chain:
+Installation Guide" for details of this kernel.
+
+
+COPYING
+=======
+
+This program is licensed under the GNU Lesser General Public License. Full
+details are in the files COPYING and COPYING.LESSER
+
+Copyright (C) 2008  Embecosm Limited
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+INSTALLATION
+============
+
+See the file INSTALL for details of installing the programs.
+
