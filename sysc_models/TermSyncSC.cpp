@@ -28,8 +28,6 @@
 #include "TermSyncSC.h"
 
 
-SC_HAS_PROCESS( TermSyncSC );
-
 //! Custom constructor for the terminal module
 
 //! Passes the name to the parent constructor.

@@ -61,7 +61,7 @@ Or1ksimSyncSC::doTrans( tlm::tlm_generic_payload &trans )
 {
   // Synchronize with SystemC for the amount of time that the ISS has used
   // since the last upcall.
-  wait( sc_core::sc_time( or1ksim_get_time_period(), sc_core::SC_SEC ) );
+  wait( sc_core::sc_time( or1ksim_get_time_period(), sc_core::SC_SEC ));
 
   // Call the transport. Since this is a synchronous model, the target should
   // have synchronized, and no additional delay be added on return.

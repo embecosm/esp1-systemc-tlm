@@ -162,7 +162,7 @@ UartSyncSC::resetCharDelay()
     // 5 bit data has max 1.5 stop bits
     double totBits = (double)(1 + dataBits + parityBit + stopBits) -
                      (((5 == dataBits) && (1 == stopBits)) ? 0.5 : 0.0);
-    double baudRate = (double)clockRate / (double)divLatch / 16.0;
+    double baudRate = (double)clockRate / (double)regs.dl / 16.0;
 
     charDelay = sc_core::sc_time( totBits / baudRate, sc_core::SC_SEC );
   }

@@ -28,6 +28,8 @@
 #include "Or1ksimIntrSC.h"
 
 
+SC_HAS_PROCESS( Or1ksimIntrSC );
+
 //! Custom constructor for the Or1ksimIntrSC SystemC module with interrupt
 //! handling
 
@@ -37,9 +39,6 @@
 //! @param name           SystemC module name
 //! @param configFile     Config file for the underlying ISS
 //! @param imageFile      Binary image to run on the ISS
-
-
-SC_HAS_PROCESS( Or1ksimIntrSC );
 
 Or1ksimIntrSC::Or1ksimIntrSC ( sc_core::sc_module_name  name,
 			       const char              *configFile,

@@ -44,7 +44,7 @@ SC_HAS_PROCESS( UartSC );
 //! Registers UartSC::busReadWrite() as the callback for blocking transport on
 //! the UartSC::bus socket.
 
-//! Zeros the registers, but leaves the UartSC::divLatch unset - it is
+//! Zeros the registers, but leaves the UartSC::regs.dl unset - it is
 //! undefined until used.
 
 //! @param name             The SystemC module name, passed to the parent
@@ -68,8 +68,7 @@ UartSC::UartSC( sc_core::sc_module_name  name,
   // Register the blocking transport method
   bus.register_b_transport( this, &UartSC::busReadWrite );
 
-  // Initialize the Uart. Clear regs. Other internal state (divLatch) is
-  // undefined until set.
+  // Clear UART regs
   bzero( (void *)&regs, sizeof( regs ));
 
 }	/* UartSC() */
@@ -139,9 +138,9 @@ UartSC::rxMethod()
 
 //! Increases the delay as appropriate and sets a success response.
 
-//! @param payload    The transaction payload
-//! @param delayTime  How far the initiator is beyond baseline SystemC
-//!                   time. For use with temporal decoupling.
+//! @param payload  The transaction payload
+//! @param delay    How far the initiator is beyond baseline SystemC time. For
+//!                 use with temporal decoupling.
 
 void
 UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
@@ -219,7 +218,7 @@ UartSC::busRead( unsigned char  uaddr )
   switch( uaddr ) {
   case UART_BUF:
     if( isSet(regs.lcr, UART_LCR_DLAB ) ) {	// DLL byte
-      res = (unsigned char)(divLatch & 0x00ff);
+      res = (unsigned char)(regs.dl & 0x00ff);
     }
     else {
       res = regs.rbr;				// Get the read data
@@ -230,7 +229,7 @@ UartSC::busRead( unsigned char  uaddr )
 
   case UART_IER:
     if( isSet( regs.lcr, UART_LCR_DLAB ) ) {	// DLH byte
-      res = (unsigned char)((divLatch & 0xff00) >> 8);
+      res = (unsigned char)((regs.dl & 0xff00) >> 8);
     }
     else {
       res = regs.ier;
@@ -300,7 +299,7 @@ UartSC::busWrite( unsigned char  uaddr,
   switch( uaddr ) {
   case UART_BUF:
     if( isSet( regs.lcr, UART_LCR_DLAB ) ) {	// DLL
-      divLatch = (divLatch & 0xff00) | (unsigned short int)wdata;
+      regs.dl = (regs.dl & 0xff00) | (unsigned short int)wdata;
     }
     else {
       regs.thr = wdata;
@@ -315,7 +314,7 @@ UartSC::busWrite( unsigned char  uaddr,
 
   case UART_IER:
     if( isSet( regs.lcr, UART_LCR_DLAB ) ) {	// DLH
-      divLatch = (divLatch & 0x00ff) | ((unsigned short int)wdata << 8);
+      regs.dl = (regs.dl & 0x00ff) | ((unsigned short int)wdata << 8);
     }
     else {
       regs.ier = wdata;
@@ -428,28 +427,27 @@ UartSC::modemLoopback()
 
 //! The IIR bits are set for the highest priority outstanding interrupt.
 
-//! @return  True if any interrupts are pending
-
-bool
+void
 UartSC::setIntrFlags()
 {
-    clr( regs.iir, UART_IIR_MASK );			// Clear current
+  clr( regs.iir, UART_IIR_MASK );			// Clear current
+  clr( regs.iir, UART_IIR_IPEND );			// 0 = pending
 
-    if( isSet( intrPending, UART_IER_RLSI )) {		// Priority order
-      set( regs.iir, UART_IIR_RLS );
-    }
-    else if( isSet( intrPending, UART_IER_RBFI )) {
-      set( regs.iir, UART_IIR_RDA );
-    }
-    else if( isSet( intrPending, UART_IER_TBEI )) {
-      set( regs.iir, UART_IIR_THRE );
-    }
-    else{
-      set( regs.iir, UART_IIR_MOD );
-    }
-
-    return 0 != (intrPending & UART_IER_VALID);
-
+  if( isSet( intrPending, UART_IER_RLSI )) {		// Priority order
+    set( regs.iir, UART_IIR_RLS );
+  }
+  else if( isSet( intrPending, UART_IER_RBFI )) {
+    set( regs.iir, UART_IIR_RDA );
+  }
+  else if( isSet( intrPending, UART_IER_TBEI )) {
+    set( regs.iir, UART_IIR_THRE );
+  }
+  else if( isSet( intrPending, UART_IER_MSI )) {
+    set( regs.iir, UART_IIR_MOD );
+  }
+  else {
+    set( regs.iir, UART_IIR_IPEND );			// 1 = not pending
+  }
 }	// setIntrFlags()
 
 
@@ -468,8 +466,7 @@ UartSC::genIntr( unsigned char  ierFlag )
 {
   if( isSet( regs.ier, ierFlag )) {
     set( intrPending, ierFlag );	// Mark this interrupt as pending.
-    (void)setIntrFlags();		// Show highest priority
-    clr( regs.iir, UART_IIR_IPEND );	// Mark (0 = pending) and queue
+    setIntrFlags();			// Show highest priority
   }
 }	// genIntr()
 
@@ -488,11 +485,9 @@ UartSC::genIntr( unsigned char  ierFlag )
 void
 UartSC::clrIntr( unsigned char ierFlag )
 {
-  clr( intrPending, ierFlag );
+  clr( intrPending, ierFlag );		// Mark this interrupt as not pending
+  setIntrFlags();
 
-  if( !setIntrFlags()) {		// Deassert if none left
-    set( regs.iir, UART_IIR_IPEND );	// 1 = not pending
-  }
 }	// clrIntr()
 
 

@@ -157,7 +157,13 @@ UartIntrSC.o: UartIntrSC.cpp UartIntrSC.h UartDecoupSC.h UartSyncSC.h UartSC.h
 # ----------------------------------------------------------------------------
 # Documentation
 
-doc:
+doc: doxygen.config mainpage Or1ksimSC.h Or1ksimSC.cpp Or1ksimExtSC.h \
+     Or1ksimExtSC.cpp Or1ksimSyncSC.h Or1ksimSyncSC.cpp Or1ksimDecoupSC.h \
+     Or1ksimDecoupSC.cpp Or1ksimIntrSC.h Or1ksimIntrSC.cpp UartSC.h \
+     UartSC.cpp UartSyncSC.h UartSyncSC.cpp UartDecoupSC.h UartDecoupSC.cpp \
+     UartIntrSC.h UartIntrSC.cpp LoggerSC.h LoggerSC.cpp TermSC.h TermSC.cpp \
+     TermSyncSC.h TermSyncSC.cpp TestSC.cpp SimpleSocSC.cpp SyncSocSC.cpp \
+     DecoupSocSC.cpp IntrSocSC.cpp
 	doxygen doxygen.config
 
 

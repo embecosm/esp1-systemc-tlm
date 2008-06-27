@@ -55,7 +55,7 @@
 
 // Interrupt Identification register bits and interrupt masks of interest
 
-#define UART_IIR_IPEND  0x01  	//!< Interrupt pending
+#define UART_IIR_IPEND  0x01  	//!< Interrupt pending (active low)
 
 #define UART_IIR_MASK   0x06  	//!< the IIR status bits
 #define UART_IIR_RLS    0x06  	//!< Receiver line status
@@ -150,7 +150,7 @@ protected:
   // needed in derived class. Generate and clear functions will be
   // reimplemented in derived classes.
 
-  bool          setIntrFlags();
+  void          setIntrFlags();
   virtual void  genIntr( unsigned char  ierFlag );
   virtual void  clrIntr( unsigned char  ierFlag );
 
@@ -179,22 +179,20 @@ protected:
   //! - lsr: R: Line Status Register	      
   //! - msr: R: Modem Status Register	      
   //! - scr: R/W: Scratch Register            
+  //! - dl:  R/W: Divisor Latch
 
   struct {
-    unsigned char  rbr;		// R: Rx buffer,
-    unsigned char  thr;		// R: Tx hold reg,
-    unsigned char  ier;		// R/W: Interrupt Enable Register
-    unsigned char  iir;		// R: Interrupt ID Register
-    unsigned char  lcr;		// R/W: Line Control Register
-    unsigned char  mcr;		// W: Modem Control Register
-    unsigned char  lsr;		// R: Line Status Register
-    unsigned char  msr;		// R: Modem Status Register
-    unsigned char  scr;		// R/W: Scratch Register            
+    unsigned char       rbr;		// R: Rx buffer,
+    unsigned char       thr;		// R: Tx hold reg,
+    unsigned char       ier;		// R/W: Interrupt Enable Register
+    unsigned char       iir;		// R: Interrupt ID Register
+    unsigned char       lcr;		// R/W: Line Control Register
+    unsigned char       mcr;		// W: Modem Control Register
+    unsigned char       lsr;		// R: Line Status Register
+    unsigned char       msr;		// R: Modem Status Register
+    unsigned char       scr;		// R/W: Scratch Register            
+    unsigned short int  dl;		// R/W: Divisor Latch
   } regs;
-
-  //! The divisor latch is really an extra 16 bit register. It will be reused
-  //! in derived classes.
-  unsigned short int  divLatch;
 
   //! Which interrupts are currently pending
   unsigned char intrPending;

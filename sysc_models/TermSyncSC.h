@@ -31,7 +31,7 @@
 #include "TermSC.h"
 
 
-//! SystemC module class for the Terminal with synchronization
+//! SystemC module class for the Terminal with synchronized timing
 
 //! Talks to the outside world via two systemC FIFOs. Any data coming in has
 //! already been delayed (to represent the baud rate wire delay) via the

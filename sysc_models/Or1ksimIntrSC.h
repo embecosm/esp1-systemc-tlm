@@ -34,7 +34,7 @@
 #define  NUM_INTR  32
 
 //! SystemC module class wrapping Or1ksim ISS with temporal decoupling and
-//! interrupts.
+//! external interrupts.
 
 //! Provides signals for the interrupts and additional threads sensitive to
 //! the interrupt inputs. All other functionality comes from the base class,

@@ -81,11 +81,8 @@ UartIntrSC::genIntr( unsigned char  ierFlag )
 {
   if( isSet( regs.ier, ierFlag )) {
     set( intrPending, ierFlag );	// Mark this interrupt as pending.
-
-    (void)setIntrFlags();		// Show highest priority
-
-    clr( regs.iir, UART_IIR_IPEND );	// Mark (0 = pending) and queue
-    intrQueue.write( true );
+    setIntrFlags();			// Show highest priority
+    intrQueue.write( true );		// Request an interrupt signal
   }
 }	// genIntr()
 
@@ -101,10 +98,10 @@ void
 UartIntrSC::clrIntr( unsigned char ierFlag )
 {
   clr( intrPending, ierFlag );
+  setIntrFlags();
 
-  if( !setIntrFlags()) {		// Deassert if none left
-    set( regs.iir, UART_IIR_IPEND );	// 1 = not pending
-    intrQueue.write( false );
+  if( isSet( regs.iir, UART_IIR_IPEND )) {	// 1 = not pending
+    intrQueue.write( false );			// Deassert if none left
   }
 }	// clrIntr()
 

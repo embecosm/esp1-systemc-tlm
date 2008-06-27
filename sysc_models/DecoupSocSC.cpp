@@ -28,8 +28,8 @@
 #include "UartDecoupSC.h"
 #include "TermSyncSC.h"
 
-#define BAUD_RATE    9600		//!< Baud rate of the terminal
-#define QUANTUM_US     10		//!< Enough time for 1000 instructions
+#define BAUD_RATE   9600		//!< Baud rate of the terminal
+#define QUANTUM_US   100		//!< Enough time for 1000 instructions
 
 
 //! Main program building a SoC model with temporal decoupling.
