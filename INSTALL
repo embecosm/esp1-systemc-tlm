@@ -1,0 +1,10 @@
+Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+
+See the individual INSTALL files in the sysc_models and sysc_models/progs_or32
+directories for installation details of their components.
+
+The Or1ksim patch file, embecosm-or32-or1ksim-0.2.0-lib-patch.bz2, should be
+applied to a standard patched Or1ksim 0.2.0 source tree as described in the
+Appendix to Embecosm Application Note 2.  "Building a Loosely Timed SoC Model
+with OSCI TLM 2.0: A Case Study Using an Open Source ISS and Linux 2.6
+Kernel".

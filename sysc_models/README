@@ -4,9 +4,9 @@
 ABOUT
 =====
 
-This is a set of example models to accompany the Embecosm Application Note
-"Building a Loosely Timed SoC Model with OSCI TLM 2.0: A Case Study Using the
-OpenRISC 1000 Or1ksim ISS".
+This is a set of example models to accompany Embecosm Application Note 2.
+"Building a Loosely Timed SoC Model with OSCI TLM 2.0: A Case Study Using an
+Open Source ISS and Linux 2.6 Kernel".
 
 They are a set of SystemC models encapsulating the OpenCores or1ksim ISS and
 building it into a complete SystemC SoC model.

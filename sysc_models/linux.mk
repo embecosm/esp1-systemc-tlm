@@ -28,9 +28,10 @@
 CXX       = g++
 CXXFLAGS += -DSC_INCLUDE_DYNAMIC_PROCESSES
 
-# Where stuff is
+# Where stuff is. Make sure you set OR1KSIM to wherever the Or1ksim binaries,
+# libraries and include files are.
 
-OR1KSIM    = /opt/or1ksim
+OR1KSIM   ?= /opt/or1ksim
 OR1KSIMLIB = $(OR1KSIM)/lib
 
 INCDIRS = -I$(OR1KSIM)/include \
@@ -179,4 +180,3 @@ clean:
 	$(RM)    SyncSocSC
 	$(RM)    DecoupSocSC
 	$(RM)    IntrSocSC
-	cd progs_or32 && $(MAKE) clean
