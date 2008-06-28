@@ -2,7 +2,7 @@
 
 # Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-# Copyright (C) 2008  Embecosm Limited
+# Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
 
 # This program is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License as published by
@@ -179,3 +179,4 @@ clean:
 	$(RM)    SyncSocSC
 	$(RM)    DecoupSocSC
 	$(RM)    IntrSocSC
+	cd progs_or32 && $(MAKE) clean
