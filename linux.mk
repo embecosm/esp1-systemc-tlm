@@ -25,14 +25,14 @@
 
 # Location
 
-DISTNAME = embecosm_app_note_2_examples
+DISTNAME = embecosm_app_note_1_examples
 
 
 # ----------------------------------------------------------------------------
 # Make the lot
 
 .PHONY: dist
-dist: $(DISTNAME) progs_or32 models
+dist: distclean $(DISTNAME) progs_or32 models
 	cp -r COPYING COPYING.LESSER INSTALL README \
 		embecosm-or32-or1ksim-0.2.0-lib-patch.bz2 \
 		linux.cfg simple.cfg sysc_models $(DISTNAME)
@@ -59,7 +59,10 @@ models:
 # ----------------------------------------------------------------------------
 # Clean up
 
-.PHONY: clean
-clean:
+.PHONY: distclean
+distclean:
+	$(RM) -r build
+	cd sysc_models && $(MAKE) clean
+	cd sysc_models/progs_or32 && $(MAKE) clean
 	$(RM) -r $(DISTNAME)
 	$(RM)    $(DISTNAME).tar.bz2
