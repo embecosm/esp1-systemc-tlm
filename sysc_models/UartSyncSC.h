@@ -47,9 +47,8 @@ class UartSyncSC
 {
 public:
 
-  UartSyncSC( sc_core::sc_module_name  name,
-	      unsigned long int        _clockRate,
-	      bool                     _isLittleEndian );
+  UartSyncSC (sc_core::sc_module_name  name,
+	      unsigned long int        _clockRate);
 
 
 protected:

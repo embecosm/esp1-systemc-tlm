@@ -33,9 +33,8 @@
 
 //! Extended SystemC module class wrapping Or1ksim ISS
 
-//! Derived from Or1ksimSC:: to add the Or1ksimExtSC::isLittleEndian() utility
-//! to the interface and reimplement Or1ksimSC::doTrans(). Everything else
-//! comes from the parent module.
+//! Derived from Or1ksimSC:: to reimplement Or1ksimSC::doTrans(). Everything
+//! else comes from the parent module.
 
 class Or1ksimExtSC
   : public Or1ksimSC
@@ -45,9 +44,6 @@ public:
   Or1ksimExtSC( sc_core::sc_module_name  name,
 		const char              *configFile,
 		const char              *imageFile );
-
-  // Public utility to return the endianism of the model
-  bool  isLittleEndian();
 
 
 protected:

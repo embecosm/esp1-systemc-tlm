@@ -47,9 +47,8 @@ class UartIntrSC
 {
 public:
 
-  UartIntrSC( sc_core::sc_module_name  name,
-	      unsigned long int        _clockRate,
-	      bool                     _isLittleEndian );
+  UartIntrSC (sc_core::sc_module_name  name,
+	      unsigned long int        _clockRate);
 
   sc_core::sc_out<bool>  intr;		//!< Interrupt output port
 

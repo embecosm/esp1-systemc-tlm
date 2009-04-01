@@ -40,13 +40,11 @@ SC_HAS_PROCESS( UartIntrSC );
 //!                         constructor
 //! @param _clockRate       The external clock rate, passed to the parent
 //!                         consturctor
-//! @param _isLittleEndian  The model endianism
 
-UartIntrSC::UartIntrSC( sc_core::sc_module_name  name,
-			unsigned long int        _clockRate,
-			bool                     _isLittleEndian ) :
-  UartDecoupSC( name, _clockRate, _isLittleEndian ),
-  intrQueue( 1 )
+UartIntrSC::UartIntrSC (sc_core::sc_module_name  name,
+			unsigned long int        _clockRate) :
+  UartDecoupSC (name, _clockRate),
+  intrQueue (1)
 {
   SC_THREAD( intrThread );
 

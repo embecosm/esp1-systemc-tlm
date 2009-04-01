@@ -44,20 +44,6 @@ Or1ksimExtSC::Or1ksimExtSC ( sc_core::sc_module_name  name,
  }	// Or1ksimExtSC()
 
 
-//! Identify the endianism of the underlying Or1ksim ISS
-
-//! Public utility to allow other modules to identify the model endianism
-
-//! @return  True if the Or1ksim ISS is little endian
-
-bool
-Or1ksimExtSC::isLittleEndian()
-{
-  return (1 == or1ksim_is_le());
-
-}	// or1ksimIsLe()
-
-
 //! Extended TLM transport to the target
 
 //! Calls the blocking transport routine for the initiator socket (@see

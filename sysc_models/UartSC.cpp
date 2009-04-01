@@ -49,12 +49,9 @@ SC_HAS_PROCESS( UartSC );
 
 //! @param name             The SystemC module name, passed to the parent
 //!                         constructor
-//! @param _isLittleEndian  The model endianism
 
-UartSC::UartSC( sc_core::sc_module_name  name,
-		bool                     _isLittleEndian ) :
+UartSC::UartSC( sc_core::sc_module_name  name) :
   sc_module( name ),
-  isLittleEndian( _isLittleEndian ),
   intrPending( 0 )
 {
   // Set up the thread for the bus side
@@ -117,7 +114,7 @@ UartSC::rxMethod()
   regs.rbr  = rx.read();
 
   sc_core::sc_time  now = sc_core::sc_time_stamp();
-  printf( "Char read at    %12.9f sec\n", now.to_seconds());
+  printf( "Char '%c' read at    %12.9f sec\n", regs.rbr, now.to_seconds());
 
   set( regs.lsr, UART_LSR_DR );		// Mark data ready
   genIntr( UART_IER_RBFI );		// Interrupt if enabled
@@ -129,9 +126,9 @@ UartSC::rxMethod()
 
 //! Receives transport requests on the target socket.
 
-//! Break out the address, data and byte enable mask. Use the byte enable mask
-//! to identify the byte address. Allow for model endianism in calculating
-//! this (see UartSC::isLittleEndian).
+//! Break out the address, data and byte enable mask. All data is host endian,
+//! so we do not need to allow for Orksim model endianism in calculating this
+//! (see UartSC::isLittleEndian).
 
 //! Switches on the command and calls UartSC::busRead() or UartSC::buswrite()
 //! routines to do the behavior
@@ -155,18 +152,28 @@ UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
   int                offset;		// Data byte offset in word
   unsigned char      uaddr;		// UART address
 
-  // Deduce the byte address, allowing for endianism of the ISS
-  switch( *((uint32_t *)maskPtr) ) {
-  case 0x000000ff: offset = isLittleEndian ? 0 : 3; break;
-  case 0x0000ff00: offset = isLittleEndian ? 1 : 2; break;
-  case 0x00ff0000: offset = isLittleEndian ? 2 : 1; break;
-  case 0xff000000: offset = isLittleEndian ? 3 : 0; break;
-
-  default:		// Invalid request
-
-    payload.set_response_status( tlm::TLM_GENERIC_ERROR_RESPONSE );
-    return;
-  }
+  // Deduce the byte address (endianness independent)
+  if (0xff == maskPtr[0])
+    {
+      offset = 0;
+    }
+  else if (0xff == maskPtr[1])
+    {
+      offset = 1;
+    }
+  else if (0xff == maskPtr[2])
+    {
+      offset = 2;
+    }
+  else if (0xff == maskPtr[3])
+    {
+      offset = 3;
+    }
+  else
+    {
+      payload.set_response_status( tlm::TLM_GENERIC_ERROR_RESPONSE );
+      return;
+    }
 
   // Mask off the address to its range. This ought to have been done already
   // by an arbiter/decoder.

@@ -42,9 +42,9 @@ int  sc_main( int   argc,
   }
 
   // Instantiate the modules
-  Or1ksimExtSC  iss( "or1ksim", argv[1], argv[2] );
-  UartSC        uart( "uart", iss.isLittleEndian() );
-  TermSC        term( "terminal" );
+  Or1ksimExtSC  iss ("or1ksim", argv[1], argv[2]);
+  UartSC        uart ("uart");
+  TermSC        term ("terminal");
 
   // Connect up the TLM ports
   iss.dataBus( uart.bus );

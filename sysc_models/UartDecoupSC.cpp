@@ -35,12 +35,10 @@
 //!                         constructor
 //! @param _clockRate       The external clock rate, passed to the parent
 //!                         consturctor
-//! @param _isLittleEndian  The model endianism
 
-UartDecoupSC::UartDecoupSC( sc_core::sc_module_name  name,
-			unsigned long int        _clockRate,
-			bool                     _isLittleEndian ) :
-  UartSyncSC( name, _clockRate, _isLittleEndian )
+UartDecoupSC::UartDecoupSC (sc_core::sc_module_name  name,
+			    unsigned long int        _clockRate) :
+  UartSyncSC (name, _clockRate)
 {
 }	/* UartDecoupSC() */
 

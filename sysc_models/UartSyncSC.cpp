@@ -39,14 +39,11 @@
 //! @param name             The SystemC module name, passed to the base class
 //!                         constructor
 //! @param _clockRate       The external clock rate
-//! @param _isLittleEndian  The model endianism, passed to the base class
-//!                         constructor
 
 UartSyncSC::UartSyncSC( sc_core::sc_module_name  name,
-			unsigned long int        _clockRate,
-			bool                     _isLittleEndian ) :
-  UartSC( name, _isLittleEndian ),
-  clockRate( _clockRate )
+			unsigned long int        _clockRate ) :
+  UartSC (name),
+  clockRate (_clockRate) 
 {
 }	/* UartSyncSC() */
 

@@ -45,9 +45,9 @@ int  sc_main( int   argc,
   }
 
   // Instantiate the modules
-  Or1ksimSyncSC  iss( "or1ksim", argv[1], argv[2] );
-  UartSyncSC     uart( "uart", iss.getClockRate(), iss.isLittleEndian() );
-  TermSyncSC     term( "terminal", BAUD_RATE );
+  Or1ksimSyncSC  iss ("or1ksim", argv[1], argv[2]);
+  UartSyncSC     uart ("uart", iss.getClockRate());
+  TermSyncSC     term ("terminal", BAUD_RATE);
 
   // Connect up the TLM ports
   iss.dataBus( uart.bus );

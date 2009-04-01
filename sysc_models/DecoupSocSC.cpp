@@ -50,9 +50,9 @@ int  sc_main( int   argc,
   refTgq.set( sc_core::sc_time( QUANTUM_US, sc_core::SC_US ));
 
   // Instantiate the modules
-  Or1ksimDecoupSC  iss( "or1ksim", argv[1], argv[2] );
-  UartDecoupSC     uart( "uart", iss.getClockRate(), iss.isLittleEndian() );
-  TermSyncSC       term( "terminal", BAUD_RATE );
+  Or1ksimDecoupSC  iss ("or1ksim", argv[1], argv[2]);
+  UartDecoupSC     uart ("uart", iss.getClockRate());
+  TermSyncSC       term ("terminal", BAUD_RATE);
 
   // Connect up the TLM ports
   iss.dataBus( uart.bus );

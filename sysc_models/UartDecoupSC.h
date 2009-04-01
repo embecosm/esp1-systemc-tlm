@@ -42,9 +42,8 @@ class UartDecoupSC
 {
 public:
 
-  UartDecoupSC( sc_core::sc_module_name  name,
-		unsigned long int        _clockRate,
-		bool                     _isLittleEndian );
+  UartDecoupSC (sc_core::sc_module_name  name,
+		unsigned long int        _clockRate);
 
 
 private:

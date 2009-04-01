@@ -117,8 +117,7 @@ class UartSC
 {
 public:
 
-  UartSC( sc_core::sc_module_name  name,
-	  bool                     _isLittleEndian );
+  UartSC (sc_core::sc_module_name  name);
 
   //! Simple target convenience socket for UART bus access to registers
   tlm_utils::simple_target_socket<UartSC>  bus;
@@ -210,10 +209,6 @@ private:
 
   // Modem loopback utility. Only used in this class.
   void  modemLoopback();
-
-  //! Flag to indicate endianism of underlying Or1ksim ISS model. Endianism is
-  //! only used in this class.
-  bool  isLittleEndian;
 
 };	// UartSC()
 

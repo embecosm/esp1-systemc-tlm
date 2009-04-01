@@ -43,6 +43,8 @@ LIBDIRS = -L$(OR1KSIMLIB) \
 
 LIBS    = -lsim -lsystemc
 
+TARGET_ARCH=linux
+
 
 # ----------------------------------------------------------------------------
 # Make the lot
