@@ -25,7 +25,7 @@
 
 # Location
 
-DISTNAME = embecosm_app_note_1_examples
+DISTNAME = embecosm-esp1-sysc-tlm2.0-examples-1.2
 
 
 # ----------------------------------------------------------------------------
