@@ -33,4 +33,4 @@ extern void  simputc( int  c );
 extern void  simputh( int  i );
 extern void  simputs( char *str );
 
-#endif OR32_UTILS__H
+#endif /* OR32_UTILS__H */
