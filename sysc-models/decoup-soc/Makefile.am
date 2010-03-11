@@ -1,6 +1,6 @@
 # Decoupled SoC SystemC models Makefile.am for automake
 
-# Copyright (C) 2009 Embecosm Limited
+# Copyright (C) 2010 Embecosm Limited
 
 # Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
@@ -18,7 +18,7 @@
 # more details.
 
 # You should have received a copy of the GNU General Public License along
-# with this program.  If not, see <http:#www.gnu.org/licenses/>.  */
+# with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 # -----------------------------------------------------------------------------
 # This code is commented throughout for use with Doxygen.

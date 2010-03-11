@@ -1,33 +1,34 @@
-/* ----------------------------------------------------------------------------
+/* Utility printing routines for OpenRISC
  *
- * Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+ * Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
  *
- * Copyright (C) 2008  Embecosm Limited
+ * Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
  *
- * This program is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
+ * This file is part of the example programs for "Building a Loosely Timed SoC
+ * Model with OSCI TLM 2.0"
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option)
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
- * License for more details.
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * ----------------------------------------------------------------------------
- *
- * Utility printing routines.
- *
- * $Id$
- *
- */
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>. */
+/* ------------------------------------------------------------------------- */
+
+/* ------------------------------------------------------------------------- */
+/* This code is commented throughout for use with Doxygen.                   */
+/* ------------------------------------------------------------------------- */
 
 
+/* ------------------------------------------------------------------------- */
 /* l.nop constants only used here */
-
+/* ------------------------------------------------------------------------- */
 #define NOP_NOP         0x0000      /* Normal nop instruction */
 #define NOP_EXIT        0x0001      /* End of simulation */
 #define NOP_REPORT      0x0002      /* Simple report */
@@ -36,11 +37,11 @@
 #define NOP_CNT_RESET   0x0005	    /* Reset statistics counters */
 
 
+/* ------------------------------------------------------------------------- */
 /*! Exit the simulator
  *!
- *! @param  rc Return code (not used)
- */
-
+ *! @param  rc Return code (not used)                                        */
+/* ------------------------------------------------------------------------- */
 void  simexit( int  rc )
 {
   __asm__ __volatile__ ( "\tl.nop\t%0" : : "K"( NOP_EXIT ));
@@ -48,11 +49,11 @@ void  simexit( int  rc )
 }	/* simexit() */
 
 
+/* ------------------------------------------------------------------------- */
 /*! Print a character
  *!
- *! @param  c Character to print
- */
-
+ *! @param  c Character to print                                             */
+/* ------------------------------------------------------------------------- */
 void  simputc( int  c )
 {
   __asm__ __volatile__ ( "\tl.nop\t%0" : : "K"( NOP_PUTC ));
@@ -60,11 +61,11 @@ void  simputc( int  c )
 }	/* simputc() */
 
 
+/* ------------------------------------------------------------------------- */
 /*! Print a hex number
  *!
- *! @param  i Number to print
- */
-
+ *! @param  i Number to print                                                */
+/* ------------------------------------------------------------------------- */
 extern void  simputh( unsigned long int  i )
 {
   char  lsd = i & 0xf;
@@ -79,10 +80,11 @@ extern void  simputh( unsigned long int  i )
 }	/* simputh() */
   
     
+/* ------------------------------------------------------------------------- */
 /*! Print a string
  *!
- *! @param  str String to print
- */
+ *! @param  str String to print                                              */
+/* ------------------------------------------------------------------------- */
 void  simputs( char *str )
 {
   int  i;
