@@ -233,7 +233,7 @@ TermSC::xtermKill( const char *mess )
     Fd2Inst *cur  = instList;
 
     while( NULL != cur ) {		// Delete this FD from the FD->inst
-      if( cur->fd = ptSlave ) {		// mapping if it exists
+      if( cur->fd == ptSlave ) {	// mapping if it exists
 	if( NULL == prev ) {
 	  instList->next = cur->next;
 	}

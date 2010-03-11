@@ -74,9 +74,10 @@ LoggerSC::loggerReadWrite( tlm::tlm_generic_payload &payload,
   const char *commStr;
 
   switch( comm ) {
-  case tlm::TLM_READ_COMMAND:   commStr = "Read";   break;
-  case tlm::TLM_WRITE_COMMAND:  commStr = "Write";  break;
-  case tlm::TLM_IGNORE_COMMAND: commStr = "Ignore"; break;
+  case tlm::TLM_READ_COMMAND:   commStr = "Read";            break;
+  case tlm::TLM_WRITE_COMMAND:  commStr = "Write";           break;
+  case tlm::TLM_IGNORE_COMMAND: commStr = "Ignore";          break;
+  default:                      commStr = "Unknown command"; break;
   }
 
   std::cout << "Logging" << std::endl;

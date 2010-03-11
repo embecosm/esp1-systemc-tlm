@@ -1,4 +1,4 @@
-# Synchronized SoC SystemC models Makefile.am for automake
+# Logger SystemC models Makefile.am for automake
 
 # Copyright (C) 2009 Embecosm Limited
 
@@ -25,38 +25,20 @@
 # -----------------------------------------------------------------------------
 
 # Build a complete program and a library for subsequent programs
-bin_PROGRAMS            = sync-soc
-noinst_LTLIBRARIES      = libsync-soc.la
+bin_PROGRAMS         = logger
+noinst_LTLIBRARIES   = liblogger.la
 
 # Sources for the program. We set the CXX flags as a workaround for name
 # clashing between program and library. It is a no-op effectively. See the
 # automake manual for an explanation.
-sync_soc_SOURCES        = syncSocMainSC.cpp \
-		          Or1ksimSyncSC.cpp \
-		          Or1ksimSyncSC.h   \
-		          TermSyncSC.cpp    \
-		          TermSyncSC.h      \
-		          UartSyncSC.cpp    \
-		          UartSyncSC.h
+logger_SOURCES       = loggerMainSC.cpp \
+		       LoggerSC.cpp     \
+		       LoggerSC.h       \
+		       Or1ksimSC.cpp    \
+		       Or1ksimSC.h
 
-sync_soc_LDADD          = ../logger/liblogger.la         \
-			    ../simple-soc/libsimple-soc.la
-
-sync_soc_CPPFLAGS       = -I$(srcdir)/../logger     \
-			    -I$(srcdir)/../simple-soc
-
-sync_soc_CXXFLAGS       = $(AM_CXXFLAGS)
+logger_CXXFLAGS      = $(AM_CXXFLAGS)
 
 # Sources for the library
-libsync_soc_la_SOURCES  = Or1ksimSyncSC.cpp \
-		          Or1ksimSyncSC.h   \
-		          TermSyncSC.cpp    \
-		          TermSyncSC.h      \
-		          UartSyncSC.cpp    \
-		          UartSyncSC.h
-
-libsync_soc_la_LIBADD   = ../logger/liblogger.la         \
-			  ../simple-soc/libsimple-soc.la
-
-libsync_soc_la_CPPFLAGS = -I$(srcdir)/../logger     \
-			  -I$(srcdir)/../simple-soc
+liblogger_la_SOURCES = Or1ksimSC.cpp \
+		       Or1ksimSC.h

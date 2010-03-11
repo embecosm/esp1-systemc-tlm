@@ -219,7 +219,7 @@ UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
 unsigned char
 UartSC::busRead( unsigned char  uaddr )
 {
-  unsigned char  res;		// The result to return
+  unsigned char  res = 0;		// The result to return
 
   // State machine lookup on the register
   switch( uaddr ) {

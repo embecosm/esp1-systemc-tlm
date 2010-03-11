@@ -1,4 +1,4 @@
-# Synchronized SoC SystemC models Makefile.am for automake
+# Simple SoC SystemC models Makefile.am for automake
 
 # Copyright (C) 2009 Embecosm Limited
 
@@ -25,38 +25,34 @@
 # -----------------------------------------------------------------------------
 
 # Build a complete program and a library for subsequent programs
-bin_PROGRAMS            = sync-soc
-noinst_LTLIBRARIES      = libsync-soc.la
+bin_PROGRAMS              = simple-soc
+noinst_LTLIBRARIES        = libsimple-soc.la
 
 # Sources for the program. We set the CXX flags as a workaround for name
 # clashing between program and library. It is a no-op effectively. See the
 # automake manual for an explanation.
-sync_soc_SOURCES        = syncSocMainSC.cpp \
-		          Or1ksimSyncSC.cpp \
-		          Or1ksimSyncSC.h   \
-		          TermSyncSC.cpp    \
-		          TermSyncSC.h      \
-		          UartSyncSC.cpp    \
-		          UartSyncSC.h
+simple_soc_SOURCES        = simpleSocMainSC.cpp \
+		            Or1ksimExtSC.cpp    \
+		            Or1ksimExtSC.h      \
+		            TermSC.cpp          \
+		            TermSC.h            \
+		            UartSC.cpp          \
+		            UartSC.h
 
-sync_soc_LDADD          = ../logger/liblogger.la         \
-			    ../simple-soc/libsimple-soc.la
+simple_soc_LDADD          = ../logger/liblogger.la
 
-sync_soc_CPPFLAGS       = -I$(srcdir)/../logger     \
-			    -I$(srcdir)/../simple-soc
+simple_soc_CPPFLAGS       = -I$(srcdir)/../logger
 
-sync_soc_CXXFLAGS       = $(AM_CXXFLAGS)
+simple_soc_CXXFLAGS       = $(AM_CXXFLAGS)
 
 # Sources for the library
-libsync_soc_la_SOURCES  = Or1ksimSyncSC.cpp \
-		          Or1ksimSyncSC.h   \
-		          TermSyncSC.cpp    \
-		          TermSyncSC.h      \
-		          UartSyncSC.cpp    \
-		          UartSyncSC.h
+libsimple_soc_la_SOURCES  = Or1ksimExtSC.cpp \
+		            Or1ksimExtSC.h   \
+		            TermSC.cpp       \
+		            TermSC.h         \
+		            UartSC.cpp       \
+		            UartSC.h
 
-libsync_soc_la_LIBADD   = ../logger/liblogger.la         \
-			  ../simple-soc/libsimple-soc.la
+libsimple_soc_la_LIBADD   = ../logger/liblogger.la
 
-libsync_soc_la_CPPFLAGS = -I$(srcdir)/../logger     \
-			  -I$(srcdir)/../simple-soc
+libsimple_soc_la_CPPFLAGS = -I$(srcdir)/../logger
