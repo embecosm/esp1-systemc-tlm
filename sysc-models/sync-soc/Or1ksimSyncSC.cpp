@@ -1,33 +1,34 @@
-// ----------------------------------------------------------------------------
+// Wrapper for Synchronized loosely timed Or1ksim module implementation
 
-// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+// Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
-// Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
+// Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
+// This file is part of the example programs for "Building a Loosely Timed SoC
+// Model with OSCI TLM 2.0"
+
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 3 of the License, or (at your option)
+// any later version.
 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-// License for more details.
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+// more details.
 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// You should have received a copy of the GNU General Public License along
+// with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------------------
 
-// Implementation of main SystemC wrapper for the OSCI SystemC wrapper project
-// with SystemC time synchronization
-
-// $Id$
-
+// ----------------------------------------------------------------------------
+// This code is commented throughout for use with Doxygen.
+// ----------------------------------------------------------------------------
 
 #include "Or1ksimSyncSC.h"
 
 
+// ----------------------------------------------------------------------------
 //! Custom constructor for the Or1ksimSyncSC SystemC module
 
 //! This calls the constructor of the base class, Or1ksimExtSC::. Then sets an
@@ -36,7 +37,7 @@
 //! @param name        SystemC module name
 //! @param configFile  Config file for the underlying ISS
 //! @param imageFile   Binary image to run on the ISS
-
+// ----------------------------------------------------------------------------
 Or1ksimSyncSC::Or1ksimSyncSC ( sc_core::sc_module_name  name,
 		       const char              *configFile,
 		       const char              *imageFile ) :
@@ -47,6 +48,7 @@ Or1ksimSyncSC::Or1ksimSyncSC ( sc_core::sc_module_name  name,
 }	/* Or1ksimSyncSC() */
 
 
+// ----------------------------------------------------------------------------
 //! Synchronized TLM transport to the target
 
 //! The module synchronizes with SystemC for the time consumed by the ISS,
@@ -55,7 +57,7 @@ Or1ksimSyncSC::Or1ksimSyncSC ( sc_core::sc_module_name  name,
 //! external entity.
 
 //! @param trans  The transaction payload
-
+// ----------------------------------------------------------------------------
 void
 Or1ksimSyncSC::doTrans( tlm::tlm_generic_payload &trans )
 {
@@ -73,12 +75,13 @@ Or1ksimSyncSC::doTrans( tlm::tlm_generic_payload &trans )
 }	// doTrans()
 
 
+// ----------------------------------------------------------------------------
 //! Get the clock rate of the underlying Or1ksim ISS
 
 //! Public utility to allow other modules to identify the ISS clock rate
 
 //! @return  The clock rate in Hz of the underlying Or1ksim ISS
-
+// ----------------------------------------------------------------------------
 unsigned long int
 Or1ksimSyncSC::getClockRate()
 {

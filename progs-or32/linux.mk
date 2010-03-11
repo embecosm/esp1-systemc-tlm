@@ -25,9 +25,9 @@
 
 # Tools
 
-CC = or32-uclinux-gcc
+CC = or32-elf-gcc
 CFLAGS = -ggdb
-LD = or32-uclinux-ld
+LD = or32-elf-ld
 
 
 # ----------------------------------------------------------------------------

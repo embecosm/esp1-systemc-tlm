@@ -1,28 +1,29 @@
-// ----------------------------------------------------------------------------
+// Xterm terminal module implementation
 
-// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+// Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
-// Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
+// Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
+// This file is part of the example programs for "Building a Loosely Timed SoC
+// Model with OSCI TLM 2.0"
+
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 3 of the License, or (at your option)
+// any later version.
 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-// License for more details.
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+// more details.
 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// You should have received a copy of the GNU General Public License along
+// with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------------------
 
-// Implementation of a xterm terminal emulator SystemC module class
-
-// $Id$
-
+// ----------------------------------------------------------------------------
+// This code is commented throughout for use with Doxygen.
+// ----------------------------------------------------------------------------
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -43,6 +44,7 @@
 
 SC_HAS_PROCESS( TermSC );
 
+// ----------------------------------------------------------------------------
 //! Custom constructor for the terminal module
 
 //! Passes the name to the parent constructor.
@@ -54,7 +56,7 @@ SC_HAS_PROCESS( TermSC );
 //! that can read and write from/to it.
 
 //! @param name      Name of this module - passed to the parent constructor
-
+// ----------------------------------------------------------------------------
 TermSC::TermSC( sc_core::sc_module_name  name ) :
   sc_module( name )
 {
@@ -72,11 +74,12 @@ TermSC::TermSC( sc_core::sc_module_name  name ) :
 }	/* TermSC() */
 
 
+// ----------------------------------------------------------------------------
 //! Custom destructor for the terminal module
 
 //! Custom destructors are not usually needed for SystemC models, but we use
 //! this to kill the child process running the xterm.
-
+// ----------------------------------------------------------------------------
 TermSC::~TermSC()
 {
   xtermKill( NULL );		// Get rid of the xterm
@@ -84,11 +87,12 @@ TermSC::~TermSC()
 }	// ~TermSC()
   
 
+// ----------------------------------------------------------------------------
 //! Method handling characters on the Rx buffer
 
 //! Statically sensitive to characters being written from the UART. When they
 //! arrive, write them to the xterm. Print a time stamp
-
+// ----------------------------------------------------------------------------
 void
 TermSC::rxMethod()
 {
@@ -100,13 +104,14 @@ TermSC::rxMethod()
 }	// rxMethod()
 
 
+// ----------------------------------------------------------------------------
 //! Thread listening for characters from the xterm.
 
 //! Wait to be notified via the SystemC event TermSC::ioEvent that there is a
 //! character available.
 
 //! Read the character, then send it out to the UART.
-
+// ----------------------------------------------------------------------------
 void
 TermSC::xtermThread()
 {
@@ -117,6 +122,7 @@ TermSC::xtermThread()
 }	// xtermThread()
 
 
+// ----------------------------------------------------------------------------
 //! Start an xTerm as a child process.
 
 //! This uses the POSIX routines to obtain a pseudo TTY (pty) and then fire up
@@ -131,7 +137,7 @@ TermSC::xtermThread()
 //! The parent is initalized using TermSC::xtermSetup()
 
 //! @return   0 on success, -1 on failure, with an error code in errno
-
+// ----------------------------------------------------------------------------
 int
 TermSC::xtermInit()
 {
@@ -216,6 +222,7 @@ TermSC::xtermInit()
 }	// xtermInit()
 
 
+// ----------------------------------------------------------------------------
 //! Kill an open xterm
 
 //!  Remove the mapping from file descriptor to process for this xterm. Close
@@ -224,7 +231,7 @@ TermSC::xtermInit()
 //! If the message is non-null print it with perror.
 
 //! @param mess  An error message
-
+// ----------------------------------------------------------------------------
 void
 TermSC::xtermKill( const char *mess )
 {
@@ -267,12 +274,13 @@ TermSC::xtermKill( const char *mess )
 }	// xtermKill()
 
 
+// ----------------------------------------------------------------------------
 //! Launch an xterm
 
 //! Called in the child to launch the xterm. Should never return - just exit.
 
 //! @param slaveName  The name of the slave pty to pass to xterm
-
+// ----------------------------------------------------------------------------
 void
 TermSC::xtermLaunch( char *slaveName )
 {
@@ -310,6 +318,7 @@ TermSC::xtermLaunch( char *slaveName )
 }	// xtermLaunch()
 
 
+// ----------------------------------------------------------------------------
 //! Set up xterm I/O for the parent process
 
 //! Called in the parent to set the terminal up. Swallows up the initial
@@ -331,7 +340,7 @@ TermSC::xtermLaunch( char *slaveName )
 //! will crash SystemC.
 
 //! @return  -1 on failure, 0 on success
-
+// ----------------------------------------------------------------------------
 int
 TermSC::xtermSetup()
 {
@@ -397,7 +406,7 @@ TermSC::xtermSetup()
 //! Static pointer to the file descriptor to instance mapping list
 Fd2Inst *TermSC::instList = NULL;
 
-
+// ----------------------------------------------------------------------------
 //! Static handler for SIGIO
 
 //! Must be static, since sigaction cannot cope with a member function. The
@@ -413,7 +422,7 @@ Fd2Inst *TermSC::instList = NULL;
 //!                signal. According to POSIX, it should contain the FD for
 //!                SIGIO, but that is not working, hence the use of select.
 //! @param p       A ucontext_t structure, passed as void*.
-
+// ----------------------------------------------------------------------------
 void
 TermSC::ioHandler( int        signum,
 		   siginfo_t *si,
@@ -451,6 +460,7 @@ TermSC::ioHandler( int        signum,
 }	// ioHandler()
 
 
+// ----------------------------------------------------------------------------
 //! Native read from the xterm.
 
 //! We'll only be calling this if we already know there is something to read,
@@ -458,7 +468,7 @@ TermSC::ioHandler( int        signum,
 
 //! @return The character read. NULL if there was an error - only detected by
 //!         a rude message on the console!
-
+// ----------------------------------------------------------------------------
 unsigned char
 TermSC::xtermRead()
 {
@@ -483,12 +493,13 @@ TermSC::xtermRead()
 }	// xtermRead()
 
 
+// ----------------------------------------------------------------------------
 //! Native write to the xterm.
 
 //! Errors are ignored, apart from a rude message on the console.
 
 //! @param ch  The character to be written
-
+// ----------------------------------------------------------------------------
 void
 TermSC::xtermWrite( unsigned char  ch )
 {

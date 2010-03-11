@@ -1,29 +1,29 @@
-// ----------------------------------------------------------------------------
+// Wrapper for loosely timed Or1ksim module with interrupts definition
 
-// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+// Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
-// Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
+// Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
+// This file is part of the example programs for "Building a Loosely Timed SoC
+// Model with OSCI TLM 2.0"
+
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 3 of the License, or (at your option)
+// any later version.
 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-// License for more details.
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+// more details.
 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// You should have received a copy of the GNU General Public License along
+// with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------------------
 
-// Definition of main SystemC wrapper for the OSCI SystemC wrapper project
-// with SystemC temporal decoupling and interrupt support
-
-// $Id$
-
+// ----------------------------------------------------------------------------
+// This code is commented throughout for use with Doxygen.
+// ----------------------------------------------------------------------------
 
 #ifndef OR1KSIM_INTR_SC__H
 #define OR1KSIM_INTR_SC__H
@@ -33,13 +33,14 @@
 
 #define  NUM_INTR  32
 
+// ----------------------------------------------------------------------------
 //! SystemC module class wrapping Or1ksim ISS with temporal decoupling and
 //! external interrupts.
 
 //! Provides signals for the interrupts and additional threads sensitive to
 //! the interrupt inputs. All other functionality comes from the base class,
 //! Or1ksimDecoupSC::.
-
+// ----------------------------------------------------------------------------
 class Or1ksimIntrSC
   : public Or1ksimDecoupSC
 {

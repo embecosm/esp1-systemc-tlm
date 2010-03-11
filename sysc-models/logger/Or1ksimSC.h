@@ -1,27 +1,29 @@
-// ----------------------------------------------------------------------------
+// Or1ksim base wrapper module definition
 
-// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+// Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
-// Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
+// Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
+// This file is part of the example programs for "Building a Loosely Timed SoC
+// Model with OSCI TLM 2.0"
+
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 3 of the License, or (at your option)
+// any later version.
 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-// License for more details.
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+// more details.
 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// You should have received a copy of the GNU General Public License along
+// with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------------------
 
-// Definition of the basic SystemC wrapper for Or1ksim
-
-// $Id$
+// ----------------------------------------------------------------------------
+// This code is commented throughout for use with Doxygen.
+// ----------------------------------------------------------------------------
 
 
 #ifndef OR1KSIM_SC__H
@@ -34,21 +36,22 @@
 #include "or1ksim.h"
 
 
+// ----------------------------------------------------------------------------
 //! SystemC module class wrapping Or1ksim ISS
 
 //! Provides a single thread (::run) which runs the underlying Or1ksim ISS.
-
+// ----------------------------------------------------------------------------
 class Or1ksimSC
   : public sc_core::sc_module
 {
 public:
 
+  //! Initiator port for data accesses
+  tlm_utils::simple_initiator_socket<Or1ksimSC>  dataBus;
+
   Or1ksimSC( sc_core::sc_module_name  name,
 	     const char              *configFile,
 	     const char              *imageFile );
-
-  //! Initiator port for data accesses
-  tlm_utils::simple_initiator_socket<Or1ksimSC>  dataBus;
 
 
 protected:

@@ -1,28 +1,29 @@
-// ----------------------------------------------------------------------------
+// UART base module implementation
 
-// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+// Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
-// Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
+// Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
+// This file is part of the example programs for "Building a Loosely Timed SoC
+// Model with OSCI TLM 2.0"
+
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 3 of the License, or (at your option)
+// any later version.
 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-// License for more details.
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+// more details.
 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// You should have received a copy of the GNU General Public License along
+// with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------------------
 
-// Implementation of 16450 UART SystemC module.
-
-// $Id$
-
+// ----------------------------------------------------------------------------
+// This code is commented throughout for use with Doxygen.
+// ----------------------------------------------------------------------------
 
 #include <iostream>
 #include <iomanip>
@@ -32,7 +33,7 @@
 
 SC_HAS_PROCESS( UartSC );
 
-
+// ----------------------------------------------------------------------------
 //! Custom constructor for the UART module
 
 //! Passes the name to the parent constructor. Sets the model endianism
@@ -49,7 +50,7 @@ SC_HAS_PROCESS( UartSC );
 
 //! @param name             The SystemC module name, passed to the parent
 //!                         constructor
-
+// ----------------------------------------------------------------------------
 UartSC::UartSC( sc_core::sc_module_name  name) :
   sc_module( name ),
   intrPending( 0 )
@@ -71,6 +72,7 @@ UartSC::UartSC( sc_core::sc_module_name  name) :
 }	/* UartSC() */
 
 
+// ----------------------------------------------------------------------------
 //! SystemC thread listening for transmit traffic on the bus
 
 //! Sits in a loop. Initially sets the line status register to indicate the
@@ -81,7 +83,7 @@ UartSC::UartSC( sc_core::sc_module_name  name) :
 //! when new data is written into the transmit buffer by a bus write).
 
 //! On receipt of a character writes the char onto the Tx FIFO.
-
+// ----------------------------------------------------------------------------
 void
 UartSC::busThread()
 {
@@ -98,6 +100,7 @@ UartSC::busThread()
 }	// busThread()
 
 
+// ----------------------------------------------------------------------------
 //! SystemC method sensitive to data on the Rx buffer
 
 //! Copies the character received into the read buffer.
@@ -107,7 +110,7 @@ UartSC::busThread()
 
 //! @note The terminal attached to the FIFO is responsible for modeling any
 //!       wire delay on the Rx.
-
+// ----------------------------------------------------------------------------
 void
 UartSC::rxMethod()
 {
@@ -122,6 +125,7 @@ UartSC::rxMethod()
 }	// rxMethod()
 
 
+// ----------------------------------------------------------------------------
 //! TLM2.0 blocking transport routine for the UART bus socket
 
 //! Receives transport requests on the target socket.
@@ -138,7 +142,7 @@ UartSC::rxMethod()
 //! @param payload  The transaction payload
 //! @param delay    How far the initiator is beyond baseline SystemC time. For
 //!                 use with temporal decoupling.
-
+// ----------------------------------------------------------------------------
 void
 UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
 		      sc_core::sc_time         &delay )
@@ -194,6 +198,7 @@ UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
 }	// busReadWrite()
 
 
+// ----------------------------------------------------------------------------
 //! Process a read on the UART bus
 
 //! Switch on the address to determine behavior
@@ -215,7 +220,7 @@ UartSC::busReadWrite( tlm::tlm_generic_payload &payload,
 //! @param uaddr  The address of the register being accessed
 
 //! @return  The value read
-
+// ----------------------------------------------------------------------------
 unsigned char
 UartSC::busRead( unsigned char  uaddr )
 {
@@ -274,6 +279,7 @@ UartSC::busRead( unsigned char  uaddr )
 }	// busRead()
 
 
+// ----------------------------------------------------------------------------
 //! Process a write on the UART bus
 
 //! Switch on the address to determine behavior
@@ -297,7 +303,7 @@ UartSC::busRead( unsigned char  uaddr )
 
 //! @param uaddr  The address of the register being accessed
 //! @param wdata  The value to be written
-
+// ----------------------------------------------------------------------------
 void
 UartSC::busWrite( unsigned char  uaddr,
 		  unsigned char  wdata )
@@ -343,11 +349,12 @@ UartSC::busWrite( unsigned char  uaddr,
 }	// busWrite()
 
 
+// ----------------------------------------------------------------------------
 //! Generate modem loopback signals
 
 //! Software relies on this to detect the UART type. Set the modem status bits
 //! as defined for modem loopback
-
+// ----------------------------------------------------------------------------
 void
 UartSC::modemLoopback()
 {
@@ -430,10 +437,11 @@ UartSC::modemLoopback()
 }	// modemLoopback()
 
 
+// ----------------------------------------------------------------------------
 //! Internal utility to set the IIR flags
 
 //! The IIR bits are set for the highest priority outstanding interrupt.
-
+// ----------------------------------------------------------------------------
 void
 UartSC::setIntrFlags()
 {
@@ -458,6 +466,7 @@ UartSC::setIntrFlags()
 }	// setIntrFlags()
 
 
+// ----------------------------------------------------------------------------
 //! Generate an interrupt
 
 //! If the particular interrupt is enabled, set the relevant interrupt
@@ -467,7 +476,7 @@ UartSC::setIntrFlags()
 //!       signal driving functionality will be added in a derived class
 
 //! @param ierFlag  Indicator of which interrupt is to be cleared (as IER bit).
-
+// ----------------------------------------------------------------------------
 void
 UartSC::genIntr( unsigned char  ierFlag )
 {
@@ -478,6 +487,7 @@ UartSC::genIntr( unsigned char  ierFlag )
 }	// genIntr()
 
 
+// ----------------------------------------------------------------------------
 //! Clear an interrupt
 
 //! Clear the interrupts in priority order.
@@ -488,7 +498,7 @@ UartSC::genIntr( unsigned char  ierFlag )
 //!       signal driving functionality will be added in a derived class
 
 //! @param ierFlag  Indicator of which interrupt is to be cleared (as IER bit).
-
+// ----------------------------------------------------------------------------
 void
 UartSC::clrIntr( unsigned char ierFlag )
 {
@@ -498,12 +508,13 @@ UartSC::clrIntr( unsigned char ierFlag )
 }	// clrIntr()
 
 
+// ----------------------------------------------------------------------------
 //! Set a bits in a register
 
 //! @param reg    The register concerned
 //! @param flags  The bits to set
-
-inline void
+// ----------------------------------------------------------------------------
+void
 UartSC::set( unsigned char &reg,
 	     unsigned char  flags )
 {
@@ -512,12 +523,13 @@ UartSC::set( unsigned char &reg,
 }	// set()
 
 
+// ----------------------------------------------------------------------------
 //! Clear a bits in a register
 
 //! @param reg    The register concerned
 //! @param flags  The bits to set
-
-inline void
+// ----------------------------------------------------------------------------
+void
 UartSC::clr( unsigned char &reg,
 	     unsigned char  flags )
 {
@@ -526,14 +538,15 @@ UartSC::clr( unsigned char &reg,
 }	// clr()
 
 
+// ----------------------------------------------------------------------------
 //! Report if bits are set in a register
 
 //! @param reg    The register concerned
 //! @param flags  The bit to set
 
 //! @return  True if the bit is set
-
-inline bool
+// ----------------------------------------------------------------------------
+bool
 UartSC::isSet( unsigned char  reg,
 	       unsigned char  flags )
 {
@@ -542,14 +555,15 @@ UartSC::isSet( unsigned char  reg,
 }	// isSet()
 
 
+// ----------------------------------------------------------------------------
 //! Report if bits are clear in a register
 
 //! @param reg    The register concerned
 //! @param flags  The bit to set
 
 //! @return  True if the bit is clear
-
-inline bool
+// ----------------------------------------------------------------------------
+bool
 UartSC::isClr( unsigned char  reg,
 	       unsigned char  flags )
 {

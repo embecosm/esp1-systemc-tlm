@@ -1,28 +1,29 @@
-// ----------------------------------------------------------------------------
+// UART with synchronized timing module implementation
 
-// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+// Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
-// Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
+// Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
+// This file is part of the example programs for "Building a Loosely Timed SoC
+// Model with OSCI TLM 2.0"
+
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 3 of the License, or (at your option)
+// any later version.
 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-// License for more details.
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+// more details.
 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// You should have received a copy of the GNU General Public License along
+// with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------------------
 
-// Implementation of 16450 UART SystemC module with synchronous timing.
-
-// $Id$
-
+// ----------------------------------------------------------------------------
+// This code is commented throughout for use with Doxygen.
+// ----------------------------------------------------------------------------
 
 #include <iostream>
 #include <iomanip>
@@ -31,6 +32,7 @@
 #include "UartSyncSC.h"
 
 
+// ----------------------------------------------------------------------------
 //! Custom constructor for the UART module with timing synchronization
 
 //! Calls the base class constructor to set up the module and records the
@@ -39,7 +41,7 @@
 //! @param name             The SystemC module name, passed to the base class
 //!                         constructor
 //! @param _clockRate       The external clock rate
-
+// ----------------------------------------------------------------------------
 UartSyncSC::UartSyncSC( sc_core::sc_module_name  name,
 			unsigned long int        _clockRate ) :
   UartSC (name),
@@ -48,6 +50,7 @@ UartSyncSC::UartSyncSC( sc_core::sc_module_name  name,
 }	/* UartSyncSC() */
 
 
+// ----------------------------------------------------------------------------
 //! SystemC thread listening for transmit traffic on the bus with timing
 
 //! Sits in a loop. Initially sets the line status register to indicate the
@@ -61,7 +64,7 @@ UartSyncSC::UartSyncSC( sc_core::sc_module_name  name,
 //! time taken to put the bits on the wire (this represents an extension from
 //! the functionality in the case class function, UartSC::busThread()). Then
 //! writes the char onto the Tx FIFO.
-
+// ----------------------------------------------------------------------------
 void
 UartSyncSC::busThread()
 {
@@ -79,6 +82,7 @@ UartSyncSC::busThread()
 }	// busThread()
 
 
+// ----------------------------------------------------------------------------
 //! TLM2.0 blocking transport routine for the UART bus socket with timing
 
 //! Reuses the base class function, UartSC::busReadWrite(), but synchronizes
@@ -86,7 +90,7 @@ UartSyncSC::busThread()
 
 //! @param payload  The transaction payload
 //! @param delay    How far the initiator is beyond baseline SystemC time.
-
+// ----------------------------------------------------------------------------
 void
 UartSyncSC::busReadWrite( tlm::tlm_generic_payload &payload,
 			  sc_core::sc_time         &delay )
@@ -103,11 +107,16 @@ UartSyncSC::busReadWrite( tlm::tlm_generic_payload &payload,
     wait( sc_core::sc_time( UART_WRITE_NS, sc_core::SC_NS ));
     delay = sc_core::SC_ZERO_TIME;
     break;
+  case tlm::TLM_IGNORE_COMMAND:
+    wait( sc_core::sc_time( UART_WRITE_NS, sc_core::SC_NS ));
+    delay = sc_core::SC_ZERO_TIME;
+    break;
   }
 
 }	// busReadWrite()
 
 
+// ----------------------------------------------------------------------------
 //! Process a write on the UART bus with update to timing
 
 //! Reuses the method in the base class, UartSC::busWrite(). Then calls the
@@ -115,7 +124,7 @@ UartSyncSC::busReadWrite( tlm::tlm_generic_payload &payload,
 
 //! @param uaddr  The address of the register being accessed
 //! @param wdata  The value to be written
-
+// ----------------------------------------------------------------------------
 void
 UartSyncSC::busWrite( unsigned char  uaddr,
 		      unsigned char  wdata )
@@ -142,12 +151,13 @@ UartSyncSC::busWrite( unsigned char  uaddr,
 }	// busWrite()
 
 
+// ----------------------------------------------------------------------------
 //! Recalculate the character delay
 
 //! Recalculate Uart::charDelay after a change to the divisor latch. The
 //! divisor latch is for a 16x clock. Allow enough time for start (1), stop
 //! (1, 1.5 or 2), data (5-7) and parity (0-1) bits.
-
+// ----------------------------------------------------------------------------
 void
 UartSyncSC::resetCharDelay()
 {

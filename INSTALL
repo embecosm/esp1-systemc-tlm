@@ -1,48 +1,32 @@
-Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
-
-See the individual INSTALL files in the sysc_models and sysc_models/progs_or32
-directories for installation details of their components.
-
-The Or1ksim patch file, embecosm-or32-or1ksim-0.2.0-lib-patch.bz2, should be
-applied to a standard patched Or1ksim 0.2.0 source tree as described in the
-Appendix to Embecosm Application Note 2.  "Building a Loosely Timed SoC Model
-with OSCI TLM 2.0: A Case Study Using an Open Source ISS and Linux 2.6
-Kernel".
-
-<< TBD: Copied from old systemC models directory
-
-Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
-
-The Example Programs
-====================
-
-To compile all the example models use:
-
-   make all
-
-There are separate targets to compile each individual program:
-
-  make TestSC
-  make SimpleSocSC
-  make SyncSocSC
-  make DecoupSocSC
-  make IntrSocSC
-
-Docbook documentation can be compiled with
-
-  make doc
-
-The directory can be cleaned with
-
-  make clean
+  Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+  ===========================================================================
 
 
-Test Programs
-=============
+INSTALLATION
+============
 
-The subdirectory "progs_or32" contains example programs for use with the
-models. See the INSTALL file in that directory for details of those programs.
+Installation follows standard GNU tool build procedures. The example programs
+should be built in a separate directory. For example if this distribution tree
+is in embecosm-eps1-sysc-tlm2.0-examples-2.0, then the following would be
+suitable: 
 
-The IntrSocSC model can also run a Linux kernel. See the Embecosm
-Application Note "The OpenCores OpenRISC 1000 Simulator and Tool Chain:
-Installation Guide" for details of how to build this.
+  mkdir build
+  cd build
+  ../embecosm-eps1-sysc-tlm2.0-examples-2.0/configure
+  make
+  make check (optional)
+  make install (optional)
+
+The resulting programs may be found in the relevant sub-directories of the
+sysc-models directory. Suitable OpenRISC program images may be found in the
+progs-32 directory of the distribution. They may be optionally rebuilt, but
+this requires installation of the OpenRISC GNU tool chain.
+
+Full details are provided in the associated Embecosm Application Note, EAN1:
+"Building a Loosely Timed SoC Model with OSCI TLM 2.0", issue 2.
+
+COPYING
+=======
+
+This software is licensed under the GNU General Public License (GPL). Full
+details of the GPL can be found in the file COPYING

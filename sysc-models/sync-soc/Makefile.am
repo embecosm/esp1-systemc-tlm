@@ -40,10 +40,10 @@ sync_soc_SOURCES        = syncSocMainSC.cpp \
 		          UartSyncSC.h
 
 sync_soc_LDADD          = ../logger/liblogger.la         \
-			    ../simple-soc/libsimple-soc.la
+			  ../simple-soc/libsimple-soc.la
 
 sync_soc_CPPFLAGS       = -I$(srcdir)/../logger     \
-			    -I$(srcdir)/../simple-soc
+			  -I$(srcdir)/../simple-soc
 
 sync_soc_CXXFLAGS       = $(AM_CXXFLAGS)
 

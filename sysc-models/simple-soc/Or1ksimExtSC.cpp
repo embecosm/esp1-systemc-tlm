@@ -1,32 +1,33 @@
-// ----------------------------------------------------------------------------
+// Or1ksim wrapper module with wait implementation
 
-// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+// Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
-// Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
+// Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
+// This file is part of the example programs for "Building a Loosely Timed SoC
+// Model with OSCI TLM 2.0"
+
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 3 of the License, or (at your option)
+// any later version.
 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-// License for more details.
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+// more details.
 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// You should have received a copy of the GNU General Public License along
+// with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------------------
 
-// Implementation of main SystemC wrapper for the OSCI SystemC wrapper project
-
-// $Id$
-
+// ----------------------------------------------------------------------------
+// This code is commented throughout for use with Doxygen.
+// ----------------------------------------------------------------------------
 
 #include "Or1ksimExtSC.h"
 
-
+// ----------------------------------------------------------------------------
 //! Custom constructor for the Or1ksimExtSC extended SystemC module
 
 //! Just calls the parent contstructor.
@@ -34,8 +35,7 @@
 //! @param name        SystemC module name
 //! @param configFile  Config file for the underlying ISS
 //! @param imageFile   Binary image to run on the ISS
-
-
+// ----------------------------------------------------------------------------
 Or1ksimExtSC::Or1ksimExtSC ( sc_core::sc_module_name  name,
 			     const char              *configFile,
 			     const char              *imageFile ) :
@@ -44,6 +44,7 @@ Or1ksimExtSC::Or1ksimExtSC ( sc_core::sc_module_name  name,
  }	// Or1ksimExtSC()
 
 
+// ----------------------------------------------------------------------------
 //! Extended TLM transport to the target
 
 //! Calls the blocking transport routine for the initiator socket (@see
@@ -53,7 +54,7 @@ Or1ksimExtSC::Or1ksimExtSC ( sc_core::sc_module_name  name,
 //! yield in an untimed model.
 
 //! @param trans  The transaction payload
-
+// ----------------------------------------------------------------------------
 void
 Or1ksimExtSC::doTrans( tlm::tlm_generic_payload &trans )
 {

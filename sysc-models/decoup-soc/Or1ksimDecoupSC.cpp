@@ -1,33 +1,34 @@
-// ----------------------------------------------------------------------------
+// Wrapper for decoupled loosely timed Or1ksim module implementation
 
-// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+// Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
-// Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
+// Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
+// This file is part of the example programs for "Building a Loosely Timed SoC
+// Model with OSCI TLM 2.0"
+
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 3 of the License, or (at your option)
+// any later version.
 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-// License for more details.
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+// more details.
 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// You should have received a copy of the GNU General Public License along
+// with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------------------
 
-// Implementation of main SystemC wrapper for the OSCI SystemC wrapper project
-// with SystemC temporal decoupling
-
-// $Id$
-
+// ----------------------------------------------------------------------------
+// This code is commented throughout for use with Doxygen.
+// ----------------------------------------------------------------------------
 
 #include "Or1ksimDecoupSC.h"
 
 
+// ----------------------------------------------------------------------------
 //! Custom constructor for the Or1ksimDecoupSC SystemC module
 
 //! Calls the constructor of the base class, Or1ksimSyncSC::, then initializes
@@ -36,7 +37,7 @@
 //! @param name           SystemC module name
 //! @param configFile     Config file for the underlying ISS
 //! @param imageFile      Binary image to run on the ISS
-
+// ----------------------------------------------------------------------------
 Or1ksimDecoupSC::Or1ksimDecoupSC ( sc_core::sc_module_name  name,
 				   const char              *configFile,
 				   const char              *imageFile ) :
@@ -49,6 +50,7 @@ Or1ksimDecoupSC::Or1ksimDecoupSC ( sc_core::sc_module_name  name,
 }	/* Or1ksimDecoupSC() */
 
 
+// ----------------------------------------------------------------------------
 //! The SystemC thread running the underlying ISS
 
 //! This version of the thread uses the local quantum keeper to ensure that we
@@ -73,7 +75,7 @@ Or1ksimDecoupSC::Or1ksimDecoupSC ( sc_core::sc_module_name  name,
 //! ::staticReadUpcall(), ::staticWriteUpcall, ::readUpcall(),
 //! ::writeUpcall()), which provide opportunities for the thread to yield, and
 //! so not block the simulation.
-
+// ----------------------------------------------------------------------------
 void
 Or1ksimDecoupSC::run()
 {
@@ -102,6 +104,7 @@ Or1ksimDecoupSC::run()
 }	// Or1ksimSC()
 
 
+// ----------------------------------------------------------------------------
 //! Temporally Decoupled TLM transport to the target
 
 //! The time used by the ISS is added to the local time. This should not
@@ -109,7 +112,7 @@ Or1ksimDecoupSC::run()
 //! would have returned to the Or1ksimDecoupSC::run() thread.
 
 //! @param trans  The transaction payload
-
+// ----------------------------------------------------------------------------
 void
 Or1ksimDecoupSC::doTrans( tlm::tlm_generic_payload &trans )
 {

@@ -1,27 +1,29 @@
-// ----------------------------------------------------------------------------
+// Or1ksim base wrapper module implementation
 
-// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+// Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
-// Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
+// Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
+// This file is part of the example programs for "Building a Loosely Timed SoC
+// Model with OSCI TLM 2.0"
+
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 3 of the License, or (at your option)
+// any later version.
 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-// License for more details.
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+// more details.
 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// You should have received a copy of the GNU General Public License along
+// with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------------------
 
-// Implementation of the basic SystemC wrapper for Or1ksim
-
-// $Id$
+// ----------------------------------------------------------------------------
+// This code is commented throughout for use with Doxygen.
+// ----------------------------------------------------------------------------
 
 
 #include "Or1ksimSC.h"
@@ -29,7 +31,7 @@
 
 SC_HAS_PROCESS( Or1ksimSC );
 
-
+// ----------------------------------------------------------------------------
 //! Custom constructor for the Or1ksimSC SystemC module
 
 //! Initializes the underlying Or1ksim ISS, passing in the configuration and
@@ -41,8 +43,7 @@ SC_HAS_PROCESS( Or1ksimSC );
 //! @param name        SystemC module name
 //! @param configFile  Config file for the underlying ISS
 //! @param imageFile   Binary image to run on the ISS
-
-
+// ----------------------------------------------------------------------------
 Or1ksimSC::Or1ksimSC ( sc_core::sc_module_name  name,
 		       const char              *configFile,
 		       const char              *imageFile ) :
@@ -57,6 +58,7 @@ Or1ksimSC::Or1ksimSC ( sc_core::sc_module_name  name,
 }	// Or1ksimSC()
 
 
+// ----------------------------------------------------------------------------
 //! The SystemC thread running the underlying ISS
 
 //! The thread calls the ISS to run forever.
@@ -65,7 +67,7 @@ Or1ksimSC::Or1ksimSC ( sc_core::sc_module_name  name,
 //! ::staticReadUpcall(), ::staticWriteUpcall, ::readUpcall(),
 //! ::writeUpcall()), which provide opportunities for the thread to yield, and
 //! so not block the simulation.
-
+// ----------------------------------------------------------------------------
 void
 Or1ksimSC::run()
 {
@@ -74,6 +76,7 @@ Or1ksimSC::run()
 }	// Or1ksimSC()
 
 
+// ----------------------------------------------------------------------------
 //! Static upcall for read from the underlying Or1ksim ISS
 
 //! Static utility routine is used (for easy C linkage!) that will call the
@@ -95,7 +98,7 @@ Or1ksimSC::run()
 //! @param mask         The byte enable mask for the read
 
 //! @return  The value read, cast back to a C type which can hold 32 bits
-
+// ----------------------------------------------------------------------------
 unsigned long int
 Or1ksimSC::staticReadUpcall( void              *instancePtr,
 			     unsigned long int  addr,
@@ -107,6 +110,7 @@ Or1ksimSC::staticReadUpcall( void              *instancePtr,
 }	// staticReadUpcall()
 
 
+// ----------------------------------------------------------------------------
 //! Static upcall for write to the underlying Or1ksim ISS
 
 //! Static utility routine is used (for easy C linkage!) that will call the
@@ -127,7 +131,7 @@ Or1ksimSC::staticReadUpcall( void              *instancePtr,
 //! @param addr         The address for the write
 //! @param mask         The byte enable mask for the write
 //! @param wdata        The data to be written (matching the mask)
-
+// ----------------------------------------------------------------------------
 void
 Or1ksimSC::staticWriteUpcall( void              *instancePtr,
 			      unsigned long int  addr,
@@ -140,6 +144,7 @@ Or1ksimSC::staticWriteUpcall( void              *instancePtr,
 }	// staticWriteUpcall()
 
 
+// ----------------------------------------------------------------------------
 //! Member function to handle read upcall from the underlying Or1ksim ISS
 
 //! This is the entry point used by ::staticReadUpcall(). Constructs a Generic
@@ -150,7 +155,7 @@ Or1ksimSC::staticWriteUpcall( void              *instancePtr,
 //! @param mask  The byte enable mask for the read
 
 //! @return  The value read
-
+// ----------------------------------------------------------------------------
 uint32_t
 Or1ksimSC::readUpcall( sc_dt::uint64  addr,
 		       uint32_t       mask )
@@ -177,6 +182,7 @@ Or1ksimSC::readUpcall( sc_dt::uint64  addr,
 }	// readUpcall()
 
 
+// ----------------------------------------------------------------------------
 //! Member function to handle write upcall from the underlying Or1ksim ISS
 
 //! This is the entry point used by ::staticWriteUpcall(). Constructs a
@@ -186,7 +192,7 @@ Or1ksimSC::readUpcall( sc_dt::uint64  addr,
 //! @param addr   The address for the write
 //! @param mask   The byte enable mask for the write
 //! @param wdata  The data to be written (matching the mask)
-
+// ----------------------------------------------------------------------------
 void
 Or1ksimSC::writeUpcall( sc_dt::uint64  addr,
 			uint32_t       mask,
@@ -211,13 +217,14 @@ Or1ksimSC::writeUpcall( sc_dt::uint64  addr,
 }	// writeUpcall()
 
 
+// ----------------------------------------------------------------------------
 //! TLM transport to the target
 
 //! Calls the blocking transport routine for the initiator socket (@see
 //! ::dataBus). Passes in a dummy time delay of zero.
 
 //! @param trans  The transaction payload
-
+// ----------------------------------------------------------------------------
 void
 Or1ksimSC::doTrans( tlm::tlm_generic_payload &trans )
 {

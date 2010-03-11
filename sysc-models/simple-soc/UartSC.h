@@ -1,27 +1,29 @@
-// ----------------------------------------------------------------------------
+// UART base module definition
 
-// Example Programs for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
+// Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
-// Copyright (C) 2008  Embecosm Limited <info@embecosm.com>
+// Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
+// This file is part of the example programs for "Building a Loosely Timed SoC
+// Model with OSCI TLM 2.0"
+
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 3 of the License, or (at your option)
+// any later version.
 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-// License for more details.
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+// more details.
 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// You should have received a copy of the GNU General Public License along
+// with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------------------
 
-// Definition of 16450 UART SystemC module.
-
-// $Id$
+// ----------------------------------------------------------------------------
+// This code is commented throughout for use with Doxygen.
+// ----------------------------------------------------------------------------
 
 
 #ifndef UART_SC__H
@@ -34,7 +36,6 @@
 #define UART_ADDR_MASK      7	//!< Mask for addresses (3 bit bus)
 
 // Offsets for the 16450 UART registers
-
 #define UART_BUF  0		//!< R/W: Rx/Tx buffer, DLAB=0
 #define UART_IER  1 		//!< R/W: Interrupt Enable Register, DLAB=0
 #define UART_IIR  2 		//!< R: Interrupt ID Register
@@ -45,7 +46,6 @@
 #define UART_SCR  7 		//!< R/W: Scratch Register
 
 // Interrupt Enable register bits of interest
-
 #define UART_IER_VALID  0x0f	//!< Mask for the valid bits
 
 #define UART_IER_MSI    0x08    //!< Enable Modem status interrupt
@@ -54,7 +54,6 @@
 #define UART_IER_RBFI   0x01  	//!< Enable receiver data interrupt
 
 // Interrupt Identification register bits and interrupt masks of interest
-
 #define UART_IIR_IPEND  0x01  	//!< Interrupt pending (active low)
 
 #define UART_IIR_MASK   0x06  	//!< the IIR status bits
@@ -64,14 +63,12 @@
 #define UART_IIR_MOD    0x00  	//!< Modem status
 
 // Line Control register bits of interest and data word length mask
-
 #define UART_LCR_DLAB   0x80	//!< Divisor latch access bit
 #define UART_LCR_PEN    0x08  	//!< Parity Enable
 #define UART_LCR_STB    0x04  	//!< Stop bits: 0=1 stop bit, 1= 2 stop bits
 #define UART_LCR_MASK   0x03	//!< 2-bit mask for word length
 
 // Line Status register bits of interest
-
 #define UART_LSR_VALID  0x7f    //!< Valid bits for LSR
 
 #define UART_LSR_TEMT   0x40  	//!< Transmitter serial register empty
@@ -83,7 +80,6 @@
 #define UART_LSR_DR     0x01  	//!< Receiver data ready
 
 // Modem Control register bits of interest
-
 #define UART_MCR_LOOP   0x10	//!< Enable loopback mode
 #define UART_MCR_OUT2   0x08    //!< Auxilary output 2
 #define UART_MCR_OUT1   0x04    //!< Auxilary output 1
@@ -91,7 +87,6 @@
 #define UART_MCR_DTR    0x01    //!< Force DTR
 
 // Modem Status register bits of interest
-
 #define UART_MSR_DCD    0x80    //!< Data Carrier Detect
 #define UART_MSR_RI     0x40    //!< Ring Indicator
 #define UART_MSR_DSR    0x20    //!< Data Set Ready
@@ -102,6 +97,7 @@
 #define UART_MSR_DCTS   0x01    //!< Delta CTS
 
 
+// ----------------------------------------------------------------------------
 //! SystemC module class for a 16450 UART.
 
 //! Provides a TLM 2.0 simple target convenience socket for access to the UART
@@ -111,7 +107,7 @@
 //! A thread (UartSC::busThread()) is provided to wait for transmit requests
 //! from the bus. A method (UartSC::rxMethod) is provided to wait for data on
 //! the Rx pin.
-
+// ----------------------------------------------------------------------------
 class UartSC
   : public sc_core::sc_module
 {
