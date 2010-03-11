@@ -1,0 +1,14 @@
+class UartDecoupSC
+!!!192130.cpp!!!	busReadWrite(inout payload : tlm::tlm_generic_payload, inout delay : sc_core::sc_time) : void
+  UartSC::busReadWrite( payload, delay );	// base method
+
+  // Delay as appropriate.
+  switch( payload.get_command() ) {
+  case tlm::TLM_READ_COMMAND:
+    delay += sc_core::sc_time( UART_READ_NS, sc_core::SC_NS );
+    break;
+  case tlm::TLM_WRITE_COMMAND:
+    delay += sc_core::sc_time( UART_WRITE_NS, sc_core::SC_NS );
+    break;
+  }
+

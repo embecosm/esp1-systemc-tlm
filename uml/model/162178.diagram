@@ -1,0 +1,36 @@
+format 70
+
+usecasecanvas 128130 usecase_ref 134530 // TestSC
+  xyzwh 266 168 3005 64 32 label_xy 278 200
+end
+usecasecanvas 128386 usecase_ref 134658 // SimpleSocSC
+  xyzwh 269 265 3005 64 32 label_xy 263 297
+end
+classcanvas 128642 class_ref 191618 // xterm
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 484 247 2000
+end
+classcanvas 128898 class_ref 191746 // or1ksim
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 87 247 2000
+end
+usecasecanvas 129282 usecase_ref 141186 // JtagSocSC
+  xyzwh 266 368 3005 64 32 label_xy 267 400
+end
+classcanvas 129410 class_ref 198274 // debugger
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 84 352 2000
+end
+line 128770 ----
+  from ref 128386 z 3006 to ref 128642
+line 129026 ----
+  from ref 128898 z 3006 to ref 128130
+line 129154 ----
+  from ref 128898 z 3006 to ref 128386
+line 129538 ----
+  from ref 128898 z 3006 to ref 129282
+line 129922 ----
+  from ref 129410 z 3006 to ref 129282
+line 130050 ----
+  from ref 129282 z 3006 to ref 128642
+end

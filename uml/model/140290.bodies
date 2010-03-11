@@ -1,0 +1,55 @@
+class JtagMainSC
+!!!145666.cpp!!!	JtagMainSC(in name : sc_core::sc_module_name, in fifo_size : int = DEFAULT_TAP_FIFO_SIZE)
+  tapActionQueue = new sc_core::sc_fifo<TapAction *> (fifo_size);
+  stateMachine   = new TapStateMachine ();
+
+  SC_METHOD (processActions);
+  sensitive << tck.pos ();
+    
+!!!145794.cpp!!!	~JtagMainSC()
+  delete  stateMachine;
+  delete  tapActionQueue;
+
+!!!145922.cpp!!!	processActions() : void
+  // TRST is driven as the inverse of the system reset
+  trst = !sysReset;
+
+  // Do nothing else if in CPU reset (active high)
+  if (sysReset)
+    {
+      return;
+    }
+
+  // Functions setting the outputs will need bools (they are not generally
+  // SystemC modules, so don't handle the likes of sc_in<> correctly).
+  bool  tdi_o;
+  bool  tms_o;
+
+  // Try to get an action if we don't have one
+  if (NULL == currentTapAction)
+    {
+      if (false == tapActionQueue->nb_read (currentTapAction))
+	{
+	  // Nothing there, so head for Run-Test/Idle state.
+	  stateMachine->targetState (TAP_RUN_TEST_IDLE, tms_o);
+	  tms  = tms_o;
+
+	  return;
+	}
+    }
+  
+  // Process the action, notifying the originator when done.
+
+  if (currentTapAction->process (stateMachine, tdi_o, tdo, tms_o))
+    {
+      currentTapAction->getDoneEvent()->notify();
+      currentTapAction = NULL;
+    }
+
+  // Select the new TAP state
+  stateMachine->nextState (tms_o);
+
+  // Drive the signal ports
+  tdi  = tdi_o;
+  tms  = tms_o;
+

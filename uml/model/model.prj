@@ -1,0 +1,3331 @@
+format 70
+"model"
+  revision 63
+  modified_by 2 "jeremy"
+  cpp_root_dir "/home/jeremy/svntrunk/Projects/or-debug-proxy/uml/generation/"
+
+
+  
+  // class settings
+  default_attribute_visibility private default_relation_visibility private default_operation_visibility public
+  //class diagram settings
+  draw_all_relations yes hide_attributes no hide_operations no hide_getset_operations no show_members_full_definition no show_members_visibility no show_members_stereotype no show_members_multiplicity no show_members_initialization no show_attribute_modifiers no member_max_width 127 show_parameter_dir yes show_parameter_name yes package_name_in_tab no class_drawing_mode natural drawing_language uml show_context_mode no auto_label_position yes show_relation_modifiers no show_relation_visibility no show_infonote no shadow yes show_stereotype_properties no
+  //use case diagram settings
+  package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes class_drawing_mode actor shadow yes show_stereotype_properties no
+  //sequence diagram settings
+  show_full_operations_definition no write_horizontally yes class_drawing_mode natural drawing_language uml draw_all_relations yes shadow yes show_stereotype_properties no
+  //collaboration diagram settings
+  show_full_operations_definition no show_hierarchical_rank no write_horizontally yes drawing_language uml package_name_in_tab no show_context no draw_all_relations yes shadow yes show_stereotype_properties no
+  //object diagram settings
+   write_horizontally yes package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes shadow yes show_stereotype_properties no
+  //component diagram settings
+  package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes shadow yes
+  draw_component_as_icon no show_component_req_prov no show_component_rea no show_stereotype_properties no
+  //deployment diagram settings
+  package_name_in_tab no show_context no write_horizontally yes auto_label_position yes draw_all_relations yes shadow yes
+  draw_component_as_icon no show_component_req_prov no show_component_rea no show_stereotype_properties no
+  //state diagram settings
+  package_name_in_tab no show_context no auto_label_position yes write_trans_label_horizontally yes show_trans_definition no draw_all_relations yes shadow yes
+  show_activities yes region_horizontally yes drawing_language uml show_stereotype_properties no
+  //activity diagram settings
+  package_name_in_tab no show_context no show_opaque_action_definition no auto_label_position yes write_flow_label_horizontally no draw_all_relations yes shadow yes
+  show_infonote yes drawing_language uml show_stereotype_properties no
+  
+  class_color yellow duration_color transparent continuation_color gray note_color blue fragment_color transparent subject_color transparent usecase_color yellow package_color transparent component_color green artifact_color green deploymentnode_color gray state_color yellow stateaction_color transparent activity_color transparent activityregion_color transparent activitypartition_color transparent activityaction_color transparent parameterpin_color white 
+  font_size 9
+  diagram_format A4
+
+  mark_for_import
+  
+  ncouples 1
+  key "html dir" value "/home/jeremy/svntrunk/Projects/rsp-jtag/uml/doc/"
+  usecaseview 134530 "top level use case view"
+    //use case diagram settings
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    usecasediagram 162178 "top level use case diagram"
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    usecase 134530 "TestSC"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+    end
+
+    usecase 134658 "SimpleSocSC"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+    end
+
+    usecase 141186 "JtagSocSC"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+    end
+
+    class 191618 "xterm"
+      visibility package stereotype "actor"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 208770 "write"
+	public explicit_return_type "void"
+	nparams 3
+	  param in name "fd" explicit_type "int"
+	  param in name "buf" explicit_type "char"
+	  param in name "len" explicit_type "int"
+	
+	
+	
+	
+	
+      end
+    end
+
+    class 191746 "or1ksim"
+      visibility package stereotype "actor"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 215426 "get_time_period"
+	class_operation public explicit_return_type "double"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 215554 "set_time_point"
+	class_operation public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 231170 "reset_duration"
+	class_operation public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 215682 "run"
+	class_operation public explicit_return_type "int"
+	nparams 1
+	  param in name "duration" explicit_type "double"
+	
+	
+	
+	
+	
+      end
+
+      operation 223362 "or1ksim_interrupt"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "int" explicit_type "int"
+	
+	
+	
+	
+	
+      end
+
+      operation 230402 "jtag_reset"
+	public explicit_return_type "void"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 230530 "jtag_shift_ir"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "jreg" type class_ref 135298 // uint8_t
+	
+	
+	
+	
+	
+      end
+
+      operation 230658 "jtag_shift_dr"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "jreg" type class_ref 135298 // uint8_t
+	
+	
+	
+	
+	
+      end
+    end
+
+    class 198274 "debugger"
+      visibility package stereotype "actor"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+  end
+
+  classview 128002 "top level class view"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 148994 "TestSC class diagram"
+      draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4-Landscape
+    end
+
+    sequencediagram 155522 "TestSC full read sequence diagram"
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      overlapping_bars size A4-Landscape
+    end
+
+    classdiagram 168834 "SimpleSocSC class diagram"
+      draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4-Landscape
+    end
+
+    sequencediagram 155650 "SimpleSocSC write sequence diagram"
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      overlapping_bars size A4-Landscape
+    end
+
+    classdiagram 168962 "SyncSocSC class diagram"
+      draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4-Landscape
+    end
+
+    sequencediagram 168706 "SyncSocSC write sequence diagram"
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      overlapping_bars size A4-Landscape
+    end
+
+    classdiagram 169090 "DecoupSocSC class diagram"
+      draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4-Landscape
+    end
+
+    sequencediagram 169218 "DecoupSocSC write sequence diagram"
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      overlapping_bars size A4-Landscape
+    end
+
+    classdiagram 175746 "IntrSocSC class diagram"
+      draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4-Landscape
+    end
+
+    sequencediagram 175874 "IntrSocSC write sequence diagram"
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      overlapping_bars size A4-Landscape
+    end
+
+    classdiagram 182402 "JtagSocSC class diagram"
+      draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4-Landscape
+    end
+
+    sequencediagram 182530 "JtagSocSC debug sequence diagram"
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      overlapping_bars size A4-Landscape
+    end
+  end
+
+  classview 140034 "Or1ksim class view"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 129154 "Or1ksim class diagram"
+      draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility yes show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 156290 "Or1ksimSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 149762 // <generalisation>
+	relation 149378 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 149762 // <generalisation>
+	  b parent class_ref 141570 // sc_module
+      end
+
+      classrelation 165634 // dataBus (<directional composition>)
+	relation 165250 *-->
+	  a role_name "dataBus" public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 165634 // dataBus (<directional composition>)
+	  b parent class_ref 132610 // simple_initiator_socket
+      end
+
+      operation 166146 "Or1ksimSC"
+	stereotype "constructor"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "name" type class_ref 141698 // sc_module_name
+	  param in name "configFile" explicit_type "char"
+	  param in name "imageFile" explicit_type "char"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}, ${t1} * ${p1}, ${t2} * ${p2}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 166274 "run"
+	cpp_virtual protected explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 166402 "doTrans"
+	cpp_virtual protected explicit_return_type "void"
+	nparams 1
+	  param in name "trans" type class_ref 133122 // tlm_generic_payload
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 166530 "staticReadUpcall"
+	class_operation private explicit_return_type "ulong"
+	nparams 3
+	  param in name "instancePointer" explicit_type "void"
+	  param in name "addr" explicit_type "ulong"
+	  param in name "mask" explicit_type "ulong"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 166658 "staticWriteUpcall"
+	class_operation private explicit_return_type "void"
+	nparams 4
+	  param in name "instancePointer" explicit_type "void"
+	  param in name "addr" explicit_type "ulong"
+	  param in name "mask" explicit_type "ulong"
+	  param in name "wdata" explicit_type "ulong"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 166786 "readUpcall"
+	private return_type class_ref 135170 // uint32_t
+	nparams 2
+	  param in name "addr" type class_ref 147458 // uint64_t
+	  param in name "mask" type class_ref 135170 // uint32_t
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}, const ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 166914 "writeUpcall"
+	private explicit_return_type "void"
+	nparams 3
+	  param in name "addr" type class_ref 147458 // uint64_t
+	  param in name "mask" type class_ref 135170 // uint32_t
+	  param in name "wdata" type class_ref 135170 // uint32_t
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}, const ${t1} & ${p1}, const ${t2} & ${p2}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      classrelation 194306 // <unidirectional association>
+	relation 193666 --->
+	  a role_name "" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 194306 // <unidirectional association>
+	  b parent class_ref 133122 // tlm_generic_payload
+      end
+
+      classrelation 201090 // <unidirectional association>
+	relation 200450 --->
+	  a role_name "" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 201090 // <unidirectional association>
+	  b parent class_ref 191746 // or1ksim
+      end
+    end
+
+    class 156418 "Or1ksimExtSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 149890 // <generalisation>
+	relation 149506 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 149890 // <generalisation>
+	  b parent class_ref 156290 // Or1ksimSC
+      end
+
+      operation 167170 "Or1ksimExtSC"
+	stereotype "constructor"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "name" type class_ref 141698 // sc_module_name
+	  param in name "configFile" explicit_type "char"
+	  param in name "imageFile" explicit_type "char"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 167042 "doTrans"
+	cpp_virtual protected explicit_return_type "void"
+	nparams 1
+	  param in name "trans" type class_ref 133122 // tlm_generic_payload
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 156546 "Or1ksimSyncSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 156418 // <generalisation>
+	relation 156034 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 156418 // <generalisation>
+	  b parent class_ref 156418 // Or1ksimExtSC
+      end
+
+      operation 167298 "Or1ksimSyncSC"
+	stereotype "constructor"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "name" type class_ref 141698 // sc_module_name
+	  param in name "configFile" explicit_type "char"
+	  param in name "imageFile" explicit_type "char"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 173954 "getClockRate"
+	public explicit_return_type "ulong"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 167426 "doTrans"
+	cpp_virtual protected explicit_return_type "void"
+	nparams 1
+	  param in name "trans" type class_ref 133122 // tlm_generic_payload
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 163074 "Or1ksimDecoupSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 156674 // <generalisation>
+	relation 156290 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 156674 // <generalisation>
+	  b parent class_ref 156546 // Or1ksimSyncSC
+      end
+
+      classrelation 173442 // issQk (<directional composition>)
+	relation 173058 *-->
+	  a role_name "issQk" multiplicity "1" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 173442 // issQk (<directional composition>)
+	  b parent class_ref 163202 // tlm_quantumkeeper
+      end
+
+      operation 174082 "Or1ksimDecoupSC"
+	stereotype "constructor"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "name" type class_ref 141698 // sc_module_name
+	  param in name "configFile" explicit_type "char"
+	  param in name "imageFile" explicit_type "char"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 174338 "doTrans"
+	cpp_virtual protected explicit_return_type "void"
+	nparams 1
+	  param in name "trans" type class_ref 133122 // tlm_generic_payload
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 174466 "run"
+	private explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      classrelation 207874 // regTgq (<unidirectional association>)
+	relation 207234 --->
+	  a role_name "regTgq" multiplicity "1" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 207874 // regTgq (<unidirectional association>)
+	  b parent class_ref 198402 // tlm_global_quantum
+      end
+    end
+
+    class 169730 "Or1ksimIntrSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 165762 // intr (<directional composition>)
+	relation 165378 *-->
+	  a role_name "intr" multiplicity "32" public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 165762 // intr (<directional composition>)
+	  b parent class_ref 169858 // sc_signal
+      end
+
+      operation 180994 "Or1ksimIntrSC"
+	stereotype "constructor"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "name" type class_ref 141698 // sc_module_name
+	  param in name "configFile" explicit_type "char"
+	  param in name "imageFile" explicit_type "char"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 181378 "intrMethod"
+	private explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      classrelation 163202 // <generalisation>
+	relation 162818 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 163202 // <generalisation>
+	  b parent class_ref 163074 // Or1ksimDecoupSC
+      end
+    end
+
+    class 204930 "Or1ksimJtagSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 220930 // <generalisation>
+	relation 220290 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 220930 // <generalisation>
+	  b parent class_ref 169730 // Or1ksimIntrSC
+      end
+
+      operation 230018 "Or1ksimJtagSC"
+	stereotype "constructor"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "name" type class_ref 141698 // sc_module_name
+	  param in name "configFile" explicit_type "char"
+	  param in name "imageFile" explicit_type "char"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${t0} ${p0}, const ${t1} * ${p1}, const ${t2} * ${p2}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 229890 "reset"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "delay" type class_ref 149762 // sc_time
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 230146 "shiftIr"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "jreg" type class_ref 205058 // JtagRegister
+	  param inout name "delay" type class_ref 149762 // sc_time
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 230274 "shiftDr"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "jreg" type class_ref 205058 // JtagRegister
+	  param inout name "delay" type class_ref 149762 // sc_time
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      classrelation 221058 // or1ksimMutex (<directional composition>)
+	relation 220418 *-->
+	  a role_name "or1ksimMutex" multiplicity "1" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 221058 // or1ksimMutex (<directional composition>)
+	  b parent class_ref 205186 // sc_mutex
+      end
+    end
+  end
+
+  classview 140290 "Logger class view"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 135938 "Logger class diagram"
+      draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 176386 "LoggerSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! SystemC module class providing a simple TLM 2.0 logger
+! Provides a TLM 2.0 simple target convenience socket, and records the
+! command, address, data, mask and delay in any packets sent to that socket.
+! Assumes all transactions are 32 bits long - this is intended for use with
+! the Or1ksimSC class."
+      classrelation 180226 // <generalisation>
+	relation 179842 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 180226 // <generalisation>
+	  b parent class_ref 141570 // sc_module
+      end
+
+      classrelation 173570 // loggerSocket (<directional composition>)
+	relation 173186 *-->
+	  a role_name "loggerSocket" multiplicity "1" public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 173570 // loggerSocket (<directional composition>)
+	  b parent class_ref 130946 // simple_target_socket
+	ncouples 2
+	key "MODULE" value "LoggerSC"
+	key "BUSWIDTH" value "32"
+      end
+
+      operation 187906 "LoggerSC"
+	stereotype "constructor"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 1
+	  param in name "name" explicit_type "sc_core::sc_module_name"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}${)}${volatile}${throw};
+"
+	cpp_def "//! Custom constructor for the OSCI TLM 2.0 logger
+//! Registers the blocking callback procedure, ::loggerReadWrite with the
+//! target socket.
+//! @param name  The SystemC module name, passed to the parent constructor.
+
+${comment}${inline}${class}::${name}${(}${t0} ${p0}${)} :
+  sc_module( name )
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 188034 "loggerReadWrite"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 2
+	  param inout name "payload" explicit_type "tlm::tlm_generic_payload"
+	  param inout name "delay" explicit_type "sc_core::sc_time"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// Or1ksimSC()
+//! Blocking transport routine the target socket
+//! Receives payloads for any transport on this socket. Assumes all payloads
+//! are 32 bit only (this is intended for use with the Or1ksimSC class).
+//! Break out the command, address, data (for write only) and mask and report
+//! them.
+//! Set a successful response (tlm::TLM_OK_RESPONSE) to the call.
+//! @param payload  The generic TLM payload
+//! @param delay    How far the initiator is beyond baseline SystemC time.
+//!                 Ignored here.
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " The blocking transport routine for the port"
+      end
+
+      classrelation 194434 // <unidirectional association>
+	relation 193794 --->
+	  a role_name "" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 194434 // <unidirectional association>
+	  b parent class_ref 133122 // tlm_generic_payload
+      end
+    end
+  end
+
+  classview 140162 "UART class view"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 135810 "UART class diagram"
+      draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility yes show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 178050 "UartSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! SystemC module class for a 16450 UART.
+! Provides a TLM 2.0 simple target convenience socket for access to the UART
+! regsters, unsigned char SystemC FIFO ports (to a 1 byte FIFO) for the Rx
+! and Tx pins and a bool SystemC signal for the interrupt pin.
+! A thread (UartSC::busThread()) is provided to wait for transmit requests
+! from the bus. A method (UartSC::rxMethod) is provided to wait for data on
+! the Rx pin."
+      classrelation 180098 // <generalisation>
+	relation 179714 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 180098 // <generalisation>
+	  b parent class_ref 141570 // sc_module
+      end
+
+      classrelation 165890 // bus (<directional composition>)
+	relation 165506 *-->
+	  a role_name "bus" multiplicity "1" public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 165890 // bus (<directional composition>)
+	  b parent class_ref 130946 // simple_target_socket
+	ncouples 2
+	key "MODULE" value "UartSC"
+	key "BUSWIDTH" value "32"
+      end
+
+      classrelation 166018 // rx (<directional composition>)
+	relation 165634 *-->
+	  a role_name "rx" multiplicity "1" public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 166018 // rx (<directional composition>)
+	  b parent class_ref 178178 // sc_buffer
+      end
+
+      classrelation 166146 // tx (<directional composition>)
+	relation 165762 *-->
+	  a role_name "tx" multiplicity "1" public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 166146 // tx (<directional composition>)
+	  b parent class_ref 139138 // sc_out
+      end
+
+      classrelation 166914 // txReceived (<directional composition>)
+	relation 166530 *-->
+	  a role_name "txReceived" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 166914 // txReceived (<directional composition>)
+	  b parent class_ref 178562 // sc_event
+      end
+
+      attribute 187266 "regs"
+	protected explicit_type "<complex type>"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}struct  {
+    unsigned char       rbr;		// R: Rx buffer,
+    unsigned char       thr;		// R: Tx hold reg,
+    unsigned char       ier;		// R/W: Interrupt Enable Register
+    unsigned char       iir;		// R: Interrupt ID Register
+    unsigned char       lcr;		// R/W: Line Control Register
+    unsigned char       mcr;		// W: Modem Control Register
+    unsigned char       lsr;		// R: Line Status Register
+    unsigned char       msr;		// R: Modem Status Register
+    unsigned char       scr;		// R/W: Scratch Register            
+    unsigned short int  dl;		// R/W: Divisor Latch
+  } ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 187394 "intrPending"
+	protected explicit_type "byte"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 192770 "UartSC"
+	stereotype "constructor"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 1
+	  param in name "name" explicit_type "sc_core::sc_module_name"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}${)}${volatile}${throw};
+"
+	cpp_def "//! Custom constructor for the UART module
+//! Passes the name to the parent constructor. Sets the model endianism
+//! (UartSC::isLittleEndian).
+//! Sets up threads listening to the bus (UartSC::busThread()) and the Rx pin
+//! (UartSC::rxThread()).
+//! Registers UartSC::busReadWrite() as the callback for blocking transport on
+//! the UartSC::bus socket.
+//! Zeros the registers, but leaves the UartSC::regs.dl unset - it is
+//! undefined until used.
+//! @param name             The SystemC module name, passed to the parent
+//!                         constructor
+
+${comment}${inline}${class}::${name}${(}${t0} ${p0}${)} :
+  sc_module( name ),
+  intrPending( 0 )
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 192898 "busThread"
+	preserve_cpp_body_indent cpp_virtual protected explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// UartSC() 
+//! SystemC thread listening for transmit traffic on the bus
+//! Sits in a loop. Initially sets the line status register to indicate the
+//! buffer is empty (reset will clear these bits) and sends an interrupt (if
+//! enabled) to indicate the buffer is empty.
+//! Then waits for the UartSC::txReceived event to be triggered (this happens
+//! when new data is written into the transmit buffer by a bus write).
+//! On receipt of a character writes the char onto the Tx FIFO.
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " A thread to run interaction with the bus side of the UART. This will be
+ reimplemented later in derived classes, so is declared virtual."
+      end
+
+      operation 193026 "busReadWrite"
+	preserve_cpp_body_indent cpp_virtual protected explicit_return_type "void"
+	nparams 2
+	  param inout name "payload" explicit_type "tlm::tlm_generic_payload"
+	  param inout name "delay" explicit_type "sc_core::sc_time"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// rxMethod()
+//! TLM2.0 blocking transport routine for the UART bus socket
+//! Receives transport requests on the target socket.
+//! Break out the address, data and byte enable mask. All data is host endian,
+//! so we do not need to allow for Orksim model endianism in calculating this
+//! (see UartSC::isLittleEndian).
+//! Switches on the command and calls UartSC::busRead() or UartSC::buswrite()
+//! routines to do the behavior
+//! Increases the delay as appropriate and sets a success response.
+//! @param payload  The transaction payload
+//! @param delay    How far the initiator is beyond baseline SystemC time. For
+//!                 use with temporal decoupling.
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Blocking transport function. Split out separate read and write
+ functions. The busReadWrite() and busWrite() functions will be
+ reimplemented in derived classes, so are declared virtual. The
+ busRead() function is only used here, so declared private (below)."
+      end
+
+      operation 193154 "busWrite"
+	preserve_cpp_body_indent cpp_virtual protected explicit_return_type "void"
+	nparams 2
+	  param in name "uaddr" explicit_type "byte"
+	  param in name "wdata" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// busRead()
+//! Process a write on the UART bus
+//! Switch on the address to determine behavior
+//! - UART_BUF
+//!   - if UART_LSR_DLAB is set, write the low byte of the clock divisor and
+//!     recalculate the character delay (UartSC::resetCharDelay())
+//!   - otherwise write the data to the transmit buffer, clear the buffer
+//!     empty flags and notify the UartSC::busThread() using the
+//!     UartSC::txReceived SystemC event.
+//! - UART_IER
+//!   - if UART_LSR_DLAB is set, write the high byte of the clock divisor and
+//!     recalculate the character delay (UartSC::resetCharDelay())
+//!   - otherwise set the instruction enable register
+//! - UART_IIR Ignored - read only
+//! - UART_LCR Set the line control register
+//! - UART_MCR Set the modem control regsiter
+//!   - if loopback is set, set the MSR registers to correspond
+//! - UART_LSR Ignored - read only
+//! - UART_MSR Ignored - read only
+//! - UART_SCR Set the scratch register
+//! @param uaddr  The address of the register being accessed
+//! @param wdata  The value to be written
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 193282 "setIntrFlags"
+	preserve_cpp_body_indent protected explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// modemLoopback()
+//! Internal utility to set the IIR flags
+//! The IIR bits are set for the highest priority outstanding interrupt.
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Utility routines for interrupt handling. The setIntrFlags function is
+ needed in derived class. Generate and clear functions will be
+ reimplemented in derived classes."
+      end
+
+      operation 193410 "genIntr"
+	preserve_cpp_body_indent cpp_virtual protected explicit_return_type "void"
+	nparams 1
+	  param in name "ierFlag" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// setIntrFlags()
+//! Generate an interrupt
+//! If the particular interrupt is enabled, set the relevant interrupt
+//! indicator flag, mark an interrupt as pending.
+//! @note There is no actual interrupt port in this class. The interrupt
+//!       signal driving functionality will be added in a derived class
+//! @param ierFlag  Indicator of which interrupt is to be cleared (as IER bit).
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 193538 "clrIntr"
+	preserve_cpp_body_indent cpp_virtual protected explicit_return_type "void"
+	nparams 1
+	  param in name "ierFlag" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// genIntr()
+//! Clear an interrupt
+//! Clear the interrupts in priority order.
+//! If no interrupts remain asserted, clear the interrupt pending flag
+//! @note There is no actual interrupt port in this class. The interrupt
+//!       signal driving functionality will be added in a derived class
+//! @param ierFlag  Indicator of which interrupt is to be cleared (as IER bit).
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 193666 "set"
+	preserve_cpp_body_indent cpp_inline protected explicit_return_type "void"
+	nparams 2
+	  param inout name "reg" explicit_type "byte"
+	  param in name "flags" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// clrIntr()
+//! Set a bits in a register
+//! @param reg    The register concerned
+//! @param flags  The bits to set
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Flag handling utilities. Also reused in later derived classes."
+      end
+
+      operation 193794 "clr"
+	preserve_cpp_body_indent cpp_inline protected explicit_return_type "void"
+	nparams 2
+	  param inout name "reg" explicit_type "byte"
+	  param in name "flags" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// set()
+//! Clear a bits in a register
+//! @param reg    The register concerned
+//! @param flags  The bits to set
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 193922 "isSet"
+	preserve_cpp_body_indent cpp_inline protected explicit_return_type "bool"
+	nparams 2
+	  param in name "reg" explicit_type "byte"
+	  param in name "flags" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// clr()
+//! Report if bits are set in a register
+//! @param reg    The register concerned
+//! @param flags  The bit to set
+//! @return  True if the bit is set
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 194050 "isClr"
+	preserve_cpp_body_indent cpp_inline protected explicit_return_type "bool"
+	nparams 2
+	  param in name "reg" explicit_type "byte"
+	  param in name "flags" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// isSet()
+//! Report if bits are clear in a register
+//! @param reg    The register concerned
+//! @param flags  The bit to set
+//! @return  True if the bit is clear
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 194178 "rxMethod"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// busThread()
+//! SystemC method sensitive to data on the Rx buffer
+//! Copies the character received into the read buffer.
+//! Sets the data ready flag of the line status register and sends an
+//! interrupt (if enabled) to indicate the data is ready.
+//! @note The terminal attached to the FIFO is responsible for modeling any
+//!       wire delay on the Rx.
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " The method to listen to the terminal side is only used in this class and
+ never reimplemented."
+      end
+
+      operation 194306 "busRead"
+	preserve_cpp_body_indent private explicit_return_type "byte"
+	nparams 1
+	  param in name "uaddr" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// busReadWrite()
+//! Process a read on the UART bus
+//! Switch on the address to determine behavior
+//! - UART_BUF
+//!   - if UART_LSR_DLAB is set, read the low byte of the clock divisor
+//!   - otherwise get the value from the read buffer and
+//!     clear the data ready flag in the line status register
+//! - UART_IER
+//!   - if UART_LSR_DLAB is set, read the high byte of the clock divisor
+//!   - otherwise get the instruction enable register
+//! - UART_IIR Get the interrupt indicator register and
+//!   clear the most important pending interrupt (UartSC::clrIntr())
+//! - UART_LCR Get the line control register
+//! - UART_MCR Ignored - write only register
+//! - UART_LSR Get the line status register
+//! - UART_MSR Get the modem status registe
+//! - UART_SCR Get the scratch register
+//! @param uaddr  The address of the register being accessed
+//! @return  The value read
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment "The busRead() function supports busReadWrite, and is only used in this
+class, so declared private"
+      end
+
+      operation 194434 "modemLoopback"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// busWrite()
+//! Generate modem loopback signals
+//! Software relies on this to detect the UART type. Set the modem status bits
+//! as defined for modem loopback
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Modem loopback utility. Only used in this class."
+      end
+
+      classrelation 207746 // <unidirectional association>
+	relation 207106 --->
+	  a role_name "" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 207746 // <unidirectional association>
+	  b parent class_ref 133122 // tlm_generic_payload
+      end
+    end
+
+    class 177794 "UartSyncSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! SystemC module class for a 16450 UART with synchronized timing
+! Derived from the UartSC:: class. Updates the UartSC::busThread() thread and
+! UartSC::busReadWrite() blocking TLM callback to provide synchronous
+! timing.
+! The UartSC::busWrite() function is extended to update the baud rate timing
+! based on changes to the UART registers."
+      classrelation 165506 // <generalisation>
+	relation 165122 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 165506 // <generalisation>
+	  b parent class_ref 178050 // UartSC
+      end
+
+      attribute 187522 "clockRate"
+	private explicit_type "ulong"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< External clock into UART"
+      end
+
+      attribute 187650 "charDelay"
+	private type class_ref 149762 // sc_time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< Total time to Tx a char"
+      end
+
+      operation 194562 "UartSyncSC"
+	stereotype "constructor"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 2
+	  param in name "name" explicit_type "sc_core::sc_module_name"
+	  param in name "_clockRate" explicit_type "ulong"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${volatile}${throw};
+"
+	cpp_def "//! Custom constructor for the UART module with timing synchronization
+//! Calls the base class constructor to set up the module and records the
+//! clock rate in the local state variable.
+//! @param name             The SystemC module name, passed to the base class
+//!                         constructor
+//! @param _clockRate       The external clock rate
+
+${comment}${inline}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)} :
+  UartSC (name),
+  clockRate (_clockRate) 
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 194690 "busReadWrite"
+	preserve_cpp_body_indent cpp_virtual protected explicit_return_type "void"
+	nparams 2
+	  param inout name "payload" explicit_type "tlm::tlm_generic_payload"
+	  param inout name "delay" explicit_type "sc_core::sc_time"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// busThread()
+//! TLM2.0 blocking transport routine for the UART bus socket with timing
+//! Reuses the base class function, UartSC::busReadWrite(), but synchronizes
+//! to allow for the relevant read/write delay, which should make the delay 0.
+//! @param payload  The transaction payload
+//! @param delay    How far the initiator is beyond baseline SystemC time.
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Reimplemetned blocking transport function, which adds timing, further
+ reimplmented in derived classes."
+      end
+
+      operation 194818 "busWrite"
+	preserve_cpp_body_indent protected explicit_return_type "void"
+	nparams 2
+	  param in name "uaddr" explicit_type "byte"
+	  param in name "wdata" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// busReadWrite()
+//! Process a write on the UART bus with update to timing
+//! Reuses the method in the base class, UartSC::busWrite(). Then calls the
+//! character delay update method if appropriate.x
+//! @param uaddr  The address of the register being accessed
+//! @param wdata  The value to be written
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " New version of the busWrite function, to update the character delay if
+ relevant registers are update will not be reimplemented further."
+      end
+
+      operation 194946 "busThread"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// UartSyncSC() 
+//! SystemC thread listening for transmit traffic on the bus with timing
+//! Sits in a loop. Initially sets the line status register to indicate the
+//! buffer is empty (reset will clear these bits) and sends an interrupt (if
+//! enabled) to indicate the buffer is empty.
+//! Then waits for the UartSyncSC::txReceived event to be triggered (this
+//! happens when new data is written into the transmit buffer by a bus write).
+//! On receipt of a character, waits for UartSyncSC::charDelay to simulate the
+//! time taken to put the bits on the wire (this represents an extension from
+//! the functionality in the case class function, UartSC::busThread()). Then
+//! writes the char onto the Tx FIFO.
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Reimplemented bus thread, which adds a timing delay before passing on hte
+ character read. Not reimplemented again."
+      end
+
+      operation 195074 "resetCharDelay"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// busWrite()
+//! Recalculate the character delay
+//! Recalculate Uart::charDelay after a change to the divisor latch. The
+//! divisor latch is for a 16x clock. Allow enough time for start (1), stop
+//! (1, 1.5 or 2), data (5-7) and parity (0-1) bits.
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Function to work out the baud rate character delay. Won't be reused in
+ derived classes."
+      end
+    end
+
+    class 177666 "UartDecoupSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! SystemC module class for a 16450 UART with temporal decoupling
+! Adds support for temporal decoupling to UartSyncSC::. Only the blocking
+! TLM callack, UartSyncSC::busReadWrite() is replaced, to support temporal
+! decoupling in the intitiator (Or1ksimDecoupSC::). The thread in this class
+! is not temporally decoupled, since it is not a TLM initiator."
+      classrelation 164994 // <generalisation>
+	relation 164610 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 164994 // <generalisation>
+	  b parent class_ref 177794 // UartSyncSC
+      end
+
+      operation 192002 "UartDecoupSC"
+	stereotype "constructor"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 2
+	  param in name "name" explicit_type "sc_core::sc_module_name"
+	  param in name "_clockRate" explicit_type "ulong"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${volatile}${throw};
+"
+	cpp_def "//! Custom constructor for the UART module
+//! Calls the parent constructor
+//! @param name             The SystemC module name, passed to the parent
+//!                         constructor
+//! @param _clockRate       The external clock rate, passed to the parent
+//!                         consturctor
+
+${comment}${inline}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)} :
+  UartSyncSC (name, _clockRate)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 192130 "busReadWrite"
+	preserve_cpp_body_indent cpp_virtual private explicit_return_type "void"
+	nparams 2
+	  param inout name "payload" explicit_type "tlm::tlm_generic_payload"
+	  param inout name "delay" explicit_type "sc_core::sc_time"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// UartDecoupSC() 
+//! TLM2.0 blocking transport routine for the UART bus socket with decoupled
+//! timing.
+//! Reuses the base class function, UartSC::busReadWrite(), but updates the
+//! delay. Does not synchronize - that is for the initiator to decide.
+//! @param payload  The transaction payload
+//! @param delay    How far the initiator is beyond baseline SystemC time.
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Reimplemented blocking transport function, which adds decoupled timing
+ delay. Will not be reimplemented further."
+      end
+    end
+
+    class 177922 "UartIntrSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! SystemC module class for a 16450 UART with temporal decoupling and
+! external interrupt.
+! Derived from UartDecoupSC:: to provide a thread which can drive a single
+! sc_signal port whether the interrupt is requested by either the existing
+! UartSyncSC::busThread() thread or UartSC::rxMethod() method.
+! @note Either of the other two processes may want to drive an interrupt,
+!       but only one process can drive a signal, so a separate thread is
+!       created and notified (via a one slot FIFO) by either of the other
+!       threads when it wishes to drive the interrupt."
+      classrelation 165122 // <generalisation>
+	relation 164738 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 165122 // <generalisation>
+	  b parent class_ref 177666 // UartDecoupSC
+      end
+
+      classrelation 214402 // intr (<directional composition>)
+	relation 213762 *-->
+	  a role_name "intr" multiplicity "1" public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 214402 // intr (<directional composition>)
+	  b parent class_ref 139138 // sc_out
+      end
+
+      classrelation 166786 // intrQueue (<directional composition>)
+	relation 166402 *-->
+	  a role_name "intrQueue" multiplicity "1" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 166786 // intrQueue (<directional composition>)
+	  b parent class_ref 178434 // sc_fifo
+      end
+
+      operation 192258 "UartIntrSC"
+	stereotype "constructor"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 2
+	  param in name "name" explicit_type "sc_core::sc_module_name"
+	  param in name "_clockRate" explicit_type "ulong"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${volatile}${throw};
+"
+	cpp_def "//! Custom constructor for the UART module
+//! Call the parent constructor and mark the size of interrupt FIFO, then set
+//! up the thread handling interrupt generation.
+//! @param name             The SystemC module name, passed to the parent
+//!                         constructor
+//! @param _clockRate       The external clock rate, passed to the parent
+//!                         consturctor
+
+${comment}${inline}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)} :
+  UartDecoupSC (name, _clockRate),
+  intrQueue (1)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 192386 "intrThread"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// UartIntrSC() 
+//! SystemC thread driving the interrupt signal
+//! If true is read, assert the interrupt, otherwise deassert. Needed since a
+//! single process must drive a signal.
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " A single thread for driving interrupts. Only used in this class"
+      end
+
+      operation 192514 "genIntr"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 1
+	  param in name "ierFlag" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// intrThread()
+//! Generate an interrupt
+//! Updated version from the base class, UartSC::genIntr(), which triggers a
+//! write to assert the interrupt signal port if required.
+//! @param ierFlag  Indicator of which interrupt is to be cleared (as IER bit).
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Reimplemented utility routines for interrupt handling, which drive the real
+ signal. Will not be reimplemented further."
+      end
+
+      operation 192642 "clrIntr"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 1
+	  param in name "ierFlag" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// genIntr()
+//! Clear an interrupt
+//! Updated version from the base class, UartSC::clrIntr(), which triggers a
+//! write to deassert the interrupt signal port if required.
+//! @param ierFlag  Indicator of which interrupt is to be cleared (as IER bit).
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+  end
+
+  classview 146818 "Terminal class view"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 142466 "Terminal class diagram"
+      draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 177410 "TermSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment " Fd2Inst
+! SystemC module class for the Terminal.
+! Talks to the outside world via a buffer (for Rx in) and a port to a buffer
+! in another module (Tx out).
+! The terminal is implemented as a separate process running an xterm. A 
+! thread listens for characters typed to the xterm, a method is sensitive to
+! characters sent from the UART."
+      classrelation 186754 // <generalisation>
+	relation 186370 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 186754 // <generalisation>
+	  b parent class_ref 141570 // sc_module
+      end
+
+      classrelation 186882 // rx (<directional composition>)
+	relation 186498 *-->
+	  a role_name "rx" multiplicity "1" public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 186882 // rx (<directional composition>)
+	  b parent class_ref 178178 // sc_buffer
+	ncouples 1
+	key "T" value "char"
+      end
+
+      classrelation 187010 // tx (<directional composition>)
+	relation 186626 *-->
+	  a role_name "tx" multiplicity "1" public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 187010 // tx (<directional composition>)
+	  b parent class_ref 139138 // sc_out
+	ncouples 1
+	key "T" value "uchar"
+      end
+
+      classrelation 164738 // instList (<composition>)
+	relation 164354 *---
+	  a role_name "instList" multiplicity "1" init_value "= NULL" class_relation private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 164738 // instList (<composition>)
+	  b role_name "inst" multiplicity "1" public
+	    classrelation_ref 187394 // inst (<composition>)
+      end
+
+      classrelation 187138 // ioevent (<directional composition>)
+	relation 186754 *-->
+	  a role_name "ioevent" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 187138 // ioevent (<directional composition>)
+	  b parent class_ref 178562 // sc_event
+      end
+
+      attribute 186114 "ptMaster"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< Master file descriptor"
+      end
+
+      attribute 186242 "ptSlave"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< Slave file descriptor (for talking to the xterm)"
+      end
+
+      attribute 186370 "xtermPid"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< Process ID of the child running the xterm"
+      end
+
+      operation 190338 "TermSC"
+	stereotype "constructor"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 1
+	  param in name "name" explicit_type "sc_core::sc_module_name"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}${)}${volatile}${throw};
+"
+	cpp_def "//! Custom constructor for the terminal module
+//! Passes the name to the parent constructor.
+//! Sets up threads listening to the rx port from the UART (TermSC::rxThread)
+//! and waiting for characters from the xterm (TermSC::xtermThread).
+//! Initializes the xterm in a separate process, setting up a file descriptor
+//! that can read and write from/to it.
+//! @param name      Name of this module - passed to the parent constructor
+
+${comment}${inline}${class}::${name}${(}${t0} ${p0}${)} :
+  sc_module( name )
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 190466 "~TermSC"
+	stereotype "destructor"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
+"
+	cpp_def "// TermSC() 
+//! Custom destructor for the terminal module
+//! Custom destructors are not usually needed for SystemC models, but we use
+//! this to kill the child process running the xterm.
+
+${comment}${inline}${class}::${name}${(}${)}${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 190594 "xtermThread"
+	preserve_cpp_body_indent cpp_virtual protected explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// rxMethod()
+//! Thread listening for characters from the xterm.
+//! Wait to be notified via the SystemC event TermSC::ioEvent that there is a
+//! character available.
+//! Read the character, then send it out to the UART.
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Thread to handle I/O for the xterm. Will be reimplemented in a derived
+ class."
+      end
+
+      operation 190722 "xtermRead"
+	preserve_cpp_body_indent protected explicit_return_type "byte"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// ioHandler()
+//! Native read from the xterm.
+//! We'll only be calling this if we already know there is something to read,
+//! so blocking call is fine.
+//! @return The character read. NULL if there was an error - only detected by
+//!         a rude message on the console!
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Utility function to read from the xterm. Will be reused in a derived
+ class."
+      end
+
+      operation 190850 "rxMethod"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// ~TermSC()
+//! Method handling characters on the Rx buffer
+//! Statically sensitive to characters being written from the UART. When they
+//! arrive, write them to the xterm. Print a time stamp
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Method to handle I/O on the Rx buffer from the UART"
+      end
+
+      operation 190978 "xtermInit"
+	preserve_cpp_body_indent private explicit_return_type "int"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// xtermThread()
+//! Start an xTerm as a child process.
+//! This uses the POSIX routines to obtain a pseudo TTY (pty) and then fire up
+//! an xterm, using that pty for I/O
+//! The I/O is set up to be canonical (i.e immediate, not at end of line),
+//! with no echno.
+//! Forks a child process to run the xterm, using the -S option to specify the
+//! pty being used.
+//! The parent is initalized using TermSC::xtermSetup()
+//! @return   0 on success, -1 on failure, with an error code in errno
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Utility functions to control the xterm"
+      end
+
+      operation 191106 "xtermKill"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 1
+	  param in name "mess" explicit_type "char"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// xtermInit()
+//! Kill an open xterm
+//!  Remove the mapping from file descriptor to process for this xterm. Close
+//! any open file descriptors and shut down the Xterm process.
+//! If the message is non-null print it with perror.
+//! @param mess  An error message
+
+${comment}${inline}${type} ${class}::${name}${(}const ${t0} * ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 191234 "xtermLaunch"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 1
+	  param inout name "slaveName" explicit_type "char"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// xtermKill()
+//! Launch an xterm
+//! Called in the child to launch the xterm. Should never return - just exit.
+//! @param slaveName  The name of the slave pty to pass to xterm
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} * ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 191362 "xtermSetup"
+	preserve_cpp_body_indent private explicit_return_type "int"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// xtermLaunch()
+//! Set up xterm I/O for the parent process
+//! Called in the parent to set the terminal up. Swallows up the initial
+//! string sent by the xterm.
+//! I/O from the xterm MUST be non-blocking, since a thread that waits on an
+//! operating system call will block the SystemC thread scheduling.
+//! The I/O is set up to signal data using SIGIO, with a handler that will
+//! then notify a SystemC event (TermSC::ioEvent).
+//! The handler must be static, since it uses C, not C++ linkage, so a mapping
+//! is needed to match the file descriptor to the class instance. This is a
+//! linked list (allowing for multiple instances of this module), pointed to
+//! by TermSC::instList.
+//! The SystemC event is created here, rather than declared statically as a
+//! member of the class. This avoids it being used during elaboration, which
+//! will crash SystemC.
+//! @return  -1 on failure, 0 on success
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 191490 "xtermWrite"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 1
+	  param in name "ch" explicit_type "byte"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// xtermRead()
+//! Native write to the xterm.
+//! Errors are ignored, apart from a rude message on the console.
+//! @param ch  The character to be written
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Function to write to the xterm. Only used in this class."
+      end
+
+      operation 191618 "ioHandler"
+	class_operation preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 3
+	  param in name "signum" explicit_type "int"
+	  param inout name "si" explicit_type "siginfo_t"
+	  param inout name "p" explicit_type "void"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} * ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "//! Static handler for SIGIO
+//! Must be static, since sigaction cannot cope with a member function. The
+//! static member list TermSC::instList holds details of each instance of this
+//! class and its associated file descriptor for talking to the xterm.
+//! POSIX select() is used to identify the source of the SIGIO, and the
+//! appropriate instance is notified using the SystemC event in
+//! TermSC::ioEvent.
+//! @param signum  The signal invoking us (SIGIO)
+//! @param si      A siginfo structure with information about the
+//!                signal. According to POSIX, it should contain the FD for
+//!                SIGIO, but that is not working, hence the use of select.
+//! @param p       A ucontext_t structure, passed as void*.
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} * ${p1}, ${t2} * ${p2}${)}${const}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Signal handling is tricky, since we have to use a static
+ function. Fortunately each instance has a 1:1 mapping to the FD used for
+ the xterm, so we can use that for lookup."
+      end
+
+      classrelation 207618 // <unidirectional association>
+	relation 206978 --->
+	  a role_name "" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 207618 // <unidirectional association>
+	  b parent class_ref 191618 // xterm
+      end
+    end
+
+    class 177538 "TermSyncSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! SystemC module class for the Terminal with synchronized timing
+! Talks to the outside world via two systemC FIFOs. Any data coming in has
+! already been delayed (to represent the baud rate wire delay) via the
+! UART. Any data we send out is similarly delayed."
+      classrelation 164866 // <generalisation>
+	relation 164482 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 164866 // <generalisation>
+	  b parent class_ref 177410 // TermSC
+      end
+
+      attribute 186498 "charDelay"
+	private type class_ref 149762 // sc_time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 191746 "TermSyncSC"
+	stereotype "constructor"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 2
+	  param in name "name" explicit_type "sc_core::sc_module_name"
+	  param in name "baudRate" explicit_type "ulong"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${volatile}${throw};
+"
+	cpp_def "//! Custom constructor for the terminal module
+//! Passes the name to the parent constructor.
+//! Sets up threads listening to the rx port from the UART
+//! (TermSyncSC::rxThread) and waiting for characters from the xterm
+//! (TermSyncSC::xtermThread).
+//! Calculates the character delay appropriate for the baud rate. Fixed
+//! behavior of 1 start bit, 8 data bits and and 1 stop bit.
+//! Initializes the xterm in a separate process, setting up a file descriptor
+//! that can read and write from/to it.
+//! @param name      Name of this module - passed to the parent constructor
+//! @param baudRate  The baud rate of the terminal connection to the UART
+
+${comment}${inline}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)} :
+  TermSC( name )  
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 191874 "xtermThread"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// TermSyncSC() 
+//! Thread listening for characters from the xterm with synchronization
+//! Wait to be notified via the SystemC event TermSC::ioEvent that there
+//! is a character available.
+//! Read the character, wait to model the delay on the wire, then send it out
+//! to the UART
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Reimplemented thread with timing to model the baud rate delay. Will not
+ be modified further in derived classes."
+      end
+    end
+
+    class 177282 "Fd2Inst"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! A convenience struct for lists of file descriptor -> instance mappings"
+      attribute 185602 "fd"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< The file descriptor"
+      end
+
+      classrelation 164482 // next (<unidirectional association>)
+	relation 164098 --->
+	  a role_name "next" multiplicity "1" public
+	    comment "!< Next element in the list"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 164482 // next (<unidirectional association>)
+	  b parent class_ref 177282 // Fd2Inst
+      end
+
+      classrelation 187394 // inst (<composition>)
+	relation_ref 164354 // <composition>
+      end
+    end
+  end
+
+  classview 129154 "TLM 2.0 class view"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    comment "The OSCI TLM 2.0 classes"
+    class 130946 "simple_target_socket"
+      visibility package 
+      nformals 2
+      formal name "MODULE" type "typename" explicit_default_value ""
+        explicit_extends ""
+      formal name "BUSWIDTH" type "uint" explicit_default_value "32"
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 132610 "simple_initiator_socket"
+      visibility package 
+      nformals 2
+      formal name "MODULE" type "typename" explicit_default_value ""
+        explicit_extends ""
+      formal name "BUSWIDTH" type "uint" explicit_default_value "32"
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 201730 "b_transport"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "payload" type class_ref 133122 // tlm_generic_payload
+	  param inout name "time" type class_ref 149762 // sc_time
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 133122 "tlm_generic_payload"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 158722 "get_command"
+	public return_type class_ref 147330 // tlm_command
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 158850 "set_command"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "cmd" type class_ref 147330 // tlm_command
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 158978 "get_address"
+	public return_type class_ref 147458 // uint64_t
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 159106 "set_address"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "addr" type class_ref 147458 // uint64_t
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 159234 "get_data_ptr"
+	public explicit_return_type "uchar"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 159362 "set_data_ptr"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "data" explicit_type "char"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 159490 "get_data_length"
+	public explicit_return_type "uint"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 159618 "set_data_length"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "len" explicit_type "uint"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 144258 "tlm_extension"
+      abstract visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 144514 // tlm_extension_base
+        rank 0 explicit_value ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 143234 // <generalisation>
+	relation 142850 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143234 // <generalisation>
+	  b parent class_ref 144514 // tlm_extension_base
+      end
+
+      attribute 159106 "ID"
+	class_attribute const_attribute public explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 153346 "clone"
+	abstract cpp_virtual public return_type class_ref 144514 // tlm_extension_base
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 153474 "copy_from"
+	abstract cpp_virtual public explicit_return_type "void"
+	nparams 1
+	  param in name "src" type class_ref 144514 // tlm_extension_base
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 153602 "~tlm_extension"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 144514 "tlm_extension_base"
+      abstract visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 152834 "clone"
+	abstract cpp_virtual public return_type class_ref 144514 // tlm_extension_base
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 152962 "free"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 153090 "copy_from"
+	abstract cpp_virtual public explicit_return_type "void"
+	nparams 1
+	  param in name "src" type class_ref 144514 // tlm_extension_base
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 153218 "~tlm_extension_base"
+	stereotype "destructor"
+	protected explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 147330 "tlm_command"
+      visibility package stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+    end
+
+    class 163202 "tlm_quantumkeeper"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 215938 "get_local_time"
+	public return_type class_ref 149762 // sc_time
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 216066 "inc"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "t" type class_ref 149762 // sc_time
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 216194 "need_sync"
+	public explicit_return_type "bool"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 216322 "sync"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 231042 "set"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "t" type class_ref 149762 // sc_time
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 198402 "tlm_global_quantum"
+      visibility package stereotype "singleton"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 215810 "instance"
+	class_operation public return_type class_ref 198402 // tlm_global_quantum
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 216450 "compute_local_quantum"
+	public return_type class_ref 149762 // sc_time
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+  end
+
+  classview 133378 "SystemC IEEE 1666 class view"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    class 138882 "sc_in"
+      visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 139010 "sc_inout"
+      visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 139138 "sc_out"
+      visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 208514 "write"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "data" explicit_type "T"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 178178 "sc_buffer"
+      visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 208386 "write"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "data" explicit_type "T"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 208642 "read"
+	public explicit_return_type "T"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 178434 "sc_fifo"
+      visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 222978 "write"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "data" explicit_type "T"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 223106 "read"
+	public explicit_return_type "T"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 169858 "sc_signal"
+      visibility package 
+      nformals 1
+      formal name "T" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 223234 "event"
+	public explicit_return_type "bool"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 141570 "sc_module"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 215298 "wait"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "event" type class_ref 178562 // sc_event
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 141698 "sc_module_name"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 149762 "sc_time"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 178562 "sc_event"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 208258 "notify"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 205186 "sc_mutex"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 230786 "lock"
+	public explicit_return_type "int"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 230914 "unlock"
+	public explicit_return_type "int"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+  end
+
+  classview 131586 "stdarg.h class view"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    class 135298 "uint8_t"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 135426 "uint16_t"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 135170 "uint32_t"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 147458 "uint64_t"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+  end
+
+  classview 153346 "JTAG debug class view"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    class 205058 "JtagRegister"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+  end
+add_operation_profile
+
+end

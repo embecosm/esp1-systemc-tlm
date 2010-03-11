@@ -1,0 +1,81 @@
+format 70
+
+statecanvas 139010 state_ref 129154 // Cycle accurate JTAG state machine
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 6 7 2000 831 467
+end
+pseudostatecanvas 139394 pseudostate_ref 129154 // initial
+   xyz 411 72 2005
+end
+statecanvas 139522 state_ref 129666 // IDLE
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 362 132 2005 116 37
+end
+statecanvas 140802 state_ref 133890 // RESET
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 361 365 2005 119 53
+end
+statecanvas 140930 state_ref 134018 // SHIFT_IR
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 111 366 2005 119 53
+end
+statecanvas 141058 state_ref 135170 // SHIFT_DR
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 615 358 2005 119 53
+end
+transitioncanvas 140290 transition_ref 130818 // <transition>
+  
+  from ref 139394 z 2006 to ref 139522
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 141314 transition_ref 137858 // <transition>
+  decenter_begin 754
+  decenter_end 745
+  
+  from ref 139522 z 2006 label "shiftIr () called
+/ buf = reg->buf ()
+bitSize = reg->bitSize ()" xyz 218 169 2006 to point 197 157
+  line 143106 z 2006 to ref 140930
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 141442 transition_ref 137986 // <transition>
+  decenter_begin 754
+  decenter_end 284
+  
+  from ref 139522 z 2006 label "shiftDr () called
+[buf = reg->buf ()
+bitSize = reg->bitSize ()]" xyz 499 172 2006 to point 646 157
+  line 141954 z 2006 to ref 141058
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 141570 transition_ref 138114 // <transition>
+  decenter_begin 239
+  decenter_end 243
+  
+  from ref 139522 z 2006 label "reset () called" xyz 303 254 2006 to ref 140802
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 142466 transition_ref 138242 // <transition>
+  decenter_begin 781
+  decenter_end 791
+  
+  from ref 140802 z 2006 label "doneEvent.notify ()" xyz 464 320 2006 to ref 139522
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 142722 transition_ref 138370 // <transition>
+  decenter_begin 268
+  decenter_end 243
+  
+  from ref 140930 z 2006 label "doneEvent.notify ()" xyz 18 326 2006 to point 140 138
+  line 143234 z 2006 to ref 139522
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 142850 transition_ref 138498 // <transition>
+  decenter_begin 745
+  decenter_end 243
+  
+  from ref 141058 z 2006 label "doneEvent.notify ()" xyz 714 320 2006 to point 701 138
+  line 142978 z 2006 to ref 139522
+  write_horizontally default show_definition default drawing_language default
+end
+end

@@ -1,0 +1,230 @@
+format 70
+
+classinstance 128258 class_ref 169730 // Or1ksimIntrSC
+  name "iss"   xyz 301 4 2000 life_line_z 2000
+classinstance 128386 class_ref 177922 // UartIntrSC
+  name "uart"   xyz 597 4 2000 life_line_z 1995
+classinstance 133122 class_ref 178178 // sc_buffer
+  name "rx"   xyz 807 4 2000 life_line_z 2000
+classinstance 133250 class_ref 177410 // TermSC
+  name "term"   xyz 888 4 2000 life_line_z 2000
+classinstance 134530 class_ref 191746 // or1ksim
+  name "or1ksim"   xyz 189 4 2000 life_line_z 2000
+classinstance 135298 class_ref 191618 // xterm
+  name "xterm"   xyz 988 4 2000 life_line_z 2000
+note 145538 "Upcalls only use superficial or1ksim calls. The main code is not re-entrant."
+  xyzwh 7 215 2000 187 67
+note 145666 "Decoupling not shown in detail on this diagram."
+  xyzwh 11 70 2000 169 53
+classinstance 146306 class_ref 169858 // sc_signal
+  name "intr[2]"   xyz 422 4 2000 life_line_z 2000
+classinstance 146434 class_ref 178434 // sc_fifo
+  name "intrQueue"   xyz 697 4 2000 life_line_z 2000
+classinstance 146562 class_ref 139138 // sc_out
+  name "intr"   xyz 524 4 2000 life_line_z 2000
+note 151298 "Example of interrupt handling in separate thread. Must be when or1ksim is not running (upcall, or while decoupling)."
+  xyzwh 8 407 2000 195 87
+note 151426 "Completion of upcall and the completion of decoupled period of or1ksim execution. New period starts"
+  xyzwh 11 516 2000 191 89
+durationcanvas 130946 classinstance_ref 128386 // uart:UartIntrSC
+  xyzwh 638 176 2005 11 130
+  overlappingdurationcanvas 147586
+    xyzwh 644 232 2015 11 68
+  end
+end
+durationcanvas 133634 classinstance_ref 133250 // term:TermSC
+  xyzwh 924 54 2010 11 25
+end
+durationcanvas 133762 classinstance_ref 133122 // rx:sc_buffer
+  xyzwh 839 63 2035 11 177
+end
+durationcanvas 134274 classinstance_ref 133250 // term:TermSC
+  xyzwh 924 229 2010 11 33
+end
+durationcanvas 135426 classinstance_ref 135298 // xterm:xterm
+  xyzwh 1016 250 2010 11 31
+end
+durationcanvas 135682 classinstance_ref 133250 // term:TermSC
+  xyzwh 924 269 2010 11 98
+end
+durationcanvas 137090 classinstance_ref 133122 // rx:sc_buffer
+  xyzwh 839 356 2010 11 466
+end
+durationcanvas 138626 classinstance_ref 134530 // or1ksim:or1ksim
+  xyzwh 230 64 2010 11 43
+end
+durationcanvas 140418 classinstance_ref 128258 // iss:Or1ksimIntrSC
+  xyzwh 350 94 2010 11 100
+end
+durationcanvas 142338 classinstance_ref 128258 // iss:Or1ksimIntrSC
+  xyzwh 350 51 2010 11 25
+end
+durationcanvas 147842 classinstance_ref 146434 // intrQueue:sc_fifo
+  xyzwh 743 258 2010 11 26
+end
+durationcanvas 148482 classinstance_ref 128386 // uart:UartIntrSC
+  xyzwh 638 338 2005 11 58
+end
+durationcanvas 148610 classinstance_ref 146434 // intrQueue:sc_fifo
+  xyzwh 743 337 2010 11 29
+end
+durationcanvas 148994 classinstance_ref 146562 // intr:sc_out
+  xyzwh 552 363 2010 11 33
+end
+durationcanvas 149250 classinstance_ref 146306 // intr[2]:sc_signal
+  xyzwh 465 375 2010 11 25
+end
+durationcanvas 149634 classinstance_ref 128258 // iss:Or1ksimIntrSC
+  xyzwh 350 426 2010 11 40
+end
+durationcanvas 149762 classinstance_ref 146306 // intr[2]:sc_signal
+  xyzwh 465 426 2010 11 25
+end
+durationcanvas 150018 classinstance_ref 134530 // or1ksim:or1ksim
+  xyzwh 230 432 2010 11 34
+end
+durationcanvas 150402 classinstance_ref 128258 // iss:Or1ksimIntrSC
+  xyzwh 350 492 2010 11 44
+end
+durationcanvas 150530 classinstance_ref 134530 // or1ksim:or1ksim
+  xyzwh 230 525 2010 11 45
+end
+durationcanvas 150786 classinstance_ref 128258 // iss:Or1ksimIntrSC
+  xyzwh 350 558 2010 11 32
+end
+durationcanvas 151042 classinstance_ref 134530 // or1ksim:or1ksim
+  xyzwh 230 578 2010 11 239
+end
+msg 133890 synchronous
+  from durationcanvas_ref 133634
+  to durationcanvas_ref 133762
+  yz 63 2015 msg operation_ref 208642 // "read() : T"
+  show_full_operations_definition default drawing_language default
+  label_xy 869 47
+msg 134402 return
+  from durationcanvas_ref 133762
+  to durationcanvas_ref 134274
+  yz 229 2015 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 134914 synchronous
+  from durationcanvas_ref 138626
+  to durationcanvas_ref 140418
+  yz 94 2015 msg operation_ref 166658 // "staticWriteUpcall(in instancePointer : void, in addr : ulong, in mask : ulong, in wdata : ulong) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 245 78
+msg 135554 synchronous
+  from durationcanvas_ref 134274
+  to durationcanvas_ref 135426
+  yz 250 2020 msg operation_ref 208770 // "write(in fd : int, in buf : char, in len : int) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 963 234
+msg 135810 return
+  from durationcanvas_ref 135426
+  to durationcanvas_ref 135682
+  yz 269 2025 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 137218 synchronous
+  from durationcanvas_ref 135682
+  to durationcanvas_ref 137090
+  yz 356 2015 msg operation_ref 208642 // "read() : T"
+  show_full_operations_definition default drawing_language default
+  label_xy 869 340
+msg 138754 synchronous
+  from durationcanvas_ref 142338
+  to durationcanvas_ref 138626
+  yz 64 2015 msg operation_ref 215682 // "run(in duration : double) : int"
+  show_full_operations_definition default drawing_language default
+  label_xy 281 48
+msg 139266 asynchronous
+  from durationcanvas_ref 140418
+  to durationcanvas_ref 130946
+  yz 183 2015 msg operation_ref 192130 // "busReadWrite(inout payload : tlm::tlm_generic_payload, inout delay : sc_core::sc_time) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 455 167
+msg 140034 asynchronous
+  from durationcanvas_ref 130946
+  to durationcanvas_ref 133762
+  yz 199 2030 msg operation_ref 208386 // "write(in data : T) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 736 183
+reflexivemsg 147714 synchronous
+  to durationcanvas_ref 147586
+  yz 232 2020 msg operation_ref 192514 // "genIntr(in ierFlag : byte) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 652 216
+msg 147970 synchronous
+  from durationcanvas_ref 147586
+  to durationcanvas_ref 147842
+  yz 259 2025 msg operation_ref 222978 // "write(in data : T) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 690 243
+msg 148226 return
+  from durationcanvas_ref 147842
+  to durationcanvas_ref 147586
+  yz 273 2020 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+selfreflexivemsg 148354
+  to durationcanvas_ref 147586
+  yz 292 2025 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 148738 synchronous
+  from durationcanvas_ref 148482
+  to durationcanvas_ref 148610
+  yz 338 2015 msg operation_ref 223106 // "read() : T"
+  show_full_operations_definition default drawing_language default
+  label_xy 688 322
+msg 148866 return
+  from durationcanvas_ref 148610
+  to durationcanvas_ref 148482
+  yz 354 2015 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 149122 synchronous
+  from durationcanvas_ref 148482
+  to durationcanvas_ref 148994
+  yz 363 2015 msg operation_ref 208514 // "write(in data : T) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 582 347
+msg 149378 asynchronous
+  from durationcanvas_ref 148994
+  to durationcanvas_ref 149250
+  yz 375 2015 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 149506 return
+  from durationcanvas_ref 148994
+  to durationcanvas_ref 148482
+  yz 385 2015 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 149890 synchronous
+  from durationcanvas_ref 149634
+  to durationcanvas_ref 149762
+  yz 426 2015 msg operation_ref 223234 // "event() : bool"
+  show_full_operations_definition default drawing_language default
+  label_xy 393 410
+msg 150146 synchronous
+  from durationcanvas_ref 149634
+  to durationcanvas_ref 150018
+  yz 432 2015 msg operation_ref 223362 // "or1ksim_interrupt(in int : int) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 243 416
+msg 150274 return
+  from durationcanvas_ref 150018
+  to durationcanvas_ref 149634
+  yz 455 2015 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 150658 return
+  from durationcanvas_ref 150402
+  to durationcanvas_ref 150530
+  yz 525 2015 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 150914 return
+  from durationcanvas_ref 150530
+  to durationcanvas_ref 150786
+  yz 559 2015 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 151170 synchronous
+  from durationcanvas_ref 150786
+  to durationcanvas_ref 151042
+  yz 579 2015 msg operation_ref 215682 // "run(in duration : double) : int"
+  show_full_operations_definition default drawing_language default
+  label_xy 281 563
+end

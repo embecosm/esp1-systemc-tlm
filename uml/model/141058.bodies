@@ -1,0 +1,87 @@
+class TapActionIRScan
+!!!147586.cpp!!!	TapActionIRScan(inout _doneEvent : sc_core::sc_event, in _iRegIn : uint32_t, in _iRegSize : int)
+
+!!!147714.cpp!!!	getIRegOut() : uint32_t
+  return  iRegOut;
+
+!!!147842.cpp!!!	process(inout tapStateMachine : TapStateMachine, inout tdi : bool, in tdo : bool, inout tms : bool) : bool
+  // Ensure we are in a consistent state. If not then we'll have moved towards
+  // it and can return with the given tms
+  if (!checkResetDone (tapStateMachine, tms, true))
+    {
+      return false;
+    }
+
+  // We are consistent, so work through the IR-Scan process
+  switch (iRScanState)
+    {
+    case SHIFT_IR_PREPARING:
+
+      // Are we in the Shift-IR state yet?
+      if (!tapStateMachine->targetState (TAP_SHIFT_IR, tms))
+	{
+	  return  false;		// Not there. Accept the TMS value
+	}
+      else
+	{
+	  iRScanState = SHIFT_IR_SHIFTING;	// Drop through
+	}
+
+    case SHIFT_IR_SHIFTING:
+
+      // Are we still shifting stuff?
+      if (bitsShifted < iRegSize)
+	{
+	  // We are in the Shift-IR state. Another bit about to be done, so
+	  // increment the count
+	  bitsShifted++;
+
+	  // Shift out the TDI value from the bottom of the register
+	  tdi       = iRegIn & 1;
+	  iRegIn >>= 1;
+
+	  // Record the TDO value. This is always a cycle late, so we ignore
+	  // it the first time. The value shifts in from the top.
+	  if (bitsShifted > 1)
+	    {
+	      iRegOut >>= 1;		// Move all the existing bits right
+	      
+	      if (tdo)			// OR any new bit in
+		{
+		  uint32_t tmpBit = 1 << (iRegSize - 1);
+		  iRegOut |= tmpBit;
+		}
+	    }
+
+	  // TMS is 0 to keep us here UNLESS this is the last bit, in which
+	  // case it is 1 to move us into Exit1-IR.
+	  tms = (bitsShifted == iRegSize);
+
+	  return false;
+	}
+      else
+	{
+	  // Capture the last TDO bit
+	  iRegOut >>= 1;		// Move all the existing bits right
+
+	  if (tdo)			// OR any new bit in
+	    {
+	      uint32_t tmpBit = 1 << (iRegSize - 1);
+	      iRegOut |= tmpBit;
+	    }
+
+	  iRScanState = SHIFT_IR_UPDATING;	// Drop through
+	}
+
+    case SHIFT_IR_UPDATING:
+
+      // Are we still trying to update?
+      if (!tapStateMachine->targetState (TAP_UPDATE_IR, tms))
+	{
+	  return  false;		// Not there. Accept the TMS value
+	}
+      else
+	{
+	  return  true;			// All done
+	}
+    }

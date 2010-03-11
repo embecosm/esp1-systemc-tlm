@@ -1,0 +1,29 @@
+format 66
+
+statecanvas 128002 state_ref 134018 // IR
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 195 37 2000 440 360
+end
+pseudostatecanvas 128130 pseudostate_ref 132866 // entry_point
+   xyz 403 120 3005 label_xy 430 123
+end
+pseudostatecanvas 128258 pseudostate_ref 132994 // exit_point
+   xyz 403 322 3005 label_xy 435 324
+end
+statecanvas 128386 state_ref 132610 // REGISTER
+  show_activities default region_horizontally no drawing_language default show_stereotype_properties default
+  xyzwh 335 218 2005 154 54
+end
+transitioncanvas 128514 transition_ref 134530 // From parent
+  
+  from ref 128130 z 3006 label "/ shiftState = SHIFT_IR
+updateState = UPDATE_IR" xyz 420 154 3000 to ref 128386
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128642 transition_ref 134658 // <transition>
+  decenter_end 472
+  
+  from ref 128386 z 3006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+end

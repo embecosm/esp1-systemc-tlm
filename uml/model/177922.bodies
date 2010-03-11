@@ -1,0 +1,24 @@
+class UartIntrSC
+!!!192258.cpp!!!	UartIntrSC(in name : sc_core::sc_module_name, in _clockRate : ulong)
+  SC_THREAD( intrThread );
+
+!!!192386.cpp!!!	intrThread() : void
+  intr.write( false );		// Clear interrupt on startup
+
+  while( true ) {
+    intr.write( intrQueue.read() );
+  }
+ 
+!!!192514.cpp!!!	genIntr(in ierFlag : byte) : void
+  if( isSet( regs.ier, ierFlag )) {
+    set( intrPending, ierFlag );	// Mark this interrupt as pending.
+    setIntrFlags();			// Show highest priority
+    intrQueue.write( true );		// Request an interrupt signal
+  }
+!!!192642.cpp!!!	clrIntr(in ierFlag : byte) : void
+  clr( intrPending, ierFlag );
+  setIntrFlags();
+
+  if( isSet( regs.iir, UART_IIR_IPEND )) {	// 1 = not pending
+    intrQueue.write( false );			// Deassert if none left
+  }

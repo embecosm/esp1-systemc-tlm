@@ -1,0 +1,22 @@
+window_sizes 1590 1146 337 1243 992 68
+diagrams
+  classdiagram_ref 175746 // IntrSocSC class diagram
+    994 793 100 18 0 0
+  sequencediagram_ref 175874 // IntrSocSC write sequence diagram
+    1243 992 100 18 0 0
+  classdiagram_ref 129154 // Or1ksim class diagram
+    994 793 100 4 0 0
+  classdiagram_ref 182402 // JtagSocSC class diagram
+    994 793 100 18 0 0
+  sequencediagram_ref 182530 // JtagSocSC debug sequence diagram
+    994 793 100 18 0 0
+  active  sequencediagram_ref 169218 // DecoupSocSC write sequence diagram
+    1243 992 100 18 0 0
+end
+show_stereotypes
+selected sequencediagram_ref 169218 // DecoupSocSC write sequence diagram
+open
+  classview_ref 128002 // top level class view
+  classview_ref 133378 // SystemC IEEE 1666 class view
+end
+end

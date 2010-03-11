@@ -1,0 +1,1598 @@
+format 66
+"sysc-jtag" // sysc-jtag
+  revision 4
+  modified_by 2 "jeremy"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default show_stereotype_properties default
+  
+  classview 134530 "sysc-jtag"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 131970 "sysc-jtag class diagram"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 140290 "JtagMainSC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! The main JTAG interface module
+! This provides a pin interface on one side (to drive JTAG ports on a chip)
+! and a FIFO on the other, allowing the user to queue JTAG actions.
+! The pin interface is:
+! - sysReset (input)  The system reset. When this is asserted, the interface
+!                     will do nothing except drive TRST low.
+! - tck (input)       The JTAG clock (supplied externally)
+! - tdi (output)      Drives the TDI pin
+! - tdo (input)       Receives the TDO pin
+! - tms (output)      Drives the TMS pin
+! - trst (output)     Drives the TRST pin
+! @note The JTAG pins are reversed, because this module is @b driving the
+!       pins.
+! The FIFO allows the user to queue actions, which are of abstract type
+! TapAction::. This is subclassed to provide specific actions for reset
+! (TapActionReset::), DR-scan (TapActionDRScan::) and IR-scan
+! (TapActionIRScan::).
+! The size of the FIFO can optionally be specified in the constructor.
+! The class provides a method, sensitive to the clock, which reads actions
+! from the FIFO and processes them, issuing the requisite sequence of
+! changes of the JTAG pins until the action is complete. It then notifies
+! the action owner of completion, through an sc_event, which is part of the
+! ::TapAction class.
+! "
+      classrelation 138498 // <generalisation>
+	relation 138370 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 138498 // <generalisation>
+	  b parent class_ref 140418 // typedef1
+      end
+
+      attribute 149250 "sysReset"
+	public explicit_type "bool"
+	stereotype "sc_core::sc_in"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< The system reset (active high)"
+      end
+
+      attribute 149378 "tck"
+	public explicit_type "bool"
+	stereotype "sc_core::sc_in"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< External JTAG TCK"
+      end
+
+      attribute 149506 "tdi"
+	public explicit_type "bool"
+	stereotype "sc_core::sc_out"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< JTAG TDI pin"
+      end
+
+      attribute 149634 "tdo"
+	public explicit_type "bool"
+	stereotype "sc_core::sc_in"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< JTAG TDO pin"
+      end
+
+      attribute 149762 "tms"
+	public explicit_type "bool"
+	stereotype "sc_core::sc_out"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< JTAG TMS pin"
+      end
+
+      attribute 149890 "trst"
+	public explicit_type "bool"
+	stereotype "sc_core::sc_out"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "!< JTAG TRST pin"
+      end
+
+      attribute 150018 "tapActionQueue"
+	public explicit_type "TapAction *"
+	stereotype "sc_core::sc_fifo"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 145666 "JtagMainSC"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 2
+	  param in name "name" explicit_type "sc_core::sc_module_name"
+	  param in name "fifo_size" explicit_type "int"
+	    defaultvalue "DEFAULT_TAP_FIFO_SIZE"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${volatile}${throw};
+"
+	cpp_def "//! Constructor for the JTAG handler.
+//! @param[in] name       Name of this module, passed to the parent
+//!                       constructor. 
+//! @param[in] fifo_size  Size of the FIFO on which to queue TAP actions.
+
+${comment}${inline}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)} :
+  sc_module (name),
+  currentTapAction (NULL)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+	comment " Constructor and destructor"
+      end
+
+      operation 145794 "~JtagMainSC"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
+"
+	cpp_def "// JtagMainSC ()
+//! Destructor for the JTAG handler.
+//! Give up our state machine and FIFO
+
+${comment}${inline}${class}::${name}${(}${)}${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 145922 "processActions"
+	preserve_cpp_body_indent protected explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// ~JtagMainSC ()
+//! Method to drive the jtag ports.
+//! Initial version just drives the reset.
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Method to process the actions"
+      end
+
+      classrelation 138626 // stateMachine (<unidirectional association>)
+	relation 138498 --->
+	  a role_name "stateMachine" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 138626 // stateMachine (<unidirectional association>)
+	  b parent class_ref 140674 // TapStateMachine
+      end
+
+      classrelation 138754 // currentTapAction (<unidirectional association>)
+	relation 138626 --->
+	  a role_name "currentTapAction" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 138754 // currentTapAction (<unidirectional association>)
+	  b parent class_ref 140546 // TapAction
+      end
+    end
+
+    class 140418 "typedef1"
+      visibility package stereotype "typedef" explicit_base_type "sc_core::sc_module"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 140546 "TapAction"
+      abstract visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! Abstract class to represent a TAP action.
+! Subclasses implement specific actions: Reset (TapActionReset::), DR-Scan
+! (TapActionDRScan::) and IR-Scan (TapActionIRScan::).
+! We keep a SystemC event, which is used to notify the creator of
+! completion. Since we are not a SystemC class, we don't do the notification
+! ourselves."
+      classrelation 138882 // <dependency>
+	relation 138754 -_->
+	  stereotype "friend"
+	  a default
+	    cpp default "${type}"
+	    classrelation_ref 138882 // <dependency>
+	  b parent class_ref 140290 // JtagMainSC
+      end
+
+      operation 146050 "TapAction"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 1
+	  param inout name "_doneEvent" explicit_type "sc_core::sc_event"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}${)}${volatile}${throw};
+"
+	cpp_def "//! Constructor
+//! Records the SystemC event used to notify completion and sets the
+//! resetCounter to zero.
+//! @param _actionType  The action type
+
+${comment}${inline}${class}::${name}${(}${t0} * ${p0}${)} :
+  doneEvent (_doneEvent),
+  resetCounter (0)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+	comment " Constructor"
+      end
+
+      operation 146178 "getDoneEvent"
+	preserve_cpp_body_indent protected explicit_return_type "sc_core::sc_event"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} * ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// TapAction ()
+//! Accessor to get the SystemC completion event
+//! @return  The SystemC completion event
+
+${comment}${inline}${type} * ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Accessor for the SystemC event to notify completion"
+      end
+
+      operation 146306 "process"
+	abstract cpp_virtual protected explicit_return_type "bool"
+	nparams 4
+	  param inout name "tapStateMachine" type class_ref 140674 // TapStateMachine
+	  param inout name "tdi" explicit_type "bool"
+	  param in name "tdo" explicit_type "bool"
+	  param inout name "tms" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+	comment " Process the action. Pure virtual, so must be implemented by subclasses."
+      end
+
+      operation 146434 "checkResetDone"
+	preserve_cpp_body_indent protected explicit_return_type "bool"
+	nparams 3
+	  param inout name "tapStateMachine" type class_ref 140674 // TapStateMachine
+	  param inout name "tms" explicit_type "bool"
+	  param in name "warn" explicit_type "bool"
+	    defaultvalue "false"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// getDoneEvent ()
+//! Function to check the TAP is in a consistent state, optionally with a
+//! warning.
+//! This is a convenience for subclasses (hence protected), so they can ensure
+//! the state machine is in a consistent state.
+//! @note The method returns TRUE to indicate that the machine is in the
+//!       consistent state. However the TapStateMachine resetDone flag is set
+//!       when the final TMS is set - the state will only be reached IF that
+//!       TMS is driven. This mechanism gives users flexibility. They can
+//!       detect the final TMS being driven.
+//! @param[in]  tapStateMachine  The TAP state machine with which we are
+//!                              associated.
+//! @param[out] tms              The value to drive on the JTAG TMS
+//! @param[in]  warn             True to indicate a warning message should be
+//!                              issued when starting a reset cycle.
+//! @return  TRUE if the TAP state machine was already in a consistent state.
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} * ${p0}, ${t1} & ${p1}, ${t2} ${p2}${)}${const}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Function to drive the TAP to a consistent state, optionally with a
+ warning."
+      end
+
+      attribute 150530 "doneEvent"
+	private explicit_type "sc_core::sc_event"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 150658 "resetCounter"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 140674 "TapStateMachine"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment " tapStateNames
+! TAP state machine
+! Tracks the state of the TAP. This should mirror the state of the TAP in
+! the connected HW.
+! The state machine is created in the reset condition, but in truth we
+! cannot know what the state is. It is essential the TAP is reset before
+! first being used.
+! We cannot know for certain when the TAP state machine has been reset. 5
+! consecutive TMS=1 transitions will take you there, but a reset of the
+! target could undo this. It is the responsibility of the user of the TAP
+! state machine.
+! For convenience of users, this class provides a flag (resetDone::),
+! with accessors by which reset state can be recorded."
+      classrelation 139394 // <dependency>
+	relation 139266 -_->
+	  stereotype "friend"
+	  a default
+	    cpp default "${type}"
+	    classrelation_ref 139394 // <dependency>
+	  b parent class_ref 140290 // JtagMainSC
+      end
+
+      classrelation 139522 // <dependency>
+	relation 139394 -_->
+	  stereotype "friend"
+	  a default
+	    cpp default "${type}"
+	    classrelation_ref 139522 // <dependency>
+	  b parent class_ref 140546 // TapAction
+      end
+
+      classrelation 139650 // <dependency>
+	relation 139522 -_->
+	  stereotype "friend"
+	  a default
+	    cpp default "${type}"
+	    classrelation_ref 139650 // <dependency>
+	  b parent class_ref 140930 // TapActionDRScan
+      end
+
+      classrelation 139778 // <dependency>
+	relation 139650 -_->
+	  stereotype "friend"
+	  a default
+	    cpp default "${type}"
+	    classrelation_ref 139778 // <dependency>
+	  b parent class_ref 141058 // TapActionIRScan
+      end
+
+      classrelation 139906 // <dependency>
+	relation 139778 -_->
+	  stereotype "friend"
+	  a default
+	    cpp default "${type}"
+	    classrelation_ref 139906 // <dependency>
+	  b parent class_ref 141186 // TapActionReset
+      end
+
+      attribute 154882 "TAP_RESET_CYCLES"
+	class_attribute const_attribute protected explicit_type "int"
+	init_value "=  5"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${h_value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 148226 "TapStateMachine"
+	preserve_cpp_body_indent protected explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw};
+"
+	cpp_def "//! Constructor
+//! Start in the Test-Logic-Reset state, although we cannot know this reflects
+//! the hardware until it has been through a TAP reset sequence. This is
+//! reflected in the ::tapResetDone flag.
+
+${comment}${inline}${class}::${name}${(}${)} :
+  state (TAP_TEST_LOGIC_RESET),
+  resetDone (false)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+	comment " Constructor"
+      end
+
+      operation 148354 "getState"
+	preserve_cpp_body_indent protected return_type class_ref 141314 // TapState
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// TapStateMachine ()
+//! Accessor to get the current TAP state
+//! Only guaranteed to match the target hardware if it has been through a
+//! reset sequence.
+//! @return  The current TAP state
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Accessor for TAP state"
+      end
+
+      operation 148482 "getResetDone"
+	preserve_cpp_body_indent protected explicit_return_type "bool"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// getState ()
+//! Accessor to get the current TAP reset state.
+//! It is the responsibility of classes using this class to correctly set this
+//! state.
+//! @return  The current TAP reset state
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Accessors for TAP reset state"
+      end
+
+      operation 148610 "setResetDone"
+	preserve_cpp_body_indent protected explicit_return_type "void"
+	nparams 1
+	  param in name "_resetDone" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// getResetDone ()
+//! Accessor to set the current TAP reset state.
+//! It is the responsibility of classes using this class to correctly set this
+//! state.
+//! @param[in]  The desired TAP reset state
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 148738 "nextState"
+	preserve_cpp_body_indent protected explicit_return_type "void"
+	nparams 1
+	  param in name "tms" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// setResetDone ()
+//! Drive the TAP state machine
+//! @param tms       The JTAG TMS pin
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Drive the TAP state machine"
+      end
+
+      operation 148866 "targetState"
+	preserve_cpp_body_indent protected explicit_return_type "bool"
+	nparams 2
+	  param in name "target" type class_ref 141314 // TapState
+	  param inout name "tms" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// nextState()
+//! Determine if we are in a particular TAP state
+//! Set TMS to get there optimally
+//! @param[in]  target  The desired TAP state
+//! @param[out] tms     Value of TMS to move towards the target state. Set
+//!                     even if we are already in the state (in case we want
+//!                     to loop).
+//! @return  True if we are already in the target state
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Determine if we are in a particular target state"
+      end
+
+      classrelation 140034 // state (<directional composition>)
+	relation 139906 *-->
+	  a role_name "state" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 140034 // state (<directional composition>)
+	  b parent class_ref 141314 // TapState
+      end
+
+      attribute 155010 "resetDone"
+	private explicit_type "bool"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 140802 "TapActionType"
+      visibility package stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! Enumeration of all the TAP actions supported."
+      attribute 150146 "TAP_ACTION_RESET"
+	public type class_ref 140802 // TapActionType
+	init_value "= 0"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 150274 "TAP_ACTION_SHIFT_DR"
+	public type class_ref 140802 // TapActionType
+	init_value "= 1"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 150402 "TAP_ACTION_SHIFT_IR"
+	public type class_ref 140802 // TapActionType
+	init_value "= 2
+"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 140930 "TapActionDRScan"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! Class to represent a TAP DR-Scan action.
+! JTAG data registers can be huge and are represented generically as arrays
+! of uint64_t. However for efficiency versions of methods are provided based
+! on a single uint64_t.
+! The SystemC classes for large unsigned ints are fabulously inefficient in
+! the reference implementation, so are not used here."
+      classrelation 139010 // <generalisation>
+	relation 138882 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 139010 // <generalisation>
+	  b parent class_ref 140546 // TapAction
+      end
+
+      operation 146562 "TapActionDRScan"
+	public explicit_return_type ""
+	nparams 3
+	  param inout name "_doneEvent" explicit_type "sc_core::sc_event"
+	  param in name "_dRegInArray" explicit_type "uint64_t"
+	  param in name "_dRegSize" explicit_type "int"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}, ${t1} ${p1}[]${v1}, ${t2} ${p2}${v2}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${t0} * ${p0}, ${t1} ${p1}[], ${t2} ${p2}${)}${throw}{
+${body}}
+"
+	
+	
+	
+	
+	comment " Constructors and destructor"
+      end
+
+      operation 146690 "TapActionDRScan"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 3
+	  param inout name "_doneEvent" explicit_type "sc_core::sc_event"
+	  param in name "_dRegIn" explicit_type "uint64_t"
+	  param in name "_dRegSize" explicit_type "int"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${volatile}${throw};
+"
+	cpp_def "// TapActionDRScan ()
+//! Constructor for small DR registers
+//! Sets up the superclass with the SystemC completion event and initializes
+//! our state as appropriate.
+//! This constructor represents small registers in a single uint64_t
+//! @param[in] doneEvent  SystemC event to be signalled when this action is
+//!                       complete.
+//! @param[in] _dRegIn    The register to shift in.
+//! @param[in] _dRegSize  Size in bits of the register to shift in. Must be no
+//!                       greater than 64, or we give a rude message and set
+//!                       the value to 64 anyway.
+
+${comment}${inline}${class}::${name}${(}${t0} * ${p0}, ${t1} ${p1}, ${t2} ${p2}${)} :
+  TapAction (_doneEvent),
+  dRegBitSize (_dRegSize),
+  dRegWordSize (1),
+  bitsShifted (0),
+  dRScanState (SHIFT_DR_PREPARING)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 146818 "~TapActionDRScan"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
+"
+	cpp_def "// TapActionDRScan ()
+//! Destructor.
+//! If we allocated them, free the large registers
+
+${comment}${inline}${class}::${name}${(}${)}${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 146946 "getDRegOut"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	  param in name "dRegArray" explicit_type "uint64_t"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}[]${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// process ()
+//! Get the shifted out value.
+//! This version works with large values.
+//! @param[out] dRegArray  Array for the result
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}[]${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Get the shifted out value"
+      end
+
+      operation 147074 "getDRegOut"
+	preserve_cpp_body_indent public explicit_return_type "uint64_t"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// getDRegOut ()
+//! Get the shifted out value.
+//! This version is for small values. For large values it silently returns the
+//! bottom 64 bits only.
+//! @todo  Should we give an error. Or is it useful to allow efficient access
+//!        to the bottom 64 bits?
+//! @return  The value shifted out (or the bottom 64 bits thereof if the
+//!          register is \"large\").
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 147202 "process"
+	preserve_cpp_body_indent protected explicit_return_type "bool"
+	nparams 4
+	  param inout name "tapStateMachine" type class_ref 140674 // TapStateMachine
+	  param inout name "tdi" explicit_type "bool"
+	  param in name "tdo" explicit_type "bool"
+	  param inout name "tms" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// ~TapActionDRScan ()
+//! Process the Shift-DR action
+//! This drives the DR-Scan state. We can only do this if we have the TAP
+//! state machine in a consistent state, which in turn is only possible if we
+//! have been through a reset cycle.
+//! If the state machine shows it has yet to be through a reset cycle, we
+//! drive that cycle, after issuing a warning. This functionality is provided
+//! by the parent class, TapAction::.
+//! @param[in]  tapStateMachine  The TAP state machine with which this action
+//!                              is associated. 
+//! @param[out] tdi              The value to drive on TDI
+//! @param[in]  tdo              The value currently on TDO
+//! @param[out] tms              The value to drive on TMS
+//! @return  True if the action is complete
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} * ${p0}, ${t1} & ${p1}, ${t2} ${p2}, ${t3} & ${p3}${)}${const}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Process the action for IR-Scan"
+      end
+
+      attribute 150786 "dRegBitSize"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 150914 "dRegWordSize"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 151042 "topMask"
+	private explicit_type "uint64_t"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 151170 "dRegInArray"
+	private explicit_type "uint64_t"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 151298 "dRegIn"
+	private explicit_type "uint64_t"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 151426 "dRegOutArray"
+	private explicit_type "uint64_t"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 151554 "dRegOut"
+	private explicit_type "uint64_t"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 151682 "bitsShifted"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 151810 "dRScanState"
+	private explicit_type "<complex type>"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}enum  {
+    SHIFT_DR_PREPARING,
+    SHIFT_DR_SHIFTING,
+    SHIFT_DR_UPDATING
+  } ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 147330 "shiftDRegOut"
+	preserve_cpp_body_indent private explicit_return_type "bool"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// getDRegOut ()
+//! Utility to shift the bottom bit out of the dReg.
+//! Two flavours depending on whether we have a \"small\" register
+//! @return  The bit shifted out.
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Utilities to shift the bottom bit out and top bit in"
+      end
+
+      operation 147458 "shiftDRegIn"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 1
+	  param in name "bitIn" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// shiftDRegOut ()
+//! Utility to shift the top bit into the dReg.
+//! Two flavours depending on whether we have a \"small\" register
+//! @param bitIn  The bit to shift in the top
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 141058 "TapActionIRScan"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! Class to represent a TAP IR-Scan action.
+! This class assumes that JTAG instruction registers are relatively
+! small. IEEE 1149.1 mandates at least 2 bits, although implementations
+! often have a wider range of instructions. The OpenRISC 1000 debug unit for
+! example uses 5 bits. 32-bits seems more than enough for the largest
+! applications."
+      classrelation 139138 // <generalisation>
+	relation 139010 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 139138 // <generalisation>
+	  b parent class_ref 140546 // TapAction
+      end
+
+      operation 147586 "TapActionIRScan"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 3
+	  param inout name "_doneEvent" explicit_type "sc_core::sc_event"
+	  param in name "_iRegIn" explicit_type "uint32_t"
+	  param in name "_iRegSize" explicit_type "int"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${volatile}${throw};
+"
+	cpp_def "//! Constructor
+//! Sets up the superclass with the SystemC completion event and initializes
+//! our state as appropriate.
+//! @param[in] doneEvent  SystemC event to be signalled when this action is
+//!                       complete.
+//! @param[in] _iRegIn    The register to shift in.
+//! @param[in] _iRegSize  Size in bits of the register to shift in.
+
+${comment}${inline}${class}::${name}${(}${t0} * ${p0}, ${t1} ${p1}, ${t2} ${p2}${)} :
+  TapAction (_doneEvent),
+  iRegIn (_iRegIn),
+  iRegSize (_iRegSize),
+  iRegOut (0),
+  bitsShifted (0),
+  iRScanState (SHIFT_IR_PREPARING)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+	comment " Constructor"
+      end
+
+      operation 147714 "getIRegOut"
+	preserve_cpp_body_indent public explicit_return_type "uint32_t"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// process ()
+//! Get the shifted out register
+//! @return  The value of the shifted our register
+
+${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Get the shifted out value"
+      end
+
+      operation 147842 "process"
+	preserve_cpp_body_indent protected explicit_return_type "bool"
+	nparams 4
+	  param inout name "tapStateMachine" type class_ref 140674 // TapStateMachine
+	  param inout name "tdi" explicit_type "bool"
+	  param in name "tdo" explicit_type "bool"
+	  param inout name "tms" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// TapActionIRScan ()
+//! Process the Shift-IR action
+//! This drives the IR-Scan state. We can only do this if we have the TAP
+//! state machine in a consistent state, which in turn is only possible if we
+//! have been through a reset cycle.
+//! If the state machine shows it has yet to be through a reset cycle, we
+//! drive that cycle, after issuing a warning. This functionality is provided
+//! by the parent class, TapAction::.
+//! @param[in]  tapStateMachine  The TAP state machine with which this action
+//!                              is associated. 
+//! @param[out] tdi              The value to drive on TDI
+//! @param[in]  tdo              The value currently on TDO
+//! @param[out] tms              The value to drive on TMS
+//! @return  True if the action is complete
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} * ${p0}, ${t1} & ${p1}, ${t2} ${p2}, ${t3} & ${p3}${)}${const}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Process the action for IR-Scan"
+      end
+
+      attribute 151938 "iRegIn"
+	private explicit_type "uint32_t"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 152066 "iRegSize"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 152194 "iRegOut"
+	private explicit_type "uint32_t"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 152322 "bitsShifted"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 152450 "iRScanState"
+	private explicit_type "<complex type>"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}enum  {
+    SHIFT_IR_PREPARING,
+    SHIFT_IR_SHIFTING,
+    SHIFT_IR_UPDATING
+  } ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 141186 "TapActionReset"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! Class to represent a TAP reset action.
+! This can be very simple, since it reuses the parent class method to do the
+! reset."
+      classrelation 139266 // <generalisation>
+	relation 139138 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 139266 // <generalisation>
+	  b parent class_ref 140546 // TapAction
+      end
+
+      operation 147970 "TapActionReset"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 1
+	  param inout name "_doneEvent" explicit_type "sc_core::sc_event"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}${)}${volatile}${throw};
+"
+	cpp_def "//! Constructor
+//! Records the SystemC completion event with the parent. Sets the ::firstTime
+//! flag, so the ::process () method will mark the tapStateMachine as not
+//! reset.
+//! @param[in] _doneEvent  The SystemC completion event
+
+${comment}${inline}${class}::${name}${(}${t0} * ${p0}${)} :
+  TapAction (_doneEvent),
+  firstTime (true)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+	comment " Constructor"
+      end
+
+      operation 148098 "process"
+	preserve_cpp_body_indent protected explicit_return_type "bool"
+	nparams 4
+	  param inout name "tapStateMachine" type class_ref 140674 // TapStateMachine
+	  param inout name "tdi" explicit_type "bool"
+	  param in name "tdo" explicit_type "bool"
+	  param inout name "tms" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "// TapActionReset ()
+//! Process the reset action
+//! This reuses the parent class ::checkResetDone() method. The first time we
+//! are called, we mark the state machine as being in an inconsistent state,
+//! to force the reset.
+//! We use the value of the TAP state machine's resetDone flag to trigger
+//! completion, since this is set on the final reset cycle. The result from
+//! ::checkResetDone () is only true on the first cycle AFTER reset.
+//! @see TapAction::
+//! @param[in]  tapStateMachine  The TAP state machine with which this action
+//!                              is associated. 
+//! @param[out] tdi              The value to drive on TDI
+//! @param[in]  tdo              The value currently on TDO
+//! @param[out] tms              The value to drive on TMS
+//! @return  True if the action is complete
+
+${comment}${inline}${type} ${class}::${name}${(}${t0} * ${p0}, ${t1} & ${p1}, ${t2} ${p2}, ${t3} & ${p3}${)}${const}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Process the action for reset"
+      end
+
+      attribute 152578 "firstTime"
+	private explicit_type "bool"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 141314 "TapState"
+      visibility package stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "! Enumeration of all the states in the TAP state machine.
+! Last entry is not a state, but a marker of the number of states. Useful
+! for state transition matrices."
+      attribute 152706 "TAP_TEST_LOGIC_RESET"
+	public type class_ref 141314 // TapState
+	init_value "=  0"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 152834 "TAP_RUN_TEST_IDLE"
+	public type class_ref 141314 // TapState
+	init_value "=  1"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 152962 "TAP_SELECT_DR_SCAN"
+	public type class_ref 141314 // TapState
+	init_value "=  2"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 153090 "TAP_CAPTURE_DR"
+	public type class_ref 141314 // TapState
+	init_value "=  3"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 153218 "TAP_SHIFT_DR"
+	public type class_ref 141314 // TapState
+	init_value "=  4"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 153346 "TAP_EXIT1_DR"
+	public type class_ref 141314 // TapState
+	init_value "=  5"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 153474 "TAP_PAUSE_DR"
+	public type class_ref 141314 // TapState
+	init_value "=  6"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 153602 "TAP_EXIT2_DR"
+	public type class_ref 141314 // TapState
+	init_value "=  7"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 153730 "TAP_UPDATE_DR"
+	public type class_ref 141314 // TapState
+	init_value "=  8"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 153858 "TAP_SELECT_IR_SCAN"
+	public type class_ref 141314 // TapState
+	init_value "=  9"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 153986 "TAP_CAPTURE_IR"
+	public type class_ref 141314 // TapState
+	init_value "= 10"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 154114 "TAP_SHIFT_IR"
+	public type class_ref 141314 // TapState
+	init_value "= 11"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 154242 "TAP_EXIT1_IR"
+	public type class_ref 141314 // TapState
+	init_value "= 12"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 154370 "TAP_PAUSE_IR"
+	public type class_ref 141314 // TapState
+	init_value "= 13"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 154498 "TAP_EXIT2_IR"
+	public type class_ref 141314 // TapState
+	init_value "= 14"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 154626 "TAP_UPDATE_IR"
+	public type class_ref 141314 // TapState
+	init_value "= 15"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 154754 "TAP_SIZE"
+	public type class_ref 141314 // TapState
+	init_value "= 16
+
+"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+  end
+
+  deploymentview 130306 "sysc-jtag"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+    artifact 132866 "JtagMainSC"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 140418 // typedef1
+	class_ref 140290 // JtagMainSC
+      end
+    end
+
+    artifact 132994 "TapAction"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 140802 // TapActionType
+	class_ref 140546 // TapAction
+      end
+    end
+
+    artifact 133122 "TapActionDRScan"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 140930 // TapActionDRScan
+      end
+    end
+
+    artifact 133250 "TapActionIRScan"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 141058 // TapActionIRScan
+      end
+    end
+
+    artifact 133378 "TapActionReset"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 141186 // TapActionReset
+      end
+    end
+
+    artifact 133506 "TapStateMachine"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 141314 // TapState
+	class_ref 140674 // TapStateMachine
+      end
+    end
+  end
+end

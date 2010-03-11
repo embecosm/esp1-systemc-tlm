@@ -1,0 +1,61 @@
+class UartSyncSC
+!!!194690.cpp!!!	busReadWrite(inout payload : tlm::tlm_generic_payload, inout delay : sc_core::sc_time) : void
+  UartSC::busReadWrite( payload, delay );	// base method
+
+  // Delay as appropriate.
+  switch( payload.get_command() ) {
+  case tlm::TLM_READ_COMMAND:
+    wait( sc_core::sc_time( UART_READ_NS, sc_core::SC_NS ));
+    delay = sc_core::SC_ZERO_TIME;
+    break;
+  case tlm::TLM_WRITE_COMMAND:
+    wait( sc_core::sc_time( UART_WRITE_NS, sc_core::SC_NS ));
+    delay = sc_core::SC_ZERO_TIME;
+    break;
+  }
+
+!!!194818.cpp!!!	busWrite(in uaddr : byte, in wdata : byte) : void
+  UartSC::busWrite( uaddr, wdata );		// base function
+
+  // Lookup on the register to see if update to delay is needed
+  switch( uaddr ) {
+  case UART_BUF:		// Only change if divisorLatch update (DLAB=1)
+  case UART_IER:
+    if( isSet( regs.lcr, UART_LCR_DLAB ) ) {
+      resetCharDelay();
+    }
+    break;
+
+  case UART_LCR:
+    resetCharDelay();		// Could change baud delay
+    break;
+
+  default:
+    break;			// Do nothing
+  }
+
+!!!194946.cpp!!!	busThread() : void
+  // Loop listening for changes on the Tx buffer, waiting for a baud rate
+  // delay then sending to the terminal
+  while( true ) {
+    set( regs.lsr, UART_LSR_THRE );	// Indicate buffer empty
+    set( regs.lsr, UART_LSR_TEMT );
+    genIntr( UART_IER_TBEI );		// Interrupt if enabled
+
+    wait( txReceived );			// Wait for a Tx request
+    wait( charDelay );			// Wait baud delay
+    tx.write( regs.thr );		// Send char to terminal
+  }
+!!!195074.cpp!!!	resetCharDelay() : void
+  if( clockRate > 0 ) {		// Avoid divide by zero!
+    int  dataBits  = (regs.lcr & UART_LCR_MASK) + 5;
+    int  parityBit = isSet( regs.lcr, UART_LCR_PEN ) ? 1 : 0;
+    int  stopBits  = isSet( regs.lcr, UART_LCR_STB ) ? 2 : 1;
+
+    // 5 bit data has max 1.5 stop bits
+    double totBits = (double)(1 + dataBits + parityBit + stopBits) -
+                     (((5 == dataBits) && (1 == stopBits)) ? 0.5 : 0.0);
+    double baudRate = (double)clockRate / (double)regs.dl / 16.0;
+
+    charDelay = sc_core::sc_time( totBits / baudRate, sc_core::SC_SEC );
+  }

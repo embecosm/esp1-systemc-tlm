@@ -1,0 +1,16 @@
+class TapActionReset
+!!!147970.cpp!!!	TapActionReset(inout _doneEvent : sc_core::sc_event)
+
+!!!148098.cpp!!!	process(inout tapStateMachine : TapStateMachine, inout tdi : bool, in tdo : bool, inout tms : bool) : bool
+  if (firstTime)
+    {
+      tapStateMachine->setResetDone (false);
+      firstTime = false;
+    }
+
+  // Parent does the work (no warning message). Our result draws on the value
+  // set in the tapStateMachine, to avoid an extra cycle.
+  checkResetDone (tapStateMachine, tms, false);
+
+  return tapStateMachine->getResetDone ();
+

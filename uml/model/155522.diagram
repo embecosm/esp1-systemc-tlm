@@ -1,0 +1,235 @@
+format 70
+
+classinstance 128258 class_ref 156290 // Or1ksimSC
+  name "iss"   xyz 150 4 2000 life_line_z 2000
+classinstance 128386 class_ref 132610 // simple_initiator_socket
+  name "dataBus"   xyz 245 4 2000 life_line_z 2000
+classinstance 128514 class_ref 130946 // simple_target_socket
+  name "loggerSocket"   xyz 596 4 2000 life_line_z 2000
+classinstance 128642 class_ref 176386 // LoggerSC
+  name "logger"   xyz 806 4 2000 life_line_z 2000
+classinstance 130690 class_ref 133122 // tlm_generic_payload
+  name "trans"   xyz 434 4 2000 life_line_z 2000
+classinstance 149122 class_ref 191746 // or1ksim
+  name "or1ksim"   xyz 8 4 2000 life_line_z 2000
+durationcanvas 133762 classinstance_ref 130690 // trans:tlm_generic_payload
+  xyzwh 507 151 2010 11 49
+end
+durationcanvas 135810 classinstance_ref 128642 // logger:LoggerSC
+  xyzwh 853 394 2010 11 55
+end
+durationcanvas 136066 classinstance_ref 130690 // trans:tlm_generic_payload
+  xyzwh 507 437 2010 11 34
+end
+durationcanvas 136706 classinstance_ref 130690 // trans:tlm_generic_payload
+  xyzwh 507 482 2010 11 39
+end
+durationcanvas 137090 classinstance_ref 130690 // trans:tlm_generic_payload
+  xyzwh 507 527 2010 11 44
+end
+durationcanvas 137474 classinstance_ref 128514 // loggerSocket:simple_target_socket
+  xyzwh 692 582 2010 11 35
+end
+durationcanvas 137730 classinstance_ref 128386 // dataBus:simple_initiator_socket
+  xyzwh 332 606 2010 11 76
+end
+durationcanvas 139650 classinstance_ref 128642 // logger:LoggerSC
+  xyzwh 853 458 2010 11 42
+end
+durationcanvas 139778 classinstance_ref 128642 // logger:LoggerSC
+  xyzwh 853 505 2010 11 45
+end
+durationcanvas 143874 classinstance_ref 128258 // iss:Or1ksimSC
+  xyzwh 190 182 2010 11 51
+  overlappingdurationcanvas 143746
+    xyzwh 196 187 2020 11 41
+  end
+end
+durationcanvas 144002 classinstance_ref 130690 // trans:tlm_generic_payload
+  xyzwh 507 217 2010 11 41
+end
+durationcanvas 144642 classinstance_ref 128258 // iss:Or1ksimSC
+  xyzwh 190 238 2010 11 66
+  overlappingdurationcanvas 144514
+    xyzwh 196 242 2020 11 56
+  end
+end
+durationcanvas 144770 classinstance_ref 130690 // trans:tlm_generic_payload
+  xyzwh 507 275 2010 11 52
+end
+durationcanvas 145410 classinstance_ref 128258 // iss:Or1ksimSC
+  xyzwh 190 310 2010 11 86
+  overlappingdurationcanvas 145282
+    xyzwh 196 315 2020 11 76
+    overlappingdurationcanvas 145538
+      xyzwh 202 346 2030 11 39
+    end
+  end
+end
+durationcanvas 146306 classinstance_ref 128386 // dataBus:simple_initiator_socket
+  xyzwh 332 374 2010 11 26
+end
+durationcanvas 146818 classinstance_ref 128514 // loggerSocket:simple_target_socket
+  xyzwh 692 389 2010 11 25
+end
+durationcanvas 147586 classinstance_ref 128642 // logger:LoggerSC
+  xyzwh 853 553 2010 11 41
+end
+durationcanvas 148482 classinstance_ref 128258 // iss:Or1ksimSC
+  xyzwh 190 656 2010 11 80
+  overlappingdurationcanvas 148354
+    xyzwh 196 663 2020 11 53
+    overlappingdurationcanvas 148226
+      xyzwh 202 670 2030 11 25
+    end
+  end
+end
+durationcanvas 149634 classinstance_ref 149122 // or1ksim:or1ksim
+  xyzwh 49 76 2010 11 47
+end
+durationcanvas 149762 classinstance_ref 128258 // iss:Or1ksimSC
+  xyzwh 190 110 2010 11 68
+  overlappingdurationcanvas 139138
+    xyzwh 196 147 2020 11 25
+  end
+end
+durationcanvas 150018 classinstance_ref 149122 // or1ksim:or1ksim
+  xyzwh 49 724 2010 11 97
+end
+durationcanvas 150274 classinstance_ref 128258 // iss:Or1ksimSC
+  xyzwh 190 59 2010 11 29
+end
+reflexivemsg 129282 synchronous
+  to durationcanvas_ref 139138
+  yz 147 3025 msg operation_ref 166786 // "readUpcall(in addr : uint64_t, in mask : uint32_t) : uint32_t"
+  show_full_operations_definition default drawing_language default
+  label_xy 204 131
+msg 133890 synchronous
+  from durationcanvas_ref 139138
+  to durationcanvas_ref 133762
+  yz 157 3030 msg operation_ref 158850 // "set_command(in cmd : tlm_command) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 311 141
+msg 136194 synchronous
+  from durationcanvas_ref 135810
+  to durationcanvas_ref 136066
+  yz 437 3020 msg operation_ref 158722 // "get_command() : tlm_command"
+  show_full_operations_definition default drawing_language default
+  label_xy 644 421
+msg 136578 return
+  from durationcanvas_ref 136066
+  to durationcanvas_ref 139650
+  yz 460 3030 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 136834 synchronous
+  from durationcanvas_ref 139650
+  to durationcanvas_ref 136706
+  yz 489 3035 msg operation_ref 158978 // "get_address() : uint64_t"
+  show_full_operations_definition default drawing_language default
+  label_xy 649 473
+msg 136962 return
+  from durationcanvas_ref 136706
+  to durationcanvas_ref 139778
+  yz 510 3040 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 137218 synchronous
+  from durationcanvas_ref 139778
+  to durationcanvas_ref 137090
+  yz 538 3035 msg operation_ref 159234 // "get_data_ptr() : uchar"
+  show_full_operations_definition default drawing_language default
+  label_xy 649 522
+msg 137346 return
+  from durationcanvas_ref 137090
+  to durationcanvas_ref 147586
+  yz 558 3040 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 137602 return
+  from durationcanvas_ref 147586
+  to durationcanvas_ref 137474
+  yz 582 2055 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 137858 return
+  from durationcanvas_ref 137474
+  to durationcanvas_ref 137730
+  yz 606 2050 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 143490 return
+  from durationcanvas_ref 133762
+  to durationcanvas_ref 143746
+  yz 187 3035 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 144130 asynchronous
+  from durationcanvas_ref 143746
+  to durationcanvas_ref 144002
+  yz 217 3040 msg operation_ref 159106 // "set_address(in addr : uint64_t) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 316 201
+msg 144258 return
+  from durationcanvas_ref 144002
+  to durationcanvas_ref 144514
+  yz 247 2025 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 144898 synchronous
+  from durationcanvas_ref 144514
+  to durationcanvas_ref 144770
+  yz 275 2025 msg operation_ref 159362 // "set_data_ptr(in data : char)"
+  show_full_operations_definition default drawing_language default
+  label_xy 315 259
+msg 145026 return
+  from durationcanvas_ref 144770
+  to durationcanvas_ref 145282
+  yz 315 2030 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+reflexivemsg 145666 synchronous
+  to durationcanvas_ref 145538
+  yz 346 2035 msg operation_ref 166402 // "doTrans(in trans : tlm_generic_payload) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 210 330
+msg 146434 synchronous
+  from durationcanvas_ref 145538
+  to durationcanvas_ref 146306
+  yz 374 2040 msg operation_ref 201730 // "b_transport(inout payload : tlm_generic_payload, inout time : sc_time)"
+  show_full_operations_definition default drawing_language default
+  label_xy 234 358
+msg 146946 synchronous
+  from durationcanvas_ref 146306
+  to durationcanvas_ref 146818
+  yz 389 2015 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 147458 synchronous
+  from durationcanvas_ref 146818
+  to durationcanvas_ref 135810
+  yz 399 2020 msg operation_ref 188034 // "loggerReadWrite(inout payload : tlm::tlm_generic_payload, inout delay : sc_core::sc_time) : void"
+  show_full_operations_definition default drawing_language default
+  label_xy 728 383
+msg 147714 return
+  from durationcanvas_ref 137730
+  to durationcanvas_ref 148226
+  yz 670 2035 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+selfreflexivemsg 148610
+  to durationcanvas_ref 148226
+  yz 687 2040 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+selfreflexivemsg 148738
+  to durationcanvas_ref 148354
+  yz 708 2045 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 149890 synchronous
+  from durationcanvas_ref 149634
+  to durationcanvas_ref 149762
+  yz 110 3005 msg operation_ref 166530 // "staticReadUpcall(in instancePointer : void, in addr : ulong, in mask : ulong) : ulong"
+  show_full_operations_definition default drawing_language default
+  label_xy 73 94
+msg 150146 return
+  from durationcanvas_ref 148482
+  to durationcanvas_ref 150018
+  yz 724 2050 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 150530 synchronous
+  from durationcanvas_ref 150274
+  to durationcanvas_ref 149634
+  yz 76 2015 msg operation_ref 215682 // "run(in duration : double) : int"
+  show_full_operations_definition default drawing_language default
+  label_xy 111 60
+end

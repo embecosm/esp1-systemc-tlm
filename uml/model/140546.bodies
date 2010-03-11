@@ -1,0 +1,36 @@
+class TapAction
+!!!146050.cpp!!!	TapAction(inout _doneEvent : sc_core::sc_event)
+
+!!!146178.cpp!!!	getDoneEvent() : sc_core::sc_event
+  return  doneEvent;
+
+!!!146434.cpp!!!	checkResetDone(inout tapStateMachine : TapStateMachine, inout tms : bool, in warn : bool = false) : bool
+  // Nothing more to do if we are consistent
+  if (tapStateMachine->getResetDone ())
+    {
+      return  true;
+    }
+
+  // Need to reset. If requested and this is the first cycle of reset, give a
+  // warning.
+  if (warn && (0 == resetCounter))
+    {
+      std::cerr << "JTAG TAP state inconsistent: resetting" << std::endl;
+    }
+
+  // Drive towards reset
+  resetCounter++;
+  tms = 1;
+
+  // If we have got to the end of the reset sequence we can clear the
+  // tapStateMachine and report we are consistent. However we will not return
+  // true until the next call.
+  if (tapStateMachine->TAP_RESET_CYCLES == resetCounter)
+    {
+      tapStateMachine->setResetDone (true);
+      resetCounter = 0;				// Ready for next time
+    }
+  else
+    {
+      return false;
+    }

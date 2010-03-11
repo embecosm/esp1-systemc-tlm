@@ -1,0 +1,145 @@
+format 70
+
+classcanvas 128002 class_ref 132994 // RspServerSC
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  hidden_operations
+    operation_ref 167042 // rspRequestExtendedMode
+    operation_ref 167298 // rspInitializeArgv
+    operation_ref 167426 // rspSetBaudRate
+    operation_ref 167554 // rspSetBreakpoint
+    operation_ref 167682 // rspContinueWithSignal
+    operation_ref 167810 // rspToggleDebugFlag
+    operation_ref 167938 // rspDetach
+    operation_ref 168066 // rspFileIO
+    operation_ref 168194 // rspSetThreadNumber
+    operation_ref 168322 // rspCycleStep
+    operation_ref 168450 // rspCycleStepWithSignal
+    operation_ref 168578 // rspKill
+    operation_ref 169090 // rspQueryCurrentThread
+    operation_ref 169218 // rspQueryCrc
+    operation_ref 169346 // rspQueryThreadFirst
+    operation_ref 169474 // rspQueryThreadSubsequent
+    operation_ref 169602 // rspQueryThreadLocalStorage
+    operation_ref 169730 // rspQueryThreadInfo
+    operation_ref 169986 // rspQueryMoreThreadInfo
+    operation_ref 170370 // rspQuerySymbol
+    operation_ref 170498 // rspQueryThreadExtraInfo
+    operation_ref 170626 // rspQueryTrace
+    operation_ref 170754 // rspQuerySpecialData
+    operation_ref 171010 // rspSetPassSignals
+    operation_ref 171138 // rspSetTrace
+    operation_ref 171266 // rspReset
+    operation_ref 171522 // rspStepWithSignal
+    operation_ref 171650 // rspSearch
+    operation_ref 171778 // rspIsThreadAlive
+    operation_ref 172034 // rspAttach
+    operation_ref 172162 // rspResumeThreads
+    operation_ref 172290 // rspResumeThreadsSupport
+    operation_ref 172418 // rspFileOperation
+    operation_ref 172546 // rspFlashOperation
+    operation_ref 172674 // rspRun
+    operation_ref 173186 // rspRemoveHardwareBreakpoint
+    operation_ref 173314 // rspRemoveWriteWatchpoint
+    operation_ref 173442 // rspRemoveReadWatchpoint
+    operation_ref 173570 // rspRemoveAccessWatchpoint
+    operation_ref 173954 // rspInsertHardwareBreakpoint
+    operation_ref 174082 // rspInsertWriteWatchpoint
+    operation_ref 174210 // rspInsertReadWatchpoint
+    operation_ref 174338 // rspInsertAccessWatchpoint
+  xyz 277 3 2000
+end
+classcanvas 128130 class_ref 133762 // MpHash
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  color green
+  xyz 366 840 2006
+end
+classcanvas 128386 class_ref 151298 // Or1kRspServerSC
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  color green
+  xyz 631 521 2006
+end
+classcanvas 128642 class_ref 151426 // MpType
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 628 67 2006
+end
+classcanvas 128898 class_ref 151554 // StallState
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  color green
+  xyz 515 590 2012
+end
+classcanvas 129154 class_ref 133506 // RspConnection
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 16 8 2006
+end
+classcanvas 129410 class_ref 133634 // RspPacket
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 161 269 3005
+end
+classcanvas 130434 class_ref 134018 // SprCache
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  color green
+  xyz 52 678 2000
+end
+classcanvas 130690 class_ref 151682 // MpEntry
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  color green
+  xyz 216 854 2000
+end
+classcanvas 131202 class_ref 151810 // MemCache
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  color green
+  xyz 48 959 2000
+end
+relationcanvas 128514 relation_ref 144002 // <generalisation>
+  decenter_begin 68
+  decenter_end 852
+  from ref 128386 z 2001 to ref 128002
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 128770 ---+ decenter_begin 558 decenter_end 221
+  from ref 128642 z 2001 to ref 128002
+line 129026 ---+ decenter_begin 504 decenter_end 314
+  from ref 128898 z 2007 to point 558 725
+  line 130306 z 2007 to ref 128386
+relationcanvas 129282 relation_ref 132354 // <directional composition>
+  decenter_begin 64
+  decenter_end 119
+  from ref 128002 z 2001 to ref 129154
+  role_a_pos 152 24 3000 no_role_b
+  multiplicity_a_pos 152 53 3000 no_multiplicity_b
+end
+relationcanvas 129538 relation_ref 144130 // <directional composition>
+  decenter_begin 782
+  from ref 128002 z 2001 to point 206 516
+  line 129922 z 2001 to ref 129410
+  role_a_pos 218 449 3000 no_role_b
+  multiplicity_a_pos 191 449 3000 no_multiplicity_b
+end
+relationcanvas 130818 relation_ref 144642 // <directional composition>
+  from ref 128130 z 2007 to ref 130690
+  role_a_pos 294 896 3000 no_role_b
+  multiplicity_a_pos 294 925 3000 no_multiplicity_b
+end
+relationcanvas 130946 relation_ref 144770 // <directional composition>
+  decenter_begin 601
+  from ref 128386 z 2007 to ref 128130
+  role_a_pos 556 896 3000 no_role_b
+  multiplicity_a_pos 556 925 3000 no_multiplicity_b
+end
+relationcanvas 131074 relation_ref 144898 // <directional composition>
+  decenter_begin 398
+  decenter_end 507
+  from ref 128386 z 2007 to ref 130434
+  role_a_pos 158 762 3000 no_role_b
+  multiplicity_a_pos 158 791 3000 no_multiplicity_b
+end
+relationcanvas 131330 relation_ref 145026 // <directional composition>
+  decenter_begin 823
+  from ref 128386 z 2007 to ref 131202
+  role_a_pos 162 1042 3000 no_role_b
+  multiplicity_a_pos 162 1071 3000 no_multiplicity_b
+end
+line 129666 -_-_
+  from ref 129282 z 2002 to ref 129410
+end

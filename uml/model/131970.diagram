@@ -1,0 +1,104 @@
+format 66
+
+classcanvas 128002 class_ref 140290 // JtagMainSC
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 21 689 2000
+end
+classcanvas 128130 class_ref 140546 // TapAction
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 349 33 3005
+end
+classcanvas 128514 class_ref 140674 // TapStateMachine
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 338 724 3011
+end
+classcanvas 129154 class_ref 140930 // TapActionDRScan
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 635 266 3017
+end
+classcanvas 130306 class_ref 141058 // TapActionIRScan
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 487 264 3017
+end
+classcanvas 130690 class_ref 141186 // TapActionReset
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 184 289 3017
+end
+relationcanvas 128258 relation_ref 138754 // <dependency>
+  decenter_begin 611
+  decenter_end 786
+  from ref 128130 z 2001 stereotype "<<friend>>" xyz 195 116 3000 to point 99 114
+  line 131202 z 2001 to ref 128002
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128386 relation_ref 138626 // <unidirectional association>
+  decenter_begin 513
+  decenter_end 495
+  from ref 128002 z 2001 to point 71 98
+  line 131074 z 2001 to ref 128130
+  role_a_pos 245 79 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128642 relation_ref 139266 // <dependency>
+  decenter_end 559
+  from ref 128514 z 2001 stereotype "<<friend>>" xyz 200 804 3000 to ref 128002
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128770 relation_ref 139394 // <dependency>
+  from ref 128514 z 3006 stereotype "<<friend>>" xyz 341 368 3000 to ref 128130
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128898 relation_ref 138498 // <unidirectional association>
+  decenter_begin 796
+  decenter_end 763
+  from ref 128002 z 2001 to ref 128514
+  role_a_pos 254 834 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129282 relation_ref 138882 // <generalisation>
+  decenter_end 488
+  from ref 129154 z 3006 to point 697 97
+  line 131330 z 3006 to ref 128130
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129410 relation_ref 139522 // <dependency>
+  decenter_begin 312
+  decenter_end 361
+  from ref 128514 z 3012 stereotype "<<friend>>" xyz 574 782 3000 to point 679 775
+  line 131458 z 3012 to ref 129154
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130434 relation_ref 139010 // <generalisation>
+  decenter_end 763
+  from ref 130306 z 3006 to point 541 135
+  line 131842 z 3006 to ref 128130
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130562 relation_ref 139650 // <dependency>
+  decenter_begin 119
+  from ref 128514 z 3012 to point 542 742
+  line 131586 z 3012 stereotype "<<friend>>" xyz 478 595 3000 to ref 130306
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130818 relation_ref 139138 // <generalisation>
+  decenter_end 883
+  from ref 130690 z 3006 to point 235 151
+  line 131970 z 3006 to ref 128130
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130946 relation_ref 139778 // <dependency>
+  decenter_begin 104
+  from ref 128514 z 3012 to point 235 739
+  line 132226 z 3012 stereotype "<<friend>>" xyz 169 557 3000 to ref 130690
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

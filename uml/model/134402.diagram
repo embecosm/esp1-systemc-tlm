@@ -1,0 +1,47 @@
+format 66
+
+statecanvas 128002 state_ref 132482 // INTERNAL RESET
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 68 7 1990 580 501
+end
+statecanvas 128130 state_ref 130178 // RESET_START
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 295 156 2005 157 69
+end
+statecanvas 128258 state_ref 131330 // RESET_IN_PROGRESS
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 293 308 1995 163 73
+end
+pseudostatecanvas 128898 pseudostate_ref 130306 // entry_point
+   xyz 364 86 3005 label_xy 391 87
+end
+pseudostatecanvas 129026 pseudostate_ref 130434 // exit_point
+   xyz 365 444 3005 label_xy 393 445
+end
+transitioncanvas 128386 transition_ref 129282 // <transition>
+  
+  from ref 128130 z 2006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128514 transition_ref 129410 // <transition>
+  decenter_begin 164
+  decenter_end 712
+  
+  from ref 128258 z 2006 label "negedge tck
+[resetCounter < TAP_RESET_CYCLES]
+/ resetCounter++; tms = 1" xyz 95 268 2006 to point 104 317
+  line 128642 z 2006 to point 104 357
+  line 128770 z 2006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129154 transition_ref 130562 // reset complete
+  
+  from ref 128258 z 3006 label "[resetCount >= TAP_RESET_CYCLES]" xyz 380 404 3006 to ref 129026
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129282 transition_ref 130690 // <transition>
+  
+  from ref 128898 z 3006 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+end

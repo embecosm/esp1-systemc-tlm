@@ -1,0 +1,53 @@
+format 66
+
+classcanvas 128002 class_ref 133122 // tlm_generic_payload
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 324 11 2000
+end
+classcanvas 128898 class_ref 144386 // JtagPayloadCommand
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 564 295 2000
+end
+classcanvas 130306 class_ref 144770 // JtagPayloadBitLength
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 311 293 2000
+end
+classcanvas 132098 class_ref 145922 // Command
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 591 589 2006
+end
+classcanvas 132354 class_ref 146050 // JtagPayloadAddress
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 73 299 2005
+end
+classcanvas 132994 class_ref 146178 // Address
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 108 466 2011
+end
+relationcanvas 131202 relation_ref 144514 // <directional composition>
+  decenter_begin 488
+  from ref 128002 z 2001 to ref 130306
+  role_a_pos 398 271 3000 no_role_b
+  multiplicity_a_pos 358 271 3000 no_multiplicity_b
+end
+relationcanvas 131330 relation_ref 144642 // <directional composition>
+  decenter_begin 781
+  from ref 128002 z 2001 to point 425 239
+  line 131586 z 2001 to point 640 239
+  line 131458 z 2001 to ref 128898
+  role_a_pos 652 273 3000 no_role_b
+  multiplicity_a_pos 612 273 3000 no_multiplicity_b
+end
+line 132226 ---+
+  from ref 132098 z 2001 to ref 128898
+line 133122 ---+
+  from ref 132994 z 2006 to ref 132354
+relationcanvas 133250 relation_ref 144898 // <directional composition>
+  decenter_begin 209
+  from ref 128002 z 2006 to point 349 238
+  line 133634 z 2006 to point 143 238
+  line 133378 z 2006 to ref 132354
+  role_a_pos 155 277 3000 no_role_b
+  multiplicity_a_pos 115 277 3000 no_multiplicity_b
+end
+end

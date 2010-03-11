@@ -1,0 +1,15 @@
+class TermSyncSC
+!!!191746.cpp!!!	TermSyncSC(in name : sc_core::sc_module_name, in baudRate : ulong)
+  // Calculate the delay. No configurability here - 1 start, 8 data and 1 stop
+  // = total 10 bits.
+  charDelay = sc_core::sc_time( 10.0 / (double)baudRate, sc_core::SC_SEC );
+
+!!!191874.cpp!!!	xtermThread() : void
+  while( true ) {
+    wait( *ioEvent );			// Wait for some I/O on the terminal
+
+    int ch = xtermRead();		// Should not block
+
+    wait( charDelay );			// Model baud rate delay
+    tx.write( (unsigned char)ch );	// Send it
+  }

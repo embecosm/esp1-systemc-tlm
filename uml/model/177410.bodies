@@ -1,0 +1,292 @@
+class TermSC
+!!!190338.cpp!!!	TermSC(in name : sc_core::sc_module_name)
+  // Method for the Rx with static sensitivity
+  SC_METHOD( rxMethod );
+  sensitive << rx;
+  dont_initialize();
+
+  // Thread for the xterm
+  SC_THREAD( xtermThread );
+
+  // Start up the terminal
+  xtermInit();
+
+!!!190466.cpp!!!	~TermSC()
+  xtermKill( NULL );		// Get rid of the xterm
+
+!!!190594.cpp!!!	xtermThread() : void
+  while( true ) {
+    wait( *ioEvent );		// Wait for some I/O on the terminal
+    tx.write( xtermRead());	// Get the char and sent it on
+  }
+!!!190722.cpp!!!	xtermRead() : byte
+  // Have we an xterm?
+  if( ptSlave < 0 ) {
+    std::cerr << "TermSC: No channel available for read" << std::endl;
+    return -1;
+  }
+
+  // Use a blocking read! No need to select, since that was done in the IO
+  // event handler
+
+  char  ch;
+
+  if( read( ptSlave, &ch, 1 ) != 1 ) {
+    perror( "TermSC: Error on read" );
+    return  0;
+  }
+  else {
+    return  ch;
+  }
+!!!190850.cpp!!!	rxMethod() : void
+  xtermWrite( rx.read() );		// Write it to the screen
+
+  sc_core::sc_time  now = sc_core::sc_time_stamp();
+  printf( "Char written at %12.9f sec\n", now.to_seconds());
+
+!!!190978.cpp!!!	xtermInit() : int
+  // Set everything to a default state
+
+  ptMaster = -1;
+  ptSlave  = -1;
+  xtermPid = -1;
+
+  // Get a slave PTY from the master
+
+  ptMaster = open("/dev/ptmx", O_RDWR);
+
+  if( ptMaster < 0 ) {
+    return -1;
+  }
+
+  if( grantpt( ptMaster ) < 0 ) {
+    xtermKill( NULL );
+    return -1;
+  }
+
+  if( unlockpt( ptMaster ) < 0 ) {
+    xtermKill( NULL );
+    return -1;
+  }
+
+  // Open the slave PTY
+
+  char *ptSlaveName = ptsname( ptMaster );
+
+  if( NULL == ptSlaveName ) {
+    xtermKill( NULL );
+    return -1;
+  }
+
+  ptSlave = open( ptSlaveName, O_RDWR );	// In and out are the same
+
+  if( ptSlave < 0 ) {
+    xtermKill( NULL );
+    return -1;
+  }
+
+  // Turn off terminal echo and cannonical mode
+
+  struct termios  termInfo;
+
+  if( tcgetattr( ptSlave, &termInfo ) < 0 ) {
+    xtermKill( NULL );
+    return -1;
+  }
+
+  termInfo.c_lflag &= ~ECHO;
+  termInfo.c_lflag &= ~ICANON;
+
+  if( tcsetattr( ptSlave, TCSADRAIN, &termInfo ) < 0 ) {
+    xtermKill( NULL );
+    return -1;
+  }
+
+  // Fork off the xterm
+
+  xtermPid = fork();
+
+  switch( xtermPid ) {
+
+  case -1:
+
+    xtermKill( NULL );				// Failure
+    return -1;
+
+  case 0:
+
+    xtermLaunch( ptSlaveName );		// Child opens the terminal
+    return -1;				// Should be impossible!
+
+  default:
+
+    return  xtermSetup();		// The parent carries on.
+  }
+
+!!!191106.cpp!!!	xtermKill(in mess : char) : void
+  if( -1 != ptSlave ) {			// Close down the slave
+    Fd2Inst *prev = NULL;
+    Fd2Inst *cur  = instList;
+
+    while( NULL != cur ) {		// Delete this FD from the FD->inst
+      if( cur->fd = ptSlave ) {		// mapping if it exists
+	if( NULL == prev ) {
+	  instList->next = cur->next;
+	}
+	else {
+	  prev->next = cur->next;
+	}
+
+	delete cur->inst->ioEvent;	// Free the SystemC event
+	delete cur;			// Free the node
+	break;				// No more expected
+      }
+    }
+
+    close( ptSlave );			// Close the FD
+    ptSlave  = -1;
+  }
+
+  if( -1 != ptMaster ) {		// Close down the master
+    close( ptMaster );
+    ptMaster = -1;
+  }
+
+  if( xtermPid > 0 ) {			// Kill the terminal
+    kill( xtermPid, SIGKILL );
+    waitpid( xtermPid, NULL, 0 );
+  }
+
+  if( NULL != mess ) {			// If we really want a message
+    perror( mess );
+  }
+!!!191234.cpp!!!	xtermLaunch(inout slaveName : char) : void
+  char *arg;
+  char *fin = &(slaveName[strlen( slaveName ) - 2]);	// Last 2 chars of name
+
+  // Two different naming conventions for PTYs, lead to two different ways of
+  // passing the -S parameter to xterm. Work out the length of string needed
+  // in each case (max size of %d is sign + 19 chars for 64 bit!)
+
+  if( NULL == strchr(fin, '/' )) {
+    arg = new char[2 + 1 + 1 + 20 + 1];
+    sprintf( arg, "-S%c%c%d", fin[0], fin[1], ptMaster );
+  }
+  else {
+    char *slaveBase = ::basename( slaveName );
+
+    arg = new char[2 + strlen( slaveBase ) + 1 + 20 + 1];
+    sprintf( arg, "-S%s/%d", slaveBase, ptMaster );
+  }
+
+  // Set up the arguments (must be a null terminated list)
+
+  char *argv[3];
+  
+  argv[0] = (char *)( "xterm" );
+  argv[1] = arg;
+  argv[2] = NULL;
+
+  // Start up xterm. After this nothing should execute (the image is replaced)
+
+  execvp( "xterm", argv );
+  exit( 1 );			// Impossible!!!
+
+!!!191362.cpp!!!	xtermSetup() : int
+  int   res;
+  char  ch;
+
+  // The xTerm spits out some code, followed by a newline which we swallow up
+
+  do {
+    res = read( ptSlave, &ch, 1 );
+  } while( (res >= 0) && (ch != '\n') );
+
+  if( res < 0 ) {
+    xtermKill( NULL );
+    return -1;
+  }
+
+  // I/O from the terminal will be asynchronous, with SIGIO triggered when
+  // anything happens. That way, we can let the SystemC thread yield.
+
+  // Record the mapping of slave FD to this instance
+
+  Fd2Inst *newMap = new Fd2Inst;
+
+  newMap->fd   = ptSlave;
+  newMap->inst = this;
+  newMap->next = instList;
+  instList     = newMap;
+
+  // Dynamically create the SystemC event we will use.
+  ioEvent = new sc_core::sc_event();
+
+  // Install a signal handler
+
+  struct sigaction  action;
+  action.sa_sigaction = ioHandler;
+  action.sa_flags     = SA_SIGINFO;
+
+  if( sigaction( SIGIO, (const struct sigaction *)&action, NULL ) != 0 ) {
+    xtermKill( "Sigaction Failed" );
+    return -1;
+  }
+
+  // Make the Slave FD asynchronous with this process.
+
+  if( fcntl( ptSlave, F_SETOWN, getpid()) != 0 ) {
+    xtermKill( "SETOWN" );
+    return -1;
+  }
+
+  int flags = fcntl( ptSlave, F_GETFL );
+
+  if( fcntl( ptSlave, F_SETFL, flags | O_ASYNC ) != 0 ) {
+    xtermKill( "SETFL" );
+    return -1;
+  }
+
+  return 0;		// Success
+
+!!!191490.cpp!!!	xtermWrite(in ch : byte) : void
+  // Have we an xterm?
+  if( ptSlave < 0 ) {
+    std::cerr << "TermSC: No channel available for write" << std::endl;
+    return;
+  }
+
+  // Blocking write should be fine. Note any error!
+  if( write( ptSlave, &ch, 1 ) != 1 ) {
+    std::cerr << "TermSC: Error on write" << std::endl;
+  }
+!!!191618.cpp!!!	ioHandler(in signum : int, inout si : siginfo_t, inout p : void) : void
+  // Use select to find which FD atually triggered to ioHandler. According to
+  // the iterature, SIGIO ought to set this in the siginfo, but it doesn't.
+
+  fd_set          readFdSet;
+  struct timeval  timeout = { 0, 0 };
+  int             maxFd   = 0;		// Largest FD we find
+
+  FD_ZERO( &readFdSet );
+
+  for( Fd2Inst *cur = instList; cur != NULL ; cur = cur->next ) {
+    FD_SET( cur->fd, &readFdSet );
+    maxFd = (cur->fd > maxFd ) ? cur->fd : maxFd;
+  }
+
+  // Non-blocking select, in case there is nothing there!!
+  switch( select( maxFd + 1, &readFdSet, NULL, NULL, &timeout ) ) {
+  case -1:
+    perror( "TermSC: Error on handler select" );
+    return;
+  case 0:
+    return;		// Nothing to read - ignore
+  }
+
+  // Now trigger the handlers of any FD's that were set
+  for( Fd2Inst *cur = instList; cur != NULL ; cur = cur->next ) {
+    if( FD_ISSET( cur->fd, &readFdSet )) {
+      (cur->inst)->ioEvent->notify();
+    }
+  }
