@@ -35,7 +35,7 @@ LD = or32-elf-ld
 # Make the lot
 
 .PHONY: all
-all: hello logger_test uart_loop uart_loop_intr
+all: hello logger-test uart-loop uart-loop-intr
 
 
 # ----------------------------------------------------------------------------
@@ -65,30 +65,30 @@ hello.o: hello.c
 # ----------------------------------------------------------------------------
 # Generic I/O. Ensure start.o is first!
 
-logger_test: start.o utils.o logger_test.o 
+logger-test: start.o utils.o logger-test.o 
 	$(LD) -Ttext 0x0 $^ -o $@
 
-logger_test.o: logger_test.c
+logger-test.o: logger-test.c
 	$(CC) $(CFLAGS) -c $<
 
 
 # ----------------------------------------------------------------------------
 # UART loop test. Ensure start.o is first!
 
-uart_loop: start.o utils.o uart_loop.o 
+uart-loop: start.o utils.o uart-loop.o 
 	$(LD) -Ttext 0x0 $^ -o $@
 
-uart_loop.o: uart_loop.c
+uart-loop.o: uart-loop.c
 	$(CC) $(CFLAGS) -c $<
 
 
 # ----------------------------------------------------------------------------
 # UART loop test with interrupts. Ensure start.o is first!
 
-uart_loop_intr: start.o utils.o uart_loop_intr.o 
+uart-loop-intr: start.o utils.o uart-loop-intr.o 
 	$(LD) -Ttext 0x0 $^ -o $@
 
-uart_loop_intr.o: uart_loop_intr.c
+uart-loop-intr.o: uart-loop-intr.c
 	$(CC) $(CFLAGS) -c $<
 
 
@@ -96,7 +96,7 @@ uart_loop_intr.o: uart_loop_intr.c
 # Documentation
 
 doc: doxygen.config mainpage start.s utils.h utils.c bitutils.c hello.c \
-     logger_test.c uart_loop.c uart_loop_intr.c
+     logger-test.c uart-loop.c uart-loop-intr.c
 	doxygen doxygen.config
 
 # ----------------------------------------------------------------------------
@@ -107,6 +107,6 @@ clean:
 	$(RM)    *.o
 	$(RM) -r doc
 	$(RM)    hello
-	$(RM)    logger_test
-	$(RM)    uart_loop
-	$(RM)    uart_loop_intr
+	$(RM)    logger-test
+	$(RM)    uart-loop
+	$(RM)    uart-loop-intr
