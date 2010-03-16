@@ -1,4 +1,4 @@
-// Simple SoC SystemC main program
+// Decoupled loosely timed SoC SystemC main program
 
 // Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
@@ -28,44 +28,58 @@
 #include <iostream>
 
 #include "tlm.h"
-#include "Or1ksimExtSC.h"
-#include "UartSC.h"
-#include "TermSC.h"
+#include "Or1ksimJtagSC.h"
+#include "UartIntrSC.h"
+#include "TermSyncSC.h"
 
 
 using std::cerr;
 using std::endl;
 
 
-// ----------------------------------------------------------------------------
-//! Main program building a simple SoC model
+#define BAUD_RATE   115200		//!< Baud rate of the Linux console
+#define QUANTUM_US      10		//!< Enough time for approx one bit
 
-//! Parses arguments, instantiates the modules and connects up the ports. Then
-//! runs forever.
+#define INTR_UART        2		//!< Interrupt line used by the UART
+
+
+// ----------------------------------------------------------------------------
+//! Main program building a SoC model with temporal decoupling and interrupts
+//! that will run Linux.
+
+//! Parses arguments, sets the global time quantum, instantiates the modules
+//! and connects up the ports. Then runs forever.
 // ----------------------------------------------------------------------------
 int  sc_main( int   argc,
 	      char *argv[] )
 {
   if( argc != 3 ) {
-    cerr << "Usage: simple-soc <config_file> <image_file>" << endl;
+    cerr << "Usage: jtag-soc <config_file> <image_file>" << endl;
     exit( 1 );
   }
 
-  // Instantiate the modules
-  Or1ksimExtSC  iss ("or1ksim", argv[1], argv[2]);
-  UartSC        uart ("uart");
-  TermSC        term ("terminal");
+  // Set the global time quantum
+  tlm::tlm_global_quantum &refTgq = tlm::tlm_global_quantum::instance();
+  refTgq.set( sc_core::sc_time( QUANTUM_US, sc_core::SC_US ));
 
-  // Connect up the TLM ports
+  // Instantiate the modules
+  Or1ksimJtagSC    iss ("or1ksim", argv[1], argv[2]);
+  UartIntrSC       uart ("uart", iss.getClockRate());
+  TermSyncSC       term ("terminal", BAUD_RATE);
+
+  // Connect up the TLM ports. For now we leave the JTAG port unconnected.
   iss.dataBus( uart.bus );
 
   // Connect up the UART and terminal Tx and Rx
   uart.tx( term.rx );
   term.tx( uart.rx );
 
+  // Connect the Uart to #2 interrupt on the iss
+  uart.intr( iss.intr[INTR_UART] );
+
   // Run it forever
   sc_core::sc_start();
-  return 0;			// Should never happen!
+  return 0;			// Shouldn't get here!
 
 }	// sc_main()
 

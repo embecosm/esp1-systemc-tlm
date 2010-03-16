@@ -63,13 +63,13 @@ durationcanvas 147842 classinstance_ref 146434 // intrQueue:sc_fifo
   xyzwh 743 258 2010 11 26
 end
 durationcanvas 148482 classinstance_ref 128386 // uart:UartIntrSC
-  xyzwh 638 338 2005 11 58
+  xyzwh 638 325 2005 11 25
 end
 durationcanvas 148610 classinstance_ref 146434 // intrQueue:sc_fifo
   xyzwh 743 337 2010 11 29
 end
 durationcanvas 148994 classinstance_ref 146562 // intr:sc_out
-  xyzwh 552 363 2010 11 33
+  xyzwh 552 362 2010 11 35
 end
 durationcanvas 149250 classinstance_ref 146306 // intr[2]:sc_signal
   xyzwh 465 375 2010 11 25
@@ -94,6 +94,12 @@ durationcanvas 150786 classinstance_ref 128258 // iss:Or1ksimIntrSC
 end
 durationcanvas 151042 classinstance_ref 134530 // or1ksim:or1ksim
   xyzwh 230 578 2010 11 239
+end
+durationcanvas 151554 classinstance_ref 128386 // uart:UartIntrSC
+  xyzwh 638 386 2005 11 27
+end
+durationcanvas 151682 classinstance_ref 128386 // uart:UartIntrSC
+  xyzwh 638 354 2020 11 27
 end
 msg 133890 synchronous
   from durationcanvas_ref 133634
@@ -170,16 +176,16 @@ selfreflexivemsg 148354
 msg 148738 synchronous
   from durationcanvas_ref 148482
   to durationcanvas_ref 148610
-  yz 338 2015 msg operation_ref 223106 // "read() : T"
+  yz 337 2015 msg operation_ref 223106 // "read() : T"
   show_full_operations_definition default drawing_language default
-  label_xy 688 322
+  label_xy 688 321
 msg 148866 return
   from durationcanvas_ref 148610
-  to durationcanvas_ref 148482
+  to durationcanvas_ref 151682
   yz 354 2015 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 149122 synchronous
-  from durationcanvas_ref 148482
+  from durationcanvas_ref 151682
   to durationcanvas_ref 148994
   yz 363 2015 msg operation_ref 208514 // "write(in data : T) : void"
   show_full_operations_definition default drawing_language default
@@ -191,8 +197,8 @@ msg 149378 asynchronous
   show_full_operations_definition default drawing_language default
 msg 149506 return
   from durationcanvas_ref 148994
-  to durationcanvas_ref 148482
-  yz 385 2015 unspecifiedmsg
+  to durationcanvas_ref 151554
+  yz 386 2015 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 149890 synchronous
   from durationcanvas_ref 149634

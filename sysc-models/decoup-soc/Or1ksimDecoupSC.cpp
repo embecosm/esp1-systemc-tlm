@@ -43,8 +43,9 @@ Or1ksimDecoupSC::Or1ksimDecoupSC ( sc_core::sc_module_name  name,
 				   const char              *imageFile ) :
   Or1ksimSyncSC( name, configFile, imageFile )
 {
-  tlm::tlm_global_quantum &refTgq = tlm::tlm_global_quantum::instance();
-  issQk.set_global_quantum( refTgq.get() );
+  tgq = &(tlm::tlm_global_quantum::instance());
+
+  issQk.set_global_quantum( tgq->get() );
   issQk.reset();				// Zero local time offset
 
 }	/* Or1ksimDecoupSC() */
@@ -79,21 +80,18 @@ Or1ksimDecoupSC::Or1ksimDecoupSC ( sc_core::sc_module_name  name,
 void
 Or1ksimDecoupSC::run()
 {
-  tlm::tlm_global_quantum &refTgq = tlm::tlm_global_quantum::instance();
-
   while( true ) {
     sc_core::sc_time  timeLeft =
-      refTgq.compute_local_quantum() - issQk.get_local_time();
+      tgq->compute_local_quantum() - issQk.get_local_time();
 
     // Mark the start of the ISS timing point, set a desired run duration and
     // run for that duration (either of these may be changed by the read/write
     // upcalls). On return advance the local time according to how much time
     // has been used since the last ISS timing point, and if necessary
     // synchronize.
-
+    or1ksim_set_time_point();
     (void)or1ksim_run( timeLeft.to_seconds() );
     issQk.inc( sc_core::sc_time( or1ksim_get_time_period(), sc_core::SC_SEC ));
-    or1ksim_set_time_point();
 
     // Sync if needed
     if( issQk.need_sync() ) {
@@ -127,16 +125,13 @@ Or1ksimDecoupSC::doTrans( tlm::tlm_generic_payload &trans )
   issQk.set( delay );			// Updated
 
   // This may have pushed us into needing to synchronize.
-
   if( issQk.need_sync() ) {
     issQk.sync();
   }
 
   // Reset the time the ISS is allowed to continue running
-
-  tlm::tlm_global_quantum &refTgq = tlm::tlm_global_quantum::instance();
   sc_core::sc_time  timeLeft      =
-    refTgq.compute_local_quantum() - issQk.get_local_time();
+    tgq->compute_local_quantum() - issQk.get_local_time();
   or1ksim_reset_duration ( timeLeft.to_seconds() );
 
 }	// doTrans()

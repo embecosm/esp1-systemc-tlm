@@ -26,6 +26,7 @@
 // ----------------------------------------------------------------------------
 
 #include <unistd.h>
+#include <iostream>
 #include <stdlib.h>
 #include <libgen.h>
 #include <fcntl.h>
@@ -40,6 +41,12 @@
 #include <iomanip>
 
 #include "TermSC.h"
+
+
+using sc_core::sc_time_stamp;
+
+using std::cout;
+using std::endl;
 
 
 SC_HAS_PROCESS( TermSC );
@@ -98,8 +105,7 @@ TermSC::rxMethod()
 {
   xtermWrite( rx.read() );		// Write it to the screen
 
-  sc_core::sc_time  now = sc_core::sc_time_stamp();
-  printf( "Char written at %12.9f sec\n", now.to_seconds());
+  cout << "Char written at " << sc_time_stamp() << endl;
 
 }	// rxMethod()
 

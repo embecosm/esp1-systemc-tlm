@@ -51,20 +51,23 @@ public:
 
 protected:
 
+  //! TLM 2.0 system global quantum. A singleton. May be reused in derived
+  //! classes.
+  tlm::tlm_global_quantum *tgq;
+
+  //! TLM 2.0 Quantum keeper for the ISS model thread. May be reused in
+  //! derived classes.
+  tlm_utils::tlm_quantumkeeper  issQk;
+
   // The common thread to make the transport calls. This has temporal
   // decoupling. Will be reimplemented in later calls
   virtual void  doTrans( tlm::tlm_generic_payload &trans );
 
+  // Thread which will run the model, with temporal decoupling.
+  virtual void  run();
+
 
 private:
-
-  // Thread which will run the model, with temporal decoupling. No more
-  // reimplementation.
-  void  run();
-
-  //! TLM 2.0 Quantum keeper for the ISS model thread. Won't be used in any
-  //! derived classes.
-  tlm_utils::tlm_quantumkeeper  issQk;
 
 };	/* Or1ksimDecoupSC() */
 

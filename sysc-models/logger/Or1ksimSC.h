@@ -67,9 +67,22 @@ protected:
 
 private:
 
+  //! The transactional payload on the bus.
+
+  //! The instinct is to declare this locally in the transaction method where
+  //! it will be used. However the underlying SystemC data structures are
+  //! apparently large with complex initialization. Although not documented in
+  //! the LRM, it is far more efficient to declare the payload once here.
+
+  //! Only one upcall is ever in use at a time, so there is no danger of a
+  //! clash in usage.
+  
+  //! Since this is only used by the upcall methods, it can be private to this
+  //! base class.
+  tlm::tlm_generic_payload  trans;
+
   // I/O upcalls from Or1ksim, with a common synchronized transport
   // utility. These are not changed in later derived classes.
-
   static unsigned long int  staticReadUpcall( void              *instancePtr,
 					      unsigned long int  addr,
 					      unsigned long int  mask );

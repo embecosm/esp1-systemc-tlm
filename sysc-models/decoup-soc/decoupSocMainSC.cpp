@@ -25,10 +25,17 @@
 // This code is commented throughout for use with Doxygen.
 // ----------------------------------------------------------------------------
 
+#include <iostream>
+
 #include "tlm.h"
 #include "Or1ksimDecoupSC.h"
 #include "UartDecoupSC.h"
 #include "TermSyncSC.h"
+
+
+using std::cerr;
+using std::endl;
+
 
 #define BAUD_RATE   9600		//!< Baud rate of the terminal
 #define QUANTUM_US   100		//!< Enough time for 1000 instructions
@@ -44,7 +51,7 @@ int  sc_main( int   argc,
 	      char *argv[] )
 {
   if( argc != 3 ) {
-    fprintf( stderr, "Usage: DecoupSocSC <config_file> <image_file>\n" );
+    cerr << "Usage: decoup-soc <config_file> <image_file>" << endl;
     exit( 1 );
   }
 

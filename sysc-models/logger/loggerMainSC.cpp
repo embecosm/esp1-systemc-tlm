@@ -26,9 +26,15 @@
 // ----------------------------------------------------------------------------
 
 
+#include <iostream>
+
 #include "tlm.h"
 #include "Or1ksimSC.h"
 #include "LoggerSC.h"
+
+
+using std::cerr;
+using std::endl;
 
 
 // ----------------------------------------------------------------------------
@@ -41,7 +47,7 @@ int  sc_main( int   argc,
 	      char *argv[] )
 {
   if( argc != 3 ) {
-    fprintf( stderr, "Usage: TestSC <config_file> <image_file>\n" );
+    cerr << "Usage: logger <config_file> <image_file>" << endl;
     exit( 1 );
   }
 

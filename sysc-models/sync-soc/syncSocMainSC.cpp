@@ -26,10 +26,17 @@
 // ----------------------------------------------------------------------------
 
 
+#include <iostream>
+
 #include "tlm.h"
 #include "Or1ksimSyncSC.h"
 #include "UartSyncSC.h"
 #include "TermSyncSC.h"
+
+
+using std::cerr;
+using std::endl;
+
 
 #define BAUD_RATE  9600			//!< Baud rate of the terminal
 
@@ -44,7 +51,7 @@ int  sc_main( int   argc,
 	      char *argv[] )
 {
   if( argc != 3 ) {
-    fprintf( stderr, "Usage: SyncSocSC <config_file> <image_file>\n" );
+    cerr << "Usage: sync-soc <config_file> <image_file>" << endl;
     exit( 1 );
   }
 

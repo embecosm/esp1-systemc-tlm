@@ -1,4 +1,4 @@
-// Decoupled loosely timed SoC SystemC main program
+// Decouped loosely timed SoC SystemC with interrupts main program
 
 // Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
@@ -25,10 +25,17 @@
 // This code is commented throughout for use with Doxygen.
 // ----------------------------------------------------------------------------
 
+#include <iostream>
+
 #include "tlm.h"
 #include "Or1ksimIntrSC.h"
 #include "UartIntrSC.h"
 #include "TermSyncSC.h"
+
+
+using std::cerr;
+using std::endl;
+
 
 #define BAUD_RATE   115200		//!< Baud rate of the Linux console
 #define QUANTUM_US      10		//!< Enough time for approx one bit
@@ -37,8 +44,8 @@
 
 
 // ----------------------------------------------------------------------------
-//! Main program building a SoC model with temporal decoupling and interrupts
-//! that will run Linux.
+//! Main program building a SoC model with temporal decoupling, interrupts and
+//! a debug interface.
 
 //! Parses arguments, sets the global time quantum, instantiates the modules
 //! and connects up the ports. Then runs forever.
@@ -47,7 +54,7 @@ int  sc_main( int   argc,
 	      char *argv[] )
 {
   if( argc != 3 ) {
-    fprintf( stderr, "Usage: IntrSocSC <config_file> <image_file>\n" );
+    cerr << "Usage: intr-soc <config_file> <image_file>" << endl;
     exit( 1 );
   }
 

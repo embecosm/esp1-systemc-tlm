@@ -1,6 +1,6 @@
 format 70
 "model"
-  revision 63
+  revision 65
   modified_by 2 "jeremy"
   cpp_root_dir "/home/jeremy/svntrunk/Projects/or-debug-proxy/uml/generation/"
 
@@ -653,7 +653,7 @@ ${inlines}
 
       classrelation 173442 // issQk (<directional composition>)
 	relation 173058 *-->
-	  a role_name "issQk" multiplicity "1" private
+	  a role_name "issQk" multiplicity "1" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	    classrelation_ref 173442 // issQk (<directional composition>)
@@ -707,12 +707,12 @@ ${inlines}
 	
       end
 
-      classrelation 207874 // regTgq (<unidirectional association>)
+      classrelation 207874 // tgq (<unidirectional association>)
 	relation 207234 --->
-	  a role_name "regTgq" multiplicity "1" private
+	  a role_name "tgq" multiplicity "1" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 207874 // regTgq (<unidirectional association>)
+	    classrelation_ref 207874 // tgq (<unidirectional association>)
 	  b parent class_ref 198402 // tlm_global_quantum
       end
     end
@@ -872,6 +872,7 @@ ${inlines}
 	    classrelation_ref 221058 // or1ksimMutex (<directional composition>)
 	  b parent class_ref 205186 // sc_mutex
       end
+
     end
   end
 

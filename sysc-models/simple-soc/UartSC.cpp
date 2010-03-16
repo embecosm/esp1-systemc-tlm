@@ -26,9 +26,14 @@
 // ----------------------------------------------------------------------------
 
 #include <iostream>
-#include <iomanip>
 
 #include "UartSC.h"
+
+
+using sc_core::sc_time_stamp;
+
+using std::cout;
+using std::endl;
 
 
 SC_HAS_PROCESS( UartSC );
@@ -39,8 +44,8 @@ SC_HAS_PROCESS( UartSC );
 //! Passes the name to the parent constructor. Sets the model endianism
 //! (UartSC::isLittleEndian).
 
-//! Sets up threads listening to the bus (UartSC::busThread()) and the Rx pin
-//! (UartSC::rxThread()).
+//! Sets up processes listening to the bus (UartSC::busThread()) and the Rx pin
+//! (UartSC::rxMethod()).
 
 //! Registers UartSC::busReadWrite() as the callback for blocking transport on
 //! the UartSC::bus socket.
@@ -82,6 +87,9 @@ UartSC::UartSC( sc_core::sc_module_name  name) :
 //! Then waits for the UartSC::txReceived event to be triggered (this happens
 //! when new data is written into the transmit buffer by a bus write).
 
+//! @note This could be a SC_METHOD in this implementation, but when we add
+//!       timing, we will want to use wait (), so it must then be a SC_THREAD.
+
 //! On receipt of a character writes the char onto the Tx FIFO.
 // ----------------------------------------------------------------------------
 void
@@ -117,7 +125,8 @@ UartSC::rxMethod()
   regs.rbr  = rx.read();
 
   sc_core::sc_time  now = sc_core::sc_time_stamp();
-  printf( "Char '%c' read at    %12.9f sec\n", regs.rbr, now.to_seconds());
+  cout << "Char " << (char)(regs.rbr) << " read at  " << sc_time_stamp ()
+       << endl;
 
   set( regs.lsr, UART_LSR_DR );		// Mark data ready
   genIntr( UART_IER_RBFI );		// Interrupt if enabled

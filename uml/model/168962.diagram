@@ -50,11 +50,15 @@ classcanvas 133634 class_ref 156418 // Or1ksimExtSC
 end
 classcanvas 134018 class_ref 177794 // UartSyncSC
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
-  xyz 667 625 3017
+  xyz 668 629 3017
 end
 classcanvas 134274 class_ref 177538 // TermSyncSC
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
-  xyz 928 592 2006
+  xyz 928 630 2006
+end
+classcanvas 134658 class_ref 178562 // sc_event
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 817 572 3017
 end
 relationcanvas 128770 relation_ref 165250 // <directional composition>
   decenter_begin 209
@@ -72,7 +76,8 @@ relationcanvas 129666 relation_ref 193666 // <unidirectional association>
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 131330 relation_ref 200450 // <unidirectional association>
-  decenter_begin 409
+  decenter_begin 298
+  decenter_end 200
   from ref 128002 z 2001 to ref 131202
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
@@ -137,13 +142,28 @@ relationcanvas 134402 relation_ref 164482 // <generalisation>
 end
 relationcanvas 134530 relation_ref 207106 // <unidirectional association>
   decenter_begin 314
-  decenter_end 233
+  decenter_end 232
   from ref 131842 z 3012 to ref 128898
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
+relationcanvas 134786 relation_ref 166530 // <directional composition>
+  decenter_begin 694
+  decenter_end 546
+  from ref 131842 z 3012 to point 740 598
+  line 135170 z 3012 to ref 134658
+  role_a_pos 745 579 3000 no_role_b
+  multiplicity_a_pos 799 608 3000 no_multiplicity_b
+end
+relationcanvas 134914 relation_ref 186754 // <directional composition>
+  decenter_begin 208
+  from ref 132098 z 2001 to point 946 596
+  line 135042 z 2001 to ref 134658
+  role_a_pos 891 577 3000 no_role_b
+  multiplicity_a_pos 891 606 3000 no_multiplicity_b
+end
 line 130178 -_-_ decenter_begin 143 decenter_end 544
   from ref 128898 z 3006 to ref 128642
-line 130306 -_-_ decenter_begin 819 decenter_end 173
+line 130306 -_-_ decenter_begin 819 decenter_end 172
   from ref 128898 z 3006 to ref 128386
 end

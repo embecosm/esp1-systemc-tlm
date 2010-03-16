@@ -160,11 +160,9 @@ uint32_t
 Or1ksimSC::readUpcall( sc_dt::uint64  addr,
 		       uint32_t       mask )
 {
-  tlm::tlm_generic_payload  trans;
   uint32_t        rdata;		// For the result
 
   // Set up the payload fields. Assume everything is 4 bytes.
-
   trans.set_read();
   trans.set_address( addr );
 
@@ -175,7 +173,6 @@ Or1ksimSC::readUpcall( sc_dt::uint64  addr,
   trans.set_byte_enable_ptr( (unsigned char *)&mask );
 
   // Transport. Then return the result
-
   doTrans( trans );
   return  rdata;
 
@@ -198,10 +195,7 @@ Or1ksimSC::writeUpcall( sc_dt::uint64  addr,
 			uint32_t       mask,
 			uint32_t       wdata )
 {
-  tlm::tlm_generic_payload  trans;
-
   // Set up the payload fields. Assume everything is 4 bytes.
-
   trans.set_write();
   trans.set_address( addr );
 

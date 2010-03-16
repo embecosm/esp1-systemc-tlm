@@ -6,7 +6,7 @@ classcanvas 128002 class_ref 156290 // Or1ksimSC
 end
 classcanvas 128386 class_ref 130946 // simple_target_socket
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
-  xyz 504 96 3005
+  xyz 436 370 3005
 end
 classcanvas 128642 class_ref 132610 // simple_initiator_socket
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
@@ -14,7 +14,7 @@ classcanvas 128642 class_ref 132610 // simple_initiator_socket
 end
 classcanvas 128898 class_ref 133122 // tlm_generic_payload
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
-  xyz 419 275 2000
+  xyz 385 140 2000
 end
 classcanvas 131202 class_ref 191746 // or1ksim
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
@@ -94,7 +94,7 @@ classcanvas 137474 class_ref 204930 // Or1ksimJtagSC
 end
 classcanvas 137730 class_ref 205186 // sc_mutex
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
-  xyz 414 741 2024
+  xyz 2 739 2024
 end
 relationcanvas 128770 relation_ref 165250 // <directional composition>
   decenter_begin 209
@@ -106,24 +106,24 @@ relationcanvas 129666 relation_ref 193666 // <unidirectional association>
   decenter_begin 683
   decenter_end 273
   from ref 128002 z 2001 to point 338 127
-  line 131714 z 2001 to point 338 321
+  line 131714 z 2001 to point 338 186
   line 130434 z 2001 to ref 128898
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 131330 relation_ref 200450 // <unidirectional association>
-  decenter_begin 409
+  decenter_begin 303
+  decenter_end 209
   from ref 128002 z 2001 to ref 131202
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 131970 relation_ref 165506 // <directional composition>
-  decenter_begin 246
-  decenter_end 805
-  from ref 131842 z 3006 to point 612 193
-  line 133122 z 3006 to ref 128386
-  role_a_pos 624 160 3000 no_role_b
-  multiplicity_a_pos 597 160 3000 no_multiplicity_b
+  decenter_begin 911
+  decenter_end 648
+  from ref 131842 z 3006 to ref 128386
+  role_a_pos 582 385 3000 no_role_b
+  multiplicity_a_pos 582 414 3000 no_multiplicity_b
 end
 relationcanvas 132354 relation_ref 186626 // <directional composition>
   decenter_begin 651
@@ -145,7 +145,7 @@ relationcanvas 132738 relation_ref 186498 // <directional composition>
   multiplicity_a_pos 896 175 3000 no_multiplicity_b
 end
 relationcanvas 132866 relation_ref 165634 // <directional composition>
-  decenter_begin 151
+  decenter_begin 150
   decenter_end 321
   from ref 131842 z 3012 to ref 132610
   role_a_pos 799 145 3000 no_role_b
@@ -187,7 +187,7 @@ relationcanvas 134914 relation_ref 164610 // <generalisation>
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 135042 relation_ref 207106 // <unidirectional association>
-  decenter_begin 643
+  decenter_begin 216
   decenter_end 261
   from ref 131842 z 3012 to ref 128898
   no_role_a no_role_b
@@ -197,7 +197,7 @@ relationcanvas 135298 relation_ref 173058 // <directional composition>
   decenter_begin 717
   decenter_end 216
   from ref 134274 z 2007 to point 316 550
-  line 135682 z 2007 to point 316 630
+  line 135682 z 2007 to point 316 634
   line 136066 z 2007 to ref 135170
   role_a_pos 331 615 3000 no_role_b
   multiplicity_a_pos 354 644 3000 no_multiplicity_b
@@ -206,7 +206,7 @@ relationcanvas 135554 relation_ref 207234 // <unidirectional association>
   decenter_begin 231
   decenter_end 229
   from ref 134274 z 2012 to ref 135426
-  role_a_pos 322 488 3000 no_role_b
+  role_a_pos 344 488 3000 no_role_b
   multiplicity_a_pos 354 517 3000 no_multiplicity_b
 end
 relationcanvas 135938 relation_ref 162818 // <generalisation>
@@ -245,11 +245,11 @@ relationcanvas 137602 relation_ref 220290 // <generalisation>
 end
 relationcanvas 137858 relation_ref 220418 // <directional composition>
   from ref 137474 z 2019 to ref 137730
-  role_a_pos 327 754 3000 no_role_b
-  multiplicity_a_pos 396 783 3000 no_multiplicity_b
+  role_a_pos 80 753 3000 no_role_b
+  multiplicity_a_pos 80 782 3000 no_multiplicity_b
 end
-line 130178 -_-_ decenter_begin 143 decenter_end 544
+line 130178 -_-_ decenter_begin 405 decenter_end 544
   from ref 128898 z 3006 to ref 128642
-line 130306 -_-_ decenter_begin 819 decenter_end 172
+line 130306 -_-_ decenter_begin 638 decenter_end 247
   from ref 128898 z 3006 to ref 128386
 end

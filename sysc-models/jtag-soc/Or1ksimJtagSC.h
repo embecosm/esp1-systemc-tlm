@@ -1,4 +1,4 @@
-// Simple SoC SystemC main program
+// Wrapper for Or1ksim with interrupts and JTAG module header
 
 // Copyright (C) 2008, 2010 Embecosm Limited <info@embecosm.com>
 
@@ -25,49 +25,56 @@
 // This code is commented throughout for use with Doxygen.
 // ----------------------------------------------------------------------------
 
-#include <iostream>
+#ifndef OR1KSIM_JTAG_SC__H
+#define OR1KSIM_JTAG_SC__H
 
-#include "tlm.h"
-#include "Or1ksimExtSC.h"
-#include "UartSC.h"
-#include "TermSC.h"
-
-
-using std::cerr;
-using std::endl;
+#include "Or1ksimIntrSC.h"
 
 
 // ----------------------------------------------------------------------------
-//! Main program building a simple SoC model
+//! SystemC module class wrapping Or1ksim ISS with temporal decoupling and
+//! external interrupts.
 
-//! Parses arguments, instantiates the modules and connects up the ports. Then
-//! runs forever.
+//! Provides signals for the interrupts and additional threads sensitive to
+//! the interrupt inputs. All other functionality comes from the base class,
+//! Or1ksimDecoupSC::.
 // ----------------------------------------------------------------------------
-int  sc_main( int   argc,
-	      char *argv[] )
+class Or1ksimJtagSC
+  : public Or1ksimIntrSC
 {
-  if( argc != 3 ) {
-    cerr << "Usage: simple-soc <config_file> <image_file>" << endl;
-    exit( 1 );
-  }
+public:
 
-  // Instantiate the modules
-  Or1ksimExtSC  iss ("or1ksim", argv[1], argv[2]);
-  UartSC        uart ("uart");
-  TermSC        term ("terminal");
+  // Constructor
+  Or1ksimJtagSC( sc_core::sc_module_name  name,
+		 const char              *configFile,
+		 const char              *imageFile );
 
-  // Connect up the TLM ports
-  iss.dataBus( uart.bus );
+  // The JTAG transactional API
+  void  reset (sc_core::sc_time &delay);
 
-  // Connect up the UART and terminal Tx and Rx
-  uart.tx( term.rx );
-  term.tx( uart.rx );
+  void  shiftIr (unsigned char    *jreg,
+		 sc_core::sc_time &delay);
 
-  // Run it forever
-  sc_core::sc_start();
-  return 0;			// Should never happen!
+  void  shiftDr (unsigned char    *jreg,
+		 sc_core::sc_time &delay);
 
-}	// sc_main()
+  
+protected:
 
+  // Thread which will run the model, which adds a mutex to prevent calling
+  // the underlying ISS when the JTAG thread is active.
+  virtual void  run();
+
+
+private:
+
+  //! SystemC mutex controlling access to the underlying ISS.
+  sc_core::sc_mutex  or1ksimMutex;
+
+
+};	/* Or1ksimJtagSC() */
+
+
+#endif	// OR1KSIM_JTAG_SC__H
 
 // EOF

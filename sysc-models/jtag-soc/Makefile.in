@@ -17,7 +17,7 @@
 
 # JTAG driven SoC SystemC models Makefile.am for automake
 
-# Copyright (C) 2009 Embecosm Limited
+# Copyright (C) 2010 Embecosm Limited
 
 # Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
@@ -35,11 +35,13 @@
 # more details.
 
 # You should have received a copy of the GNU General Public License along
-# with this program.  If not, see <http:#www.gnu.org/licenses/>.  */
+# with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 # -----------------------------------------------------------------------------
 # This code is commented throughout for use with Doxygen.
 # -----------------------------------------------------------------------------
+
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -60,6 +62,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
+bin_PROGRAMS = jtag-soc$(EXEEXT)
 subdir = sysc-models/jtag-soc
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -73,8 +76,49 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-SOURCES =
-DIST_SOURCES =
+LTLIBRARIES = $(noinst_LTLIBRARIES)
+libjtag_soc_la_DEPENDENCIES = ../logger/liblogger.la \
+	../simple-soc/libsimple-soc.la ../sync-soc/libsync-soc.la \
+	../decoup-soc/libdecoup-soc.la ../intr-soc/libintr-soc.la
+am_libjtag_soc_la_OBJECTS = libjtag_soc_la-Or1ksimJtagSC.lo
+libjtag_soc_la_OBJECTS = $(am_libjtag_soc_la_OBJECTS)
+am__installdirs = "$(DESTDIR)$(bindir)"
+PROGRAMS = $(bin_PROGRAMS)
+am_jtag_soc_OBJECTS = jtag_soc-jtagSocMainSC.$(OBJEXT) \
+	jtag_soc-Or1ksimJtagSC.$(OBJEXT)
+jtag_soc_OBJECTS = $(am_jtag_soc_OBJECTS)
+jtag_soc_DEPENDENCIES = ../logger/liblogger.la \
+	../simple-soc/libsimple-soc.la ../sync-soc/libsync-soc.la \
+	../decoup-soc/libdecoup-soc.la ../intr-soc/libintr-soc.la
+jtag_soc_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(jtag_soc_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
+depcomp = $(SHELL) $(top_srcdir)/depcomp
+am__depfiles_maybe = depfiles
+am__mv = mv -f
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
+SOURCES = $(libjtag_soc_la_SOURCES) $(jtag_soc_SOURCES)
+DIST_SOURCES = $(libjtag_soc_la_SOURCES) $(jtag_soc_SOURCES)
+ETAGS = etags
+CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -195,9 +239,49 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+noinst_LTLIBRARIES = libjtag-soc.la
+
+# Sources for the program. We set the CXX flags as a workaround for name
+# clashing between program and library. It is a no-op effectively. See the
+# automake manual for an explanation.
+jtag_soc_SOURCES = jtagSocMainSC.cpp \
+		          Or1ksimJtagSC.cpp \
+		          Or1ksimJtagSC.h
+
+jtag_soc_LDADD = ../logger/liblogger.la         \
+			  ../simple-soc/libsimple-soc.la \
+			  ../sync-soc/libsync-soc.la     \
+			  ../decoup-soc/libdecoup-soc.la \
+			  ../intr-soc/libintr-soc.la
+
+jtag_soc_CPPFLAGS = -I$(srcdir)/../logger     \
+			  -I$(srcdir)/../simple-soc \
+			  -I$(srcdir)/../sync-soc   \
+			  -I$(srcdir)/../decoup-soc \
+			  -I$(srcdir)/../intr-soc
+
+jtag_soc_CXXFLAGS = $(AM_CXXFLAGS)
+
+# Sources for the library
+libjtag_soc_la_SOURCES = Or1ksimJtagSC.cpp \
+		          Or1ksimJtagSC.h
+
+libjtag_soc_la_LIBADD = ../logger/liblogger.la         \
+			  ../simple-soc/libsimple-soc.la \
+			  ../sync-soc/libsync-soc.la     \
+			  ../decoup-soc/libdecoup-soc.la \
+			  ../intr-soc/libintr-soc.la
+
+libjtag_soc_la_CPPFLAGS = -I$(srcdir)/../logger     \
+			  -I$(srcdir)/../simple-soc \
+			  -I$(srcdir)/../sync-soc   \
+			  -I$(srcdir)/../decoup-soc \
+			  -I$(srcdir)/../intr-soc
+
 all: all-am
 
 .SUFFIXES:
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -229,17 +313,186 @@ $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test "$$dir" != "$$p" || dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
+	done
+libjtag-soc.la: $(libjtag_soc_la_OBJECTS) $(libjtag_soc_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libjtag_soc_la_OBJECTS) $(libjtag_soc_la_LIBADD) $(LIBS)
+install-binPROGRAMS: $(bin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
+	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
+	for p in $$list; do echo "$$p $$p"; done | \
+	sed 's/$(EXEEXT)$$//' | \
+	while read p p1; do if test -f $$p || test -f $$p1; \
+	  then echo "$$p"; echo "$$p"; else :; fi; \
+	done | \
+	sed -e 'p;s,.*/,,;n;h' -e 's|.*|.|' \
+	    -e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/' | \
+	sed 'N;N;N;s,\n, ,g' | \
+	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1 } \
+	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
+	    if ($$2 == $$4) files[d] = files[d] " " $$1; \
+	    else { print "f", $$3 "/" $$4, $$1; } } \
+	  END { for (d in files) print "f", d, files[d] }' | \
+	while read type dir files; do \
+	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+	    test -z "$$files" || { \
+	    echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(bindir)$$dir'"; \
+	    $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(bindir)$$dir" || exit $$?; \
+	    } \
+	; done
+
+uninstall-binPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
+	files=`for p in $$list; do echo "$$p"; done | \
+	  sed -e 'h;s,^.*/,,;s/$(EXEEXT)$$//;$(transform)' \
+	      -e 's/$$/$(EXEEXT)/' `; \
+	test -n "$$list" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(bindir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(bindir)" && rm -f $$files
+
+clean-binPROGRAMS:
+	@list='$(bin_PROGRAMS)'; test -n "$$list" || exit 0; \
+	echo " rm -f" $$list; \
+	rm -f $$list || exit $$?; \
+	test -n "$(EXEEXT)" || exit 0; \
+	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
+	echo " rm -f" $$list; \
+	rm -f $$list
+jtag-soc$(EXEEXT): $(jtag_soc_OBJECTS) $(jtag_soc_DEPENDENCIES) 
+	@rm -f jtag-soc$(EXEEXT)
+	$(jtag_soc_LINK) $(jtag_soc_OBJECTS) $(jtag_soc_LDADD) $(LIBS)
+
+mostlyclean-compile:
+	-rm -f *.$(OBJEXT)
+
+distclean-compile:
+	-rm -f *.tab.c
+
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jtag_soc-Or1ksimJtagSC.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jtag_soc-jtagSocMainSC.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libjtag_soc_la-Or1ksimJtagSC.Plo@am__quote@
+
+.cpp.o:
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
+
+.cpp.obj:
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.cpp.lo:
+@am__fastdepCXX_TRUE@	$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
+
+libjtag_soc_la-Or1ksimJtagSC.lo: Or1ksimJtagSC.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjtag_soc_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libjtag_soc_la-Or1ksimJtagSC.lo -MD -MP -MF $(DEPDIR)/libjtag_soc_la-Or1ksimJtagSC.Tpo -c -o libjtag_soc_la-Or1ksimJtagSC.lo `test -f 'Or1ksimJtagSC.cpp' || echo '$(srcdir)/'`Or1ksimJtagSC.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libjtag_soc_la-Or1ksimJtagSC.Tpo $(DEPDIR)/libjtag_soc_la-Or1ksimJtagSC.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Or1ksimJtagSC.cpp' object='libjtag_soc_la-Or1ksimJtagSC.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjtag_soc_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libjtag_soc_la-Or1ksimJtagSC.lo `test -f 'Or1ksimJtagSC.cpp' || echo '$(srcdir)/'`Or1ksimJtagSC.cpp
+
+jtag_soc-jtagSocMainSC.o: jtagSocMainSC.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(jtag_soc_CPPFLAGS) $(CPPFLAGS) $(jtag_soc_CXXFLAGS) $(CXXFLAGS) -MT jtag_soc-jtagSocMainSC.o -MD -MP -MF $(DEPDIR)/jtag_soc-jtagSocMainSC.Tpo -c -o jtag_soc-jtagSocMainSC.o `test -f 'jtagSocMainSC.cpp' || echo '$(srcdir)/'`jtagSocMainSC.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/jtag_soc-jtagSocMainSC.Tpo $(DEPDIR)/jtag_soc-jtagSocMainSC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='jtagSocMainSC.cpp' object='jtag_soc-jtagSocMainSC.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(jtag_soc_CPPFLAGS) $(CPPFLAGS) $(jtag_soc_CXXFLAGS) $(CXXFLAGS) -c -o jtag_soc-jtagSocMainSC.o `test -f 'jtagSocMainSC.cpp' || echo '$(srcdir)/'`jtagSocMainSC.cpp
+
+jtag_soc-jtagSocMainSC.obj: jtagSocMainSC.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(jtag_soc_CPPFLAGS) $(CPPFLAGS) $(jtag_soc_CXXFLAGS) $(CXXFLAGS) -MT jtag_soc-jtagSocMainSC.obj -MD -MP -MF $(DEPDIR)/jtag_soc-jtagSocMainSC.Tpo -c -o jtag_soc-jtagSocMainSC.obj `if test -f 'jtagSocMainSC.cpp'; then $(CYGPATH_W) 'jtagSocMainSC.cpp'; else $(CYGPATH_W) '$(srcdir)/jtagSocMainSC.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/jtag_soc-jtagSocMainSC.Tpo $(DEPDIR)/jtag_soc-jtagSocMainSC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='jtagSocMainSC.cpp' object='jtag_soc-jtagSocMainSC.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(jtag_soc_CPPFLAGS) $(CPPFLAGS) $(jtag_soc_CXXFLAGS) $(CXXFLAGS) -c -o jtag_soc-jtagSocMainSC.obj `if test -f 'jtagSocMainSC.cpp'; then $(CYGPATH_W) 'jtagSocMainSC.cpp'; else $(CYGPATH_W) '$(srcdir)/jtagSocMainSC.cpp'; fi`
+
+jtag_soc-Or1ksimJtagSC.o: Or1ksimJtagSC.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(jtag_soc_CPPFLAGS) $(CPPFLAGS) $(jtag_soc_CXXFLAGS) $(CXXFLAGS) -MT jtag_soc-Or1ksimJtagSC.o -MD -MP -MF $(DEPDIR)/jtag_soc-Or1ksimJtagSC.Tpo -c -o jtag_soc-Or1ksimJtagSC.o `test -f 'Or1ksimJtagSC.cpp' || echo '$(srcdir)/'`Or1ksimJtagSC.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/jtag_soc-Or1ksimJtagSC.Tpo $(DEPDIR)/jtag_soc-Or1ksimJtagSC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Or1ksimJtagSC.cpp' object='jtag_soc-Or1ksimJtagSC.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(jtag_soc_CPPFLAGS) $(CPPFLAGS) $(jtag_soc_CXXFLAGS) $(CXXFLAGS) -c -o jtag_soc-Or1ksimJtagSC.o `test -f 'Or1ksimJtagSC.cpp' || echo '$(srcdir)/'`Or1ksimJtagSC.cpp
+
+jtag_soc-Or1ksimJtagSC.obj: Or1ksimJtagSC.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(jtag_soc_CPPFLAGS) $(CPPFLAGS) $(jtag_soc_CXXFLAGS) $(CXXFLAGS) -MT jtag_soc-Or1ksimJtagSC.obj -MD -MP -MF $(DEPDIR)/jtag_soc-Or1ksimJtagSC.Tpo -c -o jtag_soc-Or1ksimJtagSC.obj `if test -f 'Or1ksimJtagSC.cpp'; then $(CYGPATH_W) 'Or1ksimJtagSC.cpp'; else $(CYGPATH_W) '$(srcdir)/Or1ksimJtagSC.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/jtag_soc-Or1ksimJtagSC.Tpo $(DEPDIR)/jtag_soc-Or1ksimJtagSC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Or1ksimJtagSC.cpp' object='jtag_soc-Or1ksimJtagSC.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(jtag_soc_CPPFLAGS) $(CPPFLAGS) $(jtag_soc_CXXFLAGS) $(CXXFLAGS) -c -o jtag_soc-Or1ksimJtagSC.obj `if test -f 'Or1ksimJtagSC.cpp'; then $(CYGPATH_W) 'Or1ksimJtagSC.cpp'; else $(CYGPATH_W) '$(srcdir)/Or1ksimJtagSC.cpp'; fi`
+
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
+
+ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
+	      END { if (nonempty) { for (i in files) print i; }; }'`; \
+	mkid -fID $$unique
 tags: TAGS
-TAGS:
 
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+		$(TAGS_FILES) $(LISP)
+	set x; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
+	      END { if (nonempty) { for (i in files) print i; }; }'`; \
+	shift; \
+	if test -z "$(ETAGS_ARGS)$$*$$unique"; then :; else \
+	  test -n "$$unique" || unique=$$empty_fix; \
+	  if test $$# -gt 0; then \
+	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+	      "$$@" $$unique; \
+	  else \
+	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+	      $$unique; \
+	  fi; \
+	fi
 ctags: CTAGS
-CTAGS:
+CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+		$(TAGS_FILES) $(LISP)
+	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
+	      END { if (nonempty) { for (i in files) print i; }; }'`; \
+	test -z "$(CTAGS_ARGS)$$unique" \
+	  || $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
+	     $$unique
 
+GTAGS:
+	here=`$(am__cd) $(top_builddir) && pwd` \
+	  && $(am__cd) $(top_srcdir) \
+	  && gtags -i $(GTAGS_ARGS) "$$here"
+
+distclean-tags:
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
@@ -273,8 +526,11 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS)
 installdirs:
+	for dir in "$(DESTDIR)$(bindir)"; do \
+	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -302,11 +558,14 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool \
+	clean-noinstLTLIBRARIES mostlyclean-am
 
 distclean: distclean-am
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic
+distclean-am: clean-am distclean-compile distclean-generic \
+	distclean-tags
 
 dvi: dvi-am
 
@@ -326,7 +585,7 @@ install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am:
+install-exec-am: install-binPROGRAMS
 
 install-html: install-html-am
 
@@ -349,12 +608,14 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-generic mostlyclean-libtool
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
 pdf: pdf-am
 
@@ -364,20 +625,23 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am:
+uninstall-am: uninstall-binPROGRAMS
 
 .MAKE: install-am install-strip
 
-.PHONY: all all-am check check-am clean clean-generic clean-libtool \
-	distclean distclean-generic distclean-libtool distdir dvi \
-	dvi-am html html-am info info-am install install-am \
+.PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
+	clean-generic clean-libtool clean-noinstLTLIBRARIES ctags \
+	distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-binPROGRAMS \
 	install-data install-data-am install-dvi install-dvi-am \
 	install-exec install-exec-am install-html install-html-am \
 	install-info install-info-am install-man install-pdf \
 	install-pdf-am install-ps install-ps-am install-strip \
 	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am uninstall uninstall-am
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-binPROGRAMS
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

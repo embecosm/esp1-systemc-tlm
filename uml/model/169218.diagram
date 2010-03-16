@@ -15,170 +15,176 @@ classinstance 134530 class_ref 191746 // or1ksim
 classinstance 135298 class_ref 191618 // xterm
   name "xterm"   xyz 1119 4 2000 life_line_z 2000
 classinstance 139394 class_ref 163202 // tlm_quantumkeeper
-  name "issQk"   xyz 523 4 2000 life_line_z 2000
+  name "issQk"   xyz 349 4 2000 life_line_z 2000
 classinstance 139522 class_ref 198402 // tlm_global_quantum
-  name "refTgk"   xyz 360 4 2000 life_line_z 2000
+  name "tgk"   xyz 521 4 2000 life_line_z 2000
 note 145410 "Execution loop
 repeats here"
-  xyzwh 6 785 2000 133 49
+  xyzwh 6 786 2000 133 49
 note 145538 "Start of upcall."
-  xyzwh 7 168 2000 135 35
+  xyzwh 8 199 2000 135 35
 note 150658 "End of upcall."
-  xyzwh 4 615 2000 137 35
+  xyzwh 4 618 2000 137 35
 note 150786 "End of one quantum of execution"
-  xyzwh 6 655 2000 137 51
+  xyzwh 6 658 2000 137 51
 note 150914 "Start of loop completing quanta of execution"
   xyzwh 6 55 2000 135 69
 durationcanvas 129026 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 178 2010 11 44
+  xyzwh 267 209 2010 11 44
 end
 durationcanvas 130690 classinstance_ref 130562 // txReceived:sc_event
-  xyzwh 856 384 2010 11 87
+  xyzwh 856 415 2010 11 87
 end
 durationcanvas 130946 classinstance_ref 128386 // uart:UartDecoupSC
-  xyzwh 732 350 2005 11 45
+  xyzwh 732 359 2005 11 67
 end
 durationcanvas 132482 classinstance_ref 128386 // uart:UartDecoupSC
-  xyzwh 732 442 2005 11 75
+  xyzwh 732 473 2005 11 75
   overlappingdurationcanvas 136322
-    xyzwh 738 454 2015 11 25
+    xyzwh 738 485 2015 11 25
   end
 end
 durationcanvas 133634 classinstance_ref 133250 // term:TermSC
   xyzwh 1044 54 2010 11 25
 end
 durationcanvas 133762 classinstance_ref 133122 // rx:sc_buffer
-  xyzwh 960 68 2010 11 462
+  xyzwh 960 68 2010 11 493
 end
 durationcanvas 134274 classinstance_ref 133250 // term:TermSC
-  xyzwh 1044 518 2010 11 29
+  xyzwh 1044 549 2010 11 29
 end
 durationcanvas 135426 classinstance_ref 135298 // xterm:xterm
-  xyzwh 1147 535 2010 11 31
+  xyzwh 1147 566 2010 11 31
 end
 durationcanvas 135682 classinstance_ref 133250 // term:TermSC
-  xyzwh 1044 470 2010 11 108
+  xyzwh 1044 501 2010 11 108
 end
 durationcanvas 137090 classinstance_ref 133122 // rx:sc_buffer
-  xyzwh 960 565 2010 11 253
+  xyzwh 960 575 2010 11 253
 end
 durationcanvas 137346 classinstance_ref 134530 // or1ksim:or1ksim
-  xyzwh 147 209 2010 11 31
+  xyzwh 147 240 2010 11 31
 end
 durationcanvas 138242 classinstance_ref 134530 // or1ksim:or1ksim
-  xyzwh 147 638 2010 11 35
+  xyzwh 147 619 2010 11 37
 end
 durationcanvas 138498 classinstance_ref 128258 // iss:Or1ksimDecoupSC
   xyzwh 267 54 2010 11 25
 end
 durationcanvas 138626 classinstance_ref 134530 // or1ksim:or1ksim
-  xyzwh 147 141 2010 11 49
+  xyzwh 147 182 2010 11 39
 end
 durationcanvas 140162 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 369 3005 11 35
+  xyzwh 267 379 3005 11 34
 end
 durationcanvas 140418 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 227 2010 11 25
+  xyzwh 267 258 2010 11 25
 end
-durationcanvas 140546 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 661 2010 11 28
-end
-durationcanvas 140802 classinstance_ref 139522 // refTgk:tlm_global_quantum
-  xyzwh 435 68 2010 11 28
+durationcanvas 140802 classinstance_ref 139522 // tgk:tlm_global_quantum
+  xyzwh 587 68 2010 11 28
 end
 durationcanvas 141442 classinstance_ref 139394 // issQk:tlm_quantumkeeper
-  xyzwh 594 103 2010 11 42
+  xyzwh 420 103 2010 11 72
 end
 durationcanvas 141826 classinstance_ref 139394 // issQk:tlm_quantumkeeper
-  xyzwh 594 677 2010 11 26
+  xyzwh 420 694 2010 11 29
 end
 durationcanvas 142082 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 691 2010 11 26
+  xyzwh 267 643 2010 11 36
 end
 durationcanvas 142338 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 132 2010 11 25
+  xyzwh 267 132 2010 11 24
 end
 durationcanvas 142466 classinstance_ref 128258 // iss:Or1ksimDecoupSC
   xyzwh 267 84 2010 11 43
 end
-durationcanvas 142594 classinstance_ref 134530 // or1ksim:or1ksim
-  xyzwh 147 705 2010 11 27
-end
-durationcanvas 142850 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 721 2010 11 29
-end
 durationcanvas 143106 classinstance_ref 139394 // issQk:tlm_quantumkeeper
-  xyzwh 594 739 2010 11 29
+  xyzwh 420 730 2010 11 28
 end
 durationcanvas 143362 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 753 2010 11 36
+  xyzwh 267 747 2030 11 31
 end
 durationcanvas 143618 classinstance_ref 139394 // issQk:tlm_quantumkeeper
-  xyzwh 594 775 2010 11 30
+  xyzwh 420 765 2010 11 31
 end
 durationcanvas 143874 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 793 2010 11 37
+  xyzwh 267 784 2010 11 40
 end
 durationcanvas 145666 classinstance_ref 139394 // issQk:tlm_quantumkeeper
-  xyzwh 594 229 2010 11 40
+  xyzwh 420 260 2010 11 40
 end
 durationcanvas 146050 classinstance_ref 134530 // or1ksim:or1ksim
-  xyzwh 147 266 2010 11 33
+  xyzwh 147 297 2010 11 33
 end
 durationcanvas 146434 classinstance_ref 139394 // issQk:tlm_quantumkeeper
-  xyzwh 594 293 2010 11 35
+  xyzwh 420 328 2010 11 33
 end
 durationcanvas 146818 classinstance_ref 139394 // issQk:tlm_quantumkeeper
-  xyzwh 594 386 2010 11 40
+  xyzwh 420 395 2010 11 40
 end
 durationcanvas 147202 classinstance_ref 139394 // issQk:tlm_quantumkeeper
-  xyzwh 594 438 2010 11 33
+  xyzwh 420 447 2010 11 33
 end
 durationcanvas 147458 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 257 2010 11 25
+  xyzwh 267 288 2010 11 25
 end
 durationcanvas 147586 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 286 3015 11 25
+  xyzwh 267 316 3015 11 25
 end
 durationcanvas 147714 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 317 3020 11 44
+  xyzwh 267 344 3020 11 27
 end
 durationcanvas 147842 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 414 3005 11 38
+  xyzwh 267 423 3005 11 38
 end
 durationcanvas 148098 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 458 3005 11 34
+  xyzwh 267 467 3005 11 34
 end
 durationcanvas 148226 classinstance_ref 139394 // issQk:tlm_quantumkeeper
-  xyzwh 594 481 2010 11 32
+  xyzwh 420 489 2010 11 28
 end
-durationcanvas 148610 classinstance_ref 139522 // refTgk:tlm_global_quantum
-  xyzwh 435 532 2010 11 31
+durationcanvas 148610 classinstance_ref 139522 // tgk:tlm_global_quantum
+  xyzwh 587 527 2010 11 27
 end
 durationcanvas 148994 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 501 3005 11 42
+  xyzwh 267 503 3005 11 36
 end
 durationcanvas 149122 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 552 3005 11 43
+  xyzwh 267 540 3035 11 34
 end
 durationcanvas 149250 classinstance_ref 139394 // issQk:tlm_quantumkeeper
-  xyzwh 594 584 2010 11 29
+  xyzwh 420 563 2010 11 31
 end
 durationcanvas 149890 classinstance_ref 134530 // or1ksim:or1ksim
-  xyzwh 147 608 2010 11 26
+  xyzwh 147 589 2010 11 26
 end
 durationcanvas 150274 classinstance_ref 128258 // iss:Or1ksimDecoupSC
-  xyzwh 267 602 3005 11 48
+  xyzwh 267 583 3005 11 48
 end
-durationcanvas 150402 classinstance_ref 139522 // refTgk:tlm_global_quantum
-  xyzwh 435 809 2010 11 25
+durationcanvas 150402 classinstance_ref 139522 // tgk:tlm_global_quantum
+  xyzwh 587 813 2010 11 36
+end
+durationcanvas 151042 classinstance_ref 128258 // iss:Or1ksimDecoupSC
+  xyzwh 267 712 2010 11 29
+end
+durationcanvas 151170 classinstance_ref 134530 // or1ksim:or1ksim
+  xyzwh 147 136 2010 11 35
+end
+durationcanvas 151554 classinstance_ref 128258 // iss:Or1ksimDecoupSC
+  xyzwh 267 160 2010 11 34
+end
+durationcanvas 151682 classinstance_ref 134530 // or1ksim:or1ksim
+  xyzwh 147 664 2010 11 31
+end
+durationcanvas 152066 classinstance_ref 128258 // iss:Or1ksimDecoupSC
+  xyzwh 267 683 2010 11 25
 end
 msg 130818 asynchronous
   from durationcanvas_ref 130946
   to durationcanvas_ref 130690
-  yz 384 2015 msg operation_ref 208258 // "notify() : void"
+  yz 415 2015 msg operation_ref 208258 // "notify() : void"
   show_full_operations_definition default drawing_language default
-  label_xy 777 368
+  label_xy 778 399
 msg 133890 synchronous
   from durationcanvas_ref 133634
   to durationcanvas_ref 133762
@@ -188,90 +194,90 @@ msg 133890 synchronous
 msg 134402 return
   from durationcanvas_ref 133762
   to durationcanvas_ref 134274
-  yz 519 2015 unspecifiedmsg
+  yz 550 2015 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 134914 synchronous
   from durationcanvas_ref 138626
   to durationcanvas_ref 129026
-  yz 178 2015 msg operation_ref 166658 // "staticWriteUpcall(in instancePointer : void, in addr : ulong, in mask : ulong, in wdata : ulong) : void"
+  yz 209 2015 msg operation_ref 166658 // "staticWriteUpcall(in instancePointer : void, in addr : ulong, in mask : ulong, in wdata : ulong) : void"
   show_full_operations_definition default drawing_language default
-  label_xy 162 162
+  label_xy 163 193
 msg 135554 synchronous
   from durationcanvas_ref 134274
   to durationcanvas_ref 135426
-  yz 535 2020 msg operation_ref 208770 // "write(in fd : int, in buf : char, in len : int) : void"
+  yz 566 2020 msg operation_ref 208770 // "write(in fd : int, in buf : char, in len : int) : void"
   show_full_operations_definition default drawing_language default
-  label_xy 1083 519
+  label_xy 1084 550
 msg 135810 return
   from durationcanvas_ref 135426
   to durationcanvas_ref 135682
-  yz 553 2025 unspecifiedmsg
+  yz 584 2025 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 reflexivemsg 136450 synchronous
   to durationcanvas_ref 136322
-  yz 454 2020 msg operation_ref 215298 // "wait(in event : sc_event)"
+  yz 485 2020 msg operation_ref 215298 // "wait(in event : sc_event)"
   show_full_operations_definition default drawing_language default
-  label_xy 751 439
+  label_xy 752 470
 selfreflexivemsg 136962
   to durationcanvas_ref 136322
-  yz 471 2025 unspecifiedmsg
+  yz 502 2025 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 137218 synchronous
   from durationcanvas_ref 135682
   to durationcanvas_ref 137090
-  yz 565 2015 msg operation_ref 208642 // "read() : T"
+  yz 596 2015 msg operation_ref 208642 // "read() : T"
   show_full_operations_definition default drawing_language default
-  label_xy 990 549
+  label_xy 991 580
 msg 137474 synchronous
   from durationcanvas_ref 129026
   to durationcanvas_ref 137346
-  yz 210 2015 msg operation_ref 215426 // "get_time_period() : double"
+  yz 241 2015 msg operation_ref 215426 // "get_time_period() : double"
   show_full_operations_definition default drawing_language default
-  label_xy 163 194
+  label_xy 164 225
 msg 137602 return
   from durationcanvas_ref 137346
   to durationcanvas_ref 140418
-  yz 227 2020 unspecifiedmsg
+  yz 258 2020 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 138370 return
   from durationcanvas_ref 150274
   to durationcanvas_ref 138242
-  yz 638 2025 unspecifiedmsg
+  yz 619 2025 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 138754 synchronous
-  from durationcanvas_ref 142338
+  from durationcanvas_ref 151554
   to durationcanvas_ref 138626
-  yz 144 2015 msg operation_ref 215682 // "run(in duration : double) : int"
+  yz 183 2015 msg operation_ref 215682 // "run(in duration : double) : int"
   show_full_operations_definition default drawing_language default
-  label_xy 198 128
+  label_xy 199 167
 msg 139266 synchronous
   from durationcanvas_ref 147714
   to durationcanvas_ref 130946
-  yz 350 2015 msg operation_ref 194690 // "busReadWrite(inout payload : tlm::tlm_generic_payload, inout delay : sc_core::sc_time) : void"
+  yz 359 2015 msg operation_ref 194690 // "busReadWrite(inout payload : tlm::tlm_generic_payload, inout delay : sc_core::sc_time) : void"
   show_full_operations_definition default drawing_language default
-  label_xy 421 334
+  label_xy 462 343
 msg 140034 asynchronous
   from durationcanvas_ref 132482
   to durationcanvas_ref 133762
-  yz 506 2030 msg operation_ref 208386 // "write(in data : T) : void"
+  yz 537 2030 msg operation_ref 208386 // "write(in data : T) : void"
   show_full_operations_definition default drawing_language default
-  label_xy 830 490
+  label_xy 831 521
 msg 140290 return
   from durationcanvas_ref 130946
   to durationcanvas_ref 140162
-  yz 369 2020 unspecifiedmsg
+  yz 379 2020 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 140674 return
   from durationcanvas_ref 138242
-  to durationcanvas_ref 140546
-  yz 662 2015 unspecifiedmsg
+  to durationcanvas_ref 142082
+  yz 644 2015 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 140930 synchronous
   from durationcanvas_ref 138498
   to durationcanvas_ref 140802
   yz 68 2015 msg operation_ref 216450 // "compute_local_quantum() : sc_time"
   show_full_operations_definition default drawing_language default
-  label_xy 288 52
+  label_xy 360 52
 msg 141058 return
   from durationcanvas_ref 140802
   to durationcanvas_ref 142466
@@ -282,161 +288,172 @@ msg 141570 synchronous
   to durationcanvas_ref 141442
   yz 116 2015 msg operation_ref 215938 // "get_local_time() : sc_time"
   show_full_operations_definition default drawing_language default
-  label_xy 381 100
+  label_xy 304 100
 msg 141698 return
   from durationcanvas_ref 141442
   to durationcanvas_ref 142338
-  yz 133 2020 unspecifiedmsg
+  yz 132 2020 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 141954 synchronous
-  from durationcanvas_ref 140546
+  from durationcanvas_ref 152066
   to durationcanvas_ref 141826
-  yz 678 2015 msg operation_ref 216066 // "inc(in t : sc_time) : void"
+  yz 694 2015 msg operation_ref 216066 // "inc(in t : sc_time) : void"
   show_full_operations_definition default drawing_language default
-  label_xy 425 662
+  label_xy 336 678
 msg 142210 return
   from durationcanvas_ref 141826
-  to durationcanvas_ref 142082
-  yz 692 2020 unspecifiedmsg
-  show_full_operations_definition default drawing_language default
-msg 142722 synchronous
-  from durationcanvas_ref 142082
-  to durationcanvas_ref 142594
-  yz 705 2015 msg operation_ref 215554 // "set_time_point()"
-  show_full_operations_definition default drawing_language default
-  label_xy 164 689
-msg 142978 return
-  from durationcanvas_ref 142594
-  to durationcanvas_ref 142850
-  yz 721 2015 unspecifiedmsg
+  to durationcanvas_ref 151042
+  yz 712 2020 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 143234 synchronous
-  from durationcanvas_ref 142850
+  from durationcanvas_ref 151042
   to durationcanvas_ref 143106
-  yz 739 2015 msg operation_ref 216194 // "need_sync() : bool"
+  yz 730 2015 msg operation_ref 216194 // "need_sync() : bool"
   show_full_operations_definition default drawing_language default
-  label_xy 403 723
+  label_xy 313 714
 msg 143490 return
   from durationcanvas_ref 143106
   to durationcanvas_ref 143362
-  yz 755 2015 unspecifiedmsg
+  yz 747 2015 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 143746 synchronous
   from durationcanvas_ref 143362
   to durationcanvas_ref 143618
-  yz 778 2020 msg operation_ref 216322 // "sync() : void"
+  yz 765 2020 msg operation_ref 216322 // "sync() : void"
   show_full_operations_definition default drawing_language default
-  label_xy 421 762
+  label_xy 331 749
 msg 144002 return
   from durationcanvas_ref 143618
   to durationcanvas_ref 143874
-  yz 794 2025 unspecifiedmsg
+  yz 784 2025 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 145794 synchronous
   from durationcanvas_ref 140418
   to durationcanvas_ref 145666
-  yz 236 2015 msg operation_ref 216066 // "inc(in t : sc_time) : void"
+  yz 267 2015 msg operation_ref 216066 // "inc(in t : sc_time) : void"
   show_full_operations_definition default drawing_language default
-  label_xy 423 220
+  label_xy 337 251
 msg 145922 return
   from durationcanvas_ref 145666
   to durationcanvas_ref 147458
-  yz 257 2020 unspecifiedmsg
+  yz 288 2020 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 146178 synchronous
   from durationcanvas_ref 147458
   to durationcanvas_ref 146050
-  yz 266 2015 msg operation_ref 215554 // "set_time_point()"
+  yz 297 2015 msg operation_ref 215554 // "set_time_point()"
   show_full_operations_definition default drawing_language default
-  label_xy 167 250
+  label_xy 168 281
 msg 146306 return
   from durationcanvas_ref 146050
   to durationcanvas_ref 147586
-  yz 286 2020 unspecifiedmsg
+  yz 316 2020 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 146562 synchronous
   from durationcanvas_ref 147586
   to durationcanvas_ref 146434
-  yz 299 3005 msg operation_ref 215938 // "get_local_time() : sc_time"
+  yz 328 3005 msg operation_ref 215938 // "get_local_time() : sc_time"
   show_full_operations_definition default drawing_language default
-  label_xy 391 283
+  label_xy 305 312
 msg 146690 return
   from durationcanvas_ref 146434
   to durationcanvas_ref 147714
-  yz 317 3010 unspecifiedmsg
+  yz 345 3010 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 146946 synchronous
   from durationcanvas_ref 140162
   to durationcanvas_ref 146818
-  yz 393 3010 msg operation_ref 231042 // "set(in t : sc_time) : void"
+  yz 402 3010 msg operation_ref 231042 // "set(in t : sc_time) : void"
   show_full_operations_definition default drawing_language default
-  label_xy 423 377
+  label_xy 337 386
 msg 147074 return
   from durationcanvas_ref 146818
   to durationcanvas_ref 147842
-  yz 414 3015 unspecifiedmsg
+  yz 423 3015 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 147330 synchronous
   from durationcanvas_ref 147842
   to durationcanvas_ref 147202
-  yz 441 3010 msg operation_ref 216194 // "need_sync() : bool"
+  yz 450 3010 msg operation_ref 216194 // "need_sync() : bool"
   show_full_operations_definition default drawing_language default
-  label_xy 401 425
+  label_xy 315 434
 msg 147970 return
   from durationcanvas_ref 147202
   to durationcanvas_ref 148098
-  yz 458 3015 unspecifiedmsg
+  yz 467 3015 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 148354 synchronous
   from durationcanvas_ref 148098
   to durationcanvas_ref 148226
-  yz 481 3010 msg operation_ref 216322 // "sync() : void"
+  yz 489 3010 msg operation_ref 216322 // "sync() : void"
   show_full_operations_definition default drawing_language default
-  label_xy 419 465
+  label_xy 333 473
 msg 148482 return
   from durationcanvas_ref 148226
   to durationcanvas_ref 148994
-  yz 501 3010 unspecifiedmsg
+  yz 503 3010 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 148738 synchronous
   from durationcanvas_ref 148994
   to durationcanvas_ref 148610
-  yz 532 3015 msg operation_ref 216450 // "compute_local_quantum() : sc_time"
+  yz 527 3015 msg operation_ref 216450 // "compute_local_quantum() : sc_time"
   show_full_operations_definition default drawing_language default
-  label_xy 284 516
+  label_xy 361 516
 msg 148866 return
   from durationcanvas_ref 148610
   to durationcanvas_ref 149122
-  yz 552 3020 unspecifiedmsg
+  yz 540 3020 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 149378 synchronous
   from durationcanvas_ref 149122
   to durationcanvas_ref 149250
-  yz 584 3025 msg operation_ref 215938 // "get_local_time() : sc_time"
+  yz 563 3025 msg operation_ref 215938 // "get_local_time() : sc_time"
   show_full_operations_definition default drawing_language default
-  label_xy 391 568
+  label_xy 304 547
 msg 149506 return
   from durationcanvas_ref 149250
   to durationcanvas_ref 150274
-  yz 602 3030 unspecifiedmsg
+  yz 583 3030 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 150018 synchronous
   from durationcanvas_ref 150274
   to durationcanvas_ref 149890
-  yz 609 3010 msg operation_ref 231170 // "reset_duration()"
+  yz 590 3010 msg operation_ref 231170 // "reset_duration()"
   show_full_operations_definition default drawing_language default
-  label_xy 168 593
+  label_xy 168 574
 msg 150146 return
   from durationcanvas_ref 149890
   to durationcanvas_ref 150274
-  yz 623 3015 unspecifiedmsg
+  yz 604 3015 unspecifiedmsg
   show_full_operations_definition default drawing_language default
 msg 150530 synchronous
   from durationcanvas_ref 143874
   to durationcanvas_ref 150402
-  yz 819 2030 msg operation_ref 216450 // "compute_local_quantum() : sc_time"
+  yz 813 2030 msg operation_ref 216450 // "compute_local_quantum() : sc_time"
   show_full_operations_definition default drawing_language default
-  label_xy 284 803
+  label_xy 360 797
+msg 151298 synchronous
+  from durationcanvas_ref 142338
+  to durationcanvas_ref 151170
+  yz 145 3005 msg operation_ref 215554 // "set_time_point()"
+  show_full_operations_definition default drawing_language default
+  label_xy 167 129
+msg 151426 return
+  from durationcanvas_ref 151170
+  to durationcanvas_ref 151554
+  yz 160 3005 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
+msg 151810 synchronous
+  from durationcanvas_ref 142082
+  to durationcanvas_ref 151682
+  yz 668 2015 msg operation_ref 215426 // "get_time_period() : double"
+  show_full_operations_definition default drawing_language default
+  label_xy 163 652
+msg 151938 return
+  from durationcanvas_ref 151682
+  to durationcanvas_ref 152066
+  yz 684 2020 unspecifiedmsg
+  show_full_operations_definition default drawing_language default
 line 136706 -_-_ decenter_end 808
   from ref 136450 z 2021 to ref 130690
 end
