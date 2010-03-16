@@ -27,6 +27,8 @@
 # Build a complete program and a library for subsequent programs
 bin_PROGRAMS         = logger
 noinst_LTLIBRARIES   = liblogger.la
+include_HEADERS      = LoggerSC.h \
+		       Or1ksimSC.h
 
 # Sources for the program. We set the CXX flags as a workaround for name
 # clashing between program and library. It is a no-op effectively. See the

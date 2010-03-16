@@ -27,6 +27,9 @@
 # Build a complete program and a library for subsequent programs
 bin_PROGRAMS              = simple-soc
 noinst_LTLIBRARIES        = libsimple-soc.la
+include_HEADERS           = Or1ksimExtSC.h \
+		            TermSC.h       \
+		            UartSC.h
 
 # Sources for the program. We set the CXX flags as a workaround for name
 # clashing between program and library. It is a no-op effectively. See the

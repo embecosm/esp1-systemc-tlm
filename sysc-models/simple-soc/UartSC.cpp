@@ -125,8 +125,8 @@ UartSC::rxMethod()
   regs.rbr  = rx.read();
 
   sc_core::sc_time  now = sc_core::sc_time_stamp();
-  cout << "Char " << (char)(regs.rbr) << " read at  " << sc_time_stamp ()
-       << endl;
+  // cout << "Char " << (char)(regs.rbr) << " read at  " << sc_time_stamp ()
+  //      << endl;
 
   set( regs.lsr, UART_LSR_DR );		// Mark data ready
   genIntr( UART_IER_RBFI );		// Interrupt if enabled

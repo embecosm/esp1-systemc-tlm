@@ -27,6 +27,9 @@
 # Build a complete program and a library for subsequent programs
 bin_PROGRAMS            = sync-soc
 noinst_LTLIBRARIES      = libsync-soc.la
+include_HEADERS         = Or1ksimSyncSC.h \
+		          TermSyncSC.h    \
+		          UartSyncSC.h
 
 # Sources for the program. We set the CXX flags as a workaround for name
 # clashing between program and library. It is a no-op effectively. See the
@@ -39,8 +42,7 @@ sync_soc_SOURCES        = syncSocMainSC.cpp \
 		          UartSyncSC.cpp    \
 		          UartSyncSC.h
 
-sync_soc_LDADD          = ../logger/liblogger.la         \
-			  ../simple-soc/libsimple-soc.la
+sync_soc_LDADD          = ../simple-soc/libsimple-soc.la
 
 sync_soc_CPPFLAGS       = -I$(srcdir)/../logger     \
 			  -I$(srcdir)/../simple-soc
@@ -55,8 +57,7 @@ libsync_soc_la_SOURCES  = Or1ksimSyncSC.cpp \
 		          UartSyncSC.cpp    \
 		          UartSyncSC.h
 
-libsync_soc_la_LIBADD   = ../logger/liblogger.la         \
-			  ../simple-soc/libsimple-soc.la
+libsync_soc_la_LIBADD   = ../simple-soc/libsimple-soc.la
 
 libsync_soc_la_CPPFLAGS = -I$(srcdir)/../logger     \
 			  -I$(srcdir)/../simple-soc

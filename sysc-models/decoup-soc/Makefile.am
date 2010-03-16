@@ -27,6 +27,8 @@
 # Build a complete program and a library for subsequent programs
 bin_PROGRAMS              = decoup-soc
 noinst_LTLIBRARIES        = libdecoup-soc.la
+include_HEADERS           = Or1ksimDecoupSC.h \
+		            UartDecoupSC.h
 
 # Sources for the program. We set the CXX flags as a workaround for name
 # clashing between program and library. It is a no-op effectively. See the
@@ -37,9 +39,7 @@ decoup_soc_SOURCES        = decoupSocMainSC.cpp \
 		            UartDecoupSC.cpp    \
 		            UartDecoupSC.h
 
-decoup_soc_LDADD          = ../logger/liblogger.la         \
-			    ../simple-soc/libsimple-soc.la \
-			    ../sync-soc/libsync-soc.la
+decoup_soc_LDADD          = ../sync-soc/libsync-soc.la
 
 decoup_soc_CPPFLAGS       = -I$(srcdir)/../logger     \
 			    -I$(srcdir)/../simple-soc \
@@ -53,9 +53,7 @@ libdecoup_soc_la_SOURCES  = Or1ksimDecoupSC.cpp \
 		            UartDecoupSC.cpp       \
 		            UartDecoupSC.h
 
-libdecoup_soc_la_LIBADD   = ../logger/liblogger.la         \
-			    ../simple-soc/libsimple-soc.la \
-			    ../sync-soc/libsync-soc.la
+libdecoup_soc_la_LIBADD   = ../sync-soc/libsync-soc.la
 
 libdecoup_soc_la_CPPFLAGS = -I$(srcdir)/../logger     \
 			    -I$(srcdir)/../simple-soc \

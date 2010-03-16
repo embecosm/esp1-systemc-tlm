@@ -27,6 +27,7 @@
 # Build a complete program and a library for subsequent programs
 bin_PROGRAMS              = jtag-soc
 noinst_LTLIBRARIES        = libjtag-soc.la
+include_HEADERS           = Or1ksimJtagSC.h
 
 # Sources for the program. We set the CXX flags as a workaround for name
 # clashing between program and library. It is a no-op effectively. See the
@@ -35,11 +36,7 @@ jtag_soc_SOURCES        = jtagSocMainSC.cpp \
 		          Or1ksimJtagSC.cpp \
 		          Or1ksimJtagSC.h
 
-jtag_soc_LDADD          = ../logger/liblogger.la         \
-			  ../simple-soc/libsimple-soc.la \
-			  ../sync-soc/libsync-soc.la     \
-			  ../decoup-soc/libdecoup-soc.la \
-			  ../intr-soc/libintr-soc.la
+jtag_soc_LDADD          = ../intr-soc/libintr-soc.la
 
 jtag_soc_CPPFLAGS       = -I$(srcdir)/../logger     \
 			  -I$(srcdir)/../simple-soc \
@@ -53,11 +50,7 @@ jtag_soc_CXXFLAGS       = $(AM_CXXFLAGS)
 libjtag_soc_la_SOURCES  = Or1ksimJtagSC.cpp \
 		          Or1ksimJtagSC.h
 
-libjtag_soc_la_LIBADD   = ../logger/liblogger.la         \
-			  ../simple-soc/libsimple-soc.la \
-			  ../sync-soc/libsync-soc.la     \
-			  ../decoup-soc/libdecoup-soc.la \
-			  ../intr-soc/libintr-soc.la
+libjtag_soc_la_LIBADD   = ../intr-soc/libintr-soc.la
 
 libjtag_soc_la_CPPFLAGS = -I$(srcdir)/../logger     \
 			  -I$(srcdir)/../simple-soc \

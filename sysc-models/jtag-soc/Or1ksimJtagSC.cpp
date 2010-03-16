@@ -127,8 +127,8 @@ Or1ksimJtagSC::reset (sc_time &delay)
 //!                       total delay after the transaction (out).
 // ----------------------------------------------------------------------------
 void
-Or1ksimJtagSC::shiftIr (unsigned char    *jreg,
-			sc_time &delay)
+Or1ksimJtagSC::shiftIr (unsigned char *jreg,
+			sc_time       &delay)
 {
   or1ksimMutex.lock ();
   or1ksimMutex.unlock ();
@@ -146,8 +146,8 @@ Or1ksimJtagSC::shiftIr (unsigned char    *jreg,
 //!                       total delay after the transaction (out).
 // ----------------------------------------------------------------------------
 void
-Or1ksimJtagSC::shiftDr (unsigned char    *jreg,
-			sc_time &delay)
+Or1ksimJtagSC::shiftDr (unsigned char *jreg,
+			sc_time       &delay)
 {
   or1ksimMutex.lock ();
   or1ksimMutex.unlock ();

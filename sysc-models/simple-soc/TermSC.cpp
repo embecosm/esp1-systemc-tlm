@@ -105,7 +105,7 @@ TermSC::rxMethod()
 {
   xtermWrite( rx.read() );		// Write it to the screen
 
-  cout << "Char written at " << sc_time_stamp() << endl;
+  // cout << "Char written at " << sc_time_stamp() << endl;
 
 }	// rxMethod()
 
