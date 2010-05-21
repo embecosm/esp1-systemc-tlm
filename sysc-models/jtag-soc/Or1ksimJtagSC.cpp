@@ -112,6 +112,7 @@ void
 Or1ksimJtagSC::reset (sc_time &delay)
 {
   or1ksimMutex.lock ();
+
   or1ksimMutex.unlock ();
 
 }	// reset ()
