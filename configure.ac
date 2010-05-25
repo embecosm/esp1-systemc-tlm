@@ -28,7 +28,16 @@
 
 AC_INIT([embecosm-eps1-sysc-tlm2.0-examples], [2.0], [jeremy.bennett@embecosm.com])
 AC_CONFIG_MACRO_DIR([m4])
+
+# Generically use extensions such as _GNU_SOURCE if available.
+AC_USE_SYSTEM_EXTENSIONS
+
+# Separate config file for the OpenRISC test programs, since they'll need to
+# use the cross compiling tool chain, rather than the native tools chain.
+AC_CONFIG_SUBDIRS([progs-or32])
+
 AC_CANONICAL_TARGET
+AC_CANONICAL_HOST
 AC_PROG_LIBTOOL
 AM_INIT_AUTOMAKE
 
@@ -52,7 +61,7 @@ AC_DEFINE(_GNU_SOURCE, 1, "The source code uses the GNU libraries)
 
 # Options to explicitly specify the location of the SystemC world and the TLM
 # world. Deal with SystemC's OS naming convention (linux, not linux-gnu)
-if test "x$target_os" == "xlinux-gnu"
+if test "x$host_os" == "xlinux-gnu"
 then
   sysc_os=linux
 else

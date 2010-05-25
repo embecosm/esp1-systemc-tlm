@@ -44,16 +44,16 @@ SC_HAS_PROCESS( Or1ksimSC );
 //! @param configFile  Config file for the underlying ISS
 //! @param imageFile   Binary image to run on the ISS
 // ----------------------------------------------------------------------------
-Or1ksimSC::Or1ksimSC ( sc_core::sc_module_name  name,
-		       const char              *configFile,
-		       const char              *imageFile ) :
-  sc_module( name ),
-  dataBus( "data_initiator" )
+Or1ksimSC::Or1ksimSC (sc_core::sc_module_name  name,
+		      const char              *configFile,
+		      const char              *imageFile) :
+  sc_module (name),
+  dataBus ("data_initiator" )
 {
-  or1ksim_init( configFile, imageFile, this, staticReadUpcall,
-		staticWriteUpcall );
+  or1ksim_init (configFile, imageFile, this, staticReadUpcall,
+		staticWriteUpcall);
 
-  SC_THREAD( run );		  // Thread to run the ISS
+  SC_THREAD (run);		  // Thread to run the ISS
 
 }	// Or1ksimSC()
 
@@ -69,9 +69,9 @@ Or1ksimSC::Or1ksimSC ( sc_core::sc_module_name  name,
 //! so not block the simulation.
 // ----------------------------------------------------------------------------
 void
-Or1ksimSC::run()
+Or1ksimSC::run ()
 {
-  (void)or1ksim_run( -1.0 );
+  (void)or1ksim_run (-1.0);
 
 }	// Or1ksimSC()
 
@@ -84,29 +84,30 @@ Or1ksimSC::run()
 //! C) as arguments, but calls the member routine, ::readUpcall(), with fixed
 //! width types (from stdint.h).
 
-//! All reads are 32 bits wide, but some bytes may be masked off, to enable
-//! byte and half-word accesses.
-
 //! @note In theory this ought to be possible by using member pointers to
 //! functions. However given the external linkage is to C and not C++, this way
 //! is much safer!
 
-//! @param instancePtr  The pointer to the class member associated with this
-//!                     upcall (originally passed to or1ksim_init in the
-//!                     constructor, ::Or1ksimSC()).
-//! @param addr         The address for the read
-//! @param mask         The byte enable mask for the read
+//! @param[in]  instancePtr  The pointer to the class member associated with
+//!                          this upcall (originally passed to or1ksim_init in
+//!                          the constructor, ::Or1ksimSC()).
+//! @param[in]  addr         The address for the read
+//! @param[in]  mask         The byte enable mask for the read
+//! @param[out] rdata        Vector for the read data
+//! @param[in]  dataLen      The number of bytes to read
 
-//! @return  The value read, cast back to a C type which can hold 32 bits
+//! @return  Zero on success. A return code otherwise.
 // ----------------------------------------------------------------------------
-unsigned long int
-Or1ksimSC::staticReadUpcall( void              *instancePtr,
+int
+Or1ksimSC::staticReadUpcall (void              *instancePtr,
 			     unsigned long int  addr,
-			     unsigned long int  mask )
+			     unsigned char      mask[],
+			     unsigned char      rdata[],
+			     int                dataLen)
 {
-  Or1ksimSC *classPtr = (Or1ksimSC *)instancePtr;
-  return (unsigned long int)classPtr->readUpcall( (sc_dt::uint64)addr,
-						  (uint32_t)mask );
+  Or1ksimSC *classPtr = (Or1ksimSC *) instancePtr;
+  return  classPtr->readUpcall (addr, mask, rdata, dataLen);
+
 }	// staticReadUpcall()
 
 
@@ -118,28 +119,29 @@ Or1ksimSC::staticReadUpcall( void              *instancePtr,
 //! C) as arguments, but calls the member routine, ::writeUpcall(), with fixed
 //! width types (from stdint.h).
 
-//! All writes are 32 bits wide, but some bytes may be masked off, to enable
-//! byte and half-word accesses.
-
 //! @note In theory this ought to be possible by using member pointers to
 //! functions. However given the external linkage is to C and not C++, this way
 //! is much safer!
 
-//! @param instancePtr  The pointer to the class member associated with this
-//!                     upcall (originally passed to or1ksim_init in the
-//!                     constructor, ::Or1ksimSC()).
-//! @param addr         The address for the write
-//! @param mask         The byte enable mask for the write
-//! @param wdata        The data to be written (matching the mask)
+//! @param[in] instancePtr  The pointer to the class member associated with
+//!                         this upcall (originally passed to or1ksim_init in
+//!                         the constructor, ::Or1ksimSC()).
+//! @param[in] addr         The address for the write
+//! @param[in] mask         The byte enable mask for the write
+//! @param[in] wdata        Vector of data to write
+//! @param[in] dataLen      The number of bytes to write
+
+//! @return  Zero on success. A return code otherwise.
 // ----------------------------------------------------------------------------
-void
-Or1ksimSC::staticWriteUpcall( void              *instancePtr,
+int
+Or1ksimSC::staticWriteUpcall (void              *instancePtr,
 			      unsigned long int  addr,
-			      unsigned long int  mask,
-			      unsigned long int  wdata )
+			      unsigned char      mask[],
+			      unsigned char      wdata[],
+			      int                dataLen)
 {
-  Or1ksimSC *classPtr = (Or1ksimSC *)instancePtr;
-  classPtr->writeUpcall( (sc_dt::uint64)addr, (uint32_t)mask, (uint32_t)wdata );
+  Or1ksimSC *classPtr = (Or1ksimSC *) instancePtr;
+  return  classPtr->writeUpcall (addr, mask, wdata, dataLen);
 
 }	// staticWriteUpcall()
 
@@ -151,30 +153,34 @@ Or1ksimSC::staticWriteUpcall( void              *instancePtr,
 //! transactional payload for the read, then passes it to ::doTrans() (also
 //! used by ::writeUpcall()) for transport to the target.
 
-//! @param addr  The address for the read
-//! @param mask  The byte enable mask for the read
+//! @param[in]  addr         The address for the read
+//! @param[in]  mask         The byte enable mask for the read
+//! @param[out] rdata        Vector for the read data
+//! @param[in]  dataLen      The number of bytes to read
 
-//! @return  The value read
+//! @return  Zero on success. A return code otherwise.
 // ----------------------------------------------------------------------------
-uint32_t
-Or1ksimSC::readUpcall( sc_dt::uint64  addr,
-		       uint32_t       mask )
+int
+Or1ksimSC::readUpcall (unsigned long int  addr,
+		       unsigned char      mask[],
+		       unsigned char      rdata[],
+		       int                dataLen)
 {
-  uint32_t        rdata;		// For the result
-
   // Set up the payload fields. Assume everything is 4 bytes.
-  trans.set_read();
-  trans.set_address( addr );
+  trans.set_read ();
+  trans.set_address ((sc_dt::uint64) addr);
 
-  trans.set_data_length( 4 );
-  trans.set_data_ptr( (unsigned char *)&rdata );
+  trans.set_byte_enable_length ((const unsigned int) dataLen);
+  trans.set_byte_enable_ptr ((unsigned char *) mask);
 
-  trans.set_byte_enable_length( 4 );
-  trans.set_byte_enable_ptr( (unsigned char *)&mask );
+  trans.set_data_length ((const unsigned int) dataLen);
+  trans.set_data_ptr ((unsigned char *) rdata);
 
-  // Transport. Then return the result
-  doTrans( trans );
-  return  rdata;
+  // Transport.
+  doTrans (trans);
+
+  /* For now just simple non-zero return code on error */
+  return  trans.is_response_ok () ? 0 : -1;
 
 }	// readUpcall()
 
@@ -186,27 +192,34 @@ Or1ksimSC::readUpcall( sc_dt::uint64  addr,
 //! Generic transactional payload for the write, then passes it to ::doTrans()
 //! (also used by ::readUpcall()) for transport to the target.
 
-//! @param addr   The address for the write
-//! @param mask   The byte enable mask for the write
-//! @param wdata  The data to be written (matching the mask)
+//! @param[in] addr         The address for the write
+//! @param[in] mask         The byte enable mask for the write
+//! @param[in] wdata        Vector of data to write
+//! @param[in] dataLen      The number of bytes to write
+
+//! @return  Zero on success. A return code otherwise.
 // ----------------------------------------------------------------------------
-void
-Or1ksimSC::writeUpcall( sc_dt::uint64  addr,
-			uint32_t       mask,
-			uint32_t       wdata )
+int
+Or1ksimSC::writeUpcall (unsigned long int  addr,
+			unsigned char      mask[],
+			unsigned char      wdata[],
+			int                dataLen)
 {
   // Set up the payload fields. Assume everything is 4 bytes.
-  trans.set_write();
-  trans.set_address( addr );
+  trans.set_write ();
+  trans.set_address ((sc_dt::uint64) addr);
 
-  trans.set_data_length( 4 );
-  trans.set_data_ptr( (unsigned char *)&wdata );
+  trans.set_byte_enable_length ((const unsigned int) dataLen);
+  trans.set_byte_enable_ptr ((unsigned char *) mask);
 
-  trans.set_byte_enable_length( 4 );
-  trans.set_byte_enable_ptr( (unsigned char *)&mask );
+  trans.set_data_length ((const unsigned int) dataLen);
+  trans.set_data_ptr ((unsigned char *) wdata);
 
   // Transport.
   doTrans( trans );
+
+  /* For now just simple non-zero return code on error */
+  return  trans.is_response_ok () ? 0 : -1;
 
 }	// writeUpcall()
 

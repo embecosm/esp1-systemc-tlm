@@ -53,9 +53,11 @@ public:
   void  reset (sc_core::sc_time &delay);
 
   void  shiftIr (unsigned char    *jreg,
+		 int               numBits,
 		 sc_core::sc_time &delay);
 
   void  shiftDr (unsigned char    *jreg,
+		 int               numBits,
 		 sc_core::sc_time &delay);
 
   

@@ -112,7 +112,7 @@ void
 Or1ksimJtagSC::reset (sc_time &delay)
 {
   or1ksimMutex.lock ();
-
+  delay += sc_time (or1ksim_jtag_reset (), SC_SEC);
   or1ksimMutex.unlock ();
 
 }	// reset ()
@@ -123,15 +123,18 @@ Or1ksimJtagSC::reset (sc_time &delay)
 
 //! Dummy code for now. Just claims and releases the mutex.
 
-//! @param[in,out] jreg   The JTAG register to shift in and out.
-//! @param[in,out] delay  The delay so far in the transaction (in) and the
-//!                       total delay after the transaction (out).
+//! @param[in,out] jreg     The JTAG register to shift in and out.
+//! @param[in]     numBits  The number of bits in jreg
+//! @param[in,out] delay    The delay so far in the transaction (in) and the
+//!                         total delay after the transaction (out).
 // ----------------------------------------------------------------------------
 void
 Or1ksimJtagSC::shiftIr (unsigned char *jreg,
+			int            numBits,
 			sc_time       &delay)
 {
   or1ksimMutex.lock ();
+  delay += sc_time (or1ksim_jtag_shift_ir (jreg, numBits), SC_SEC);
   or1ksimMutex.unlock ();
 
 }	// shiftIr ()
@@ -142,15 +145,18 @@ Or1ksimJtagSC::shiftIr (unsigned char *jreg,
 
 //! Dummy code for now. Just claims and releases the mutex.
 
-//! @param[in,out] jreg   The JTAG register to shift in and out.
-//! @param[in,out] delay  The delay so far in the transaction (in) and the
-//!                       total delay after the transaction (out).
+//! @param[in,out] jreg     The JTAG register to shift in and out.
+//! @param[in]     numBits  The number of bits in jreg
+//! @param[in,out] delay    The delay so far in the transaction (in) and the
+//!                         total delay after the transaction (out).
 // ----------------------------------------------------------------------------
 void
 Or1ksimJtagSC::shiftDr (unsigned char *jreg,
+			int            numBits,
 			sc_time       &delay)
 {
   or1ksimMutex.lock ();
+  delay += sc_time (or1ksim_jtag_shift_dr (jreg, numBits), SC_SEC);
   or1ksimMutex.unlock ();
 
 }	// shiftDr ()

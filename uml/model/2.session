@@ -1,12 +1,10 @@
-window_sizes 1590 1146 337 1243 992 68
+window_sizes 1440 850 337 1097 708 68
 diagrams
   active  classdiagram_ref 182402 // JtagSocSC class diagram
-    1243 992 100 18 0 0
-  sequencediagram_ref 182530 // JtagSocSC debug sequence diagram
-    994 793 100 18 0 0
+    1097 708 100 18 0 0
 end
 show_stereotypes
-selected classdiagram_ref 182402 // JtagSocSC class diagram
+selected sequencediagram_ref 182530 // JtagSocSC debug sequence diagram
 open
   classview_ref 128002 // top level class view
   classview_ref 140162 // UART class view

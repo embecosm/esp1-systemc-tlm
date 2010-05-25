@@ -49,20 +49,20 @@ public:
   //! Initiator port for data accesses
   tlm_utils::simple_initiator_socket<Or1ksimSC>  dataBus;
 
-  Or1ksimSC( sc_core::sc_module_name  name,
+  Or1ksimSC (sc_core::sc_module_name  name,
 	     const char              *configFile,
-	     const char              *imageFile );
+	     const char              *imageFile);
 
 
 protected:
 
   // Thread which will run the model. This will be reimplemented in later
   // derived classes to deal with timing.
-  virtual void  run();
+  virtual void  run ();
 
   // The common thread to make the transport calls. This will be reimplemented
   // in later derived classes to deal with timing.
-  virtual void  doTrans( tlm::tlm_generic_payload &trans );
+  virtual void  doTrans (tlm::tlm_generic_payload &trans);
 
 
 private:
@@ -83,21 +83,27 @@ private:
 
   // I/O upcalls from Or1ksim, with a common synchronized transport
   // utility. These are not changed in later derived classes.
-  static unsigned long int  staticReadUpcall( void              *instancePtr,
-					      unsigned long int  addr,
-					      unsigned long int  mask );
+  static int  staticReadUpcall (void              *instancePtr,
+				unsigned long int  addr,
+				unsigned char      mask[],
+				unsigned char      rdata[],
+				int                dataLen);
 
-  static void               staticWriteUpcall( void              *instancePtr,
-					       unsigned long int  addr,
-					       unsigned long int  mask,
-					       unsigned long int  wdata );
+  static int  staticWriteUpcall (void              *instancePtr,
+				 unsigned long int  addr,
+				 unsigned char      mask[],
+				 unsigned char      wdata[],
+				 int                dataLen);
 
-  uint32_t                  readUpcall( sc_dt::uint64  addr,
-					uint32_t       mask );
+  int         readUpcall (unsigned long int  addr,
+			  unsigned char      mask[],
+			  unsigned char      rdata[],
+			  int                dataLen);
 
-  void                      writeUpcall( sc_dt::uint64  addr,
-					 uint32_t       mask,
-					 uint32_t       wdata );
+  int         writeUpcall (unsigned long int  addr,
+			   unsigned char      mask[],
+			   unsigned char      wdata[],
+			   int                dataLen);
 
 };	/* Or1ksimSC() */
 

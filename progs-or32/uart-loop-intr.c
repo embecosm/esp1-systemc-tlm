@@ -29,38 +29,39 @@
 
 #define BASEADDR   0x90000000
 #define BAUD_RATE        9600
-#define CLOCK_RATE  100000000		// 100 Mhz
+#define CLOCK_RATE  100000000		/* 100 Mhz */
 
 struct uart16450
 {
-  volatile unsigned char  buf;		// R/W: Rx & Tx buffer when DLAB=0  
-  volatile unsigned char  ier;		// R/W: Interrupt Enable Register   
-  volatile unsigned char  iir;		// R: Interrupt ID Register	    
-  volatile unsigned char  lcr;		// R/W: Line Control Register	    
-  volatile unsigned char  mcr;		// W: Modem Control Register	    
-  volatile unsigned char  lsr;		// R: Line Status Register	    
-  volatile unsigned char  msr;		// R: Modem Status Register	    
-  volatile unsigned char  scr;		// R/W: Scratch Register	    
+  volatile unsigned char  buf;		/* R/W: Rx & Tx buffer when DLAB=0 */
+  volatile unsigned char  ier;		/* R/W: Interrupt Enable Register */
+  volatile unsigned char  iir;		/* R: Interrupt ID Register */
+  volatile unsigned char  lcr;		/* R/W: Line Control Register */
+  volatile unsigned char  mcr;		/* W: Modem Control Register */
+  volatile unsigned char  lsr;		/* R: Line Status Register */
+  volatile unsigned char  msr;		/* R: Modem Status Register */
+  volatile unsigned char  scr;		/* R/W: Scratch Register */
 };
 
-#define UART_IER_ETBEI  0x02		// Enable trans holding register int.
-#define UART_IER_ERBFI  0x01		// Enable receiver data interrupt
+#define UART_IER_ETBEI  0x02		/* Enable trans holding register int. */
+#define UART_IER_ERBFI  0x01		/* Enable receiver data interrupt */
 
-#define UART_IIR_RDI    0x04		// Receiver data interrupt
-#define UART_IIR_THRE   0x02	  	// Trans holding reg empty interrupt
-#define UART_IIR_IPEND  0x01		// Interrupt pending
+#define UART_IIR_RDI    0x04		/* Receiver data interrupt */
+#define UART_IIR_THRE   0x02	  	/* Trans holding reg empty interrupt */
+#define UART_IIR_IPEND  0x01		/* Interrupt pending */
 
-#define UART_LSR_TEMT   0x40		// Transmitter serial register empty
-#define UART_LSR_THRE   0x20		// Transmitter holding register empty
-#define UART_LSR_DR     0x01		// Receiver data ready
+#define UART_LSR_TEMT   0x40		/* Transmitter serial register empty */
+#define UART_LSR_THRE   0x20		/* Transmitter holding register empty */
+#define UART_LSR_DR     0x01		/* Receiver data ready */
 
-#define UART_LCR_DLAB   0x80		// Divisor latch access bit
-#define UART_LCR_8BITS  0x03		// 8 bit data bits
+#define UART_LCR_DLAB   0x80		/* Divisor latch access bit */
+#define UART_LCR_8BITS  0x03		/* 8 bit data bits */
 
 
 #include "bitutils.c"
 
 
+int
 main()
 {
   volatile struct uart16450 *uart = (struct uart16450 *)BASEADDR;
@@ -77,7 +78,7 @@ main()
   
   set( &(uart->ier), UART_IER_ERBFI | UART_IER_ETBEI );  /* Both Intrs */
 
-  // Loop echoing characters
+  /* Loop echoing characters*/
   while( 1 ) {
     unsigned char  ch;
 
@@ -101,4 +102,7 @@ main()
       
     uart->buf = ch;
   }
-}
+
+  return  0;			/* So compiler does not barf */
+
+}	/* main () */

@@ -30,64 +30,67 @@
 
 #define BASEADDR   0x90000000
 #define BAUD_RATE        9600
-#define CLOCK_RATE  100000000		// 100 Mhz
-
+#define CLOCK_RATE  100000000	
 /*! A structure representing the UART registers */
 struct uart16450
 {
-  volatile unsigned char  buf;		// R/W: Rx & Tx buffer when DLAB=0  
-  volatile unsigned char  ier;		// R/W: Interrupt Enable Register   
-  volatile unsigned char  iir;		// R: Interrupt ID Register	    
-  volatile unsigned char  lcr;		// R/W: Line Control Register	    
-  volatile unsigned char  mcr;		// W: Modem Control Register	    
-  volatile unsigned char  lsr;		// R: Line Status Register	    
-  volatile unsigned char  msr;		// R: Modem Status Register	    
-  volatile unsigned char  scr;		// R/W: Scratch Register	    
+  volatile unsigned char  buf;		/* R/W: Rx & Tx buffer when DLAB=0 */
+  volatile unsigned char  ier;		/* R/W: Interrupt Enable Register */
+  volatile unsigned char  iir;		/* R: Interrupt ID Register */
+  volatile unsigned char  lcr;		/* R/W: Line Control Register */
+  volatile unsigned char  mcr;		/* W: Modem Control Register */
+  volatile unsigned char  lsr;		/* R: Line Status Register */
+  volatile unsigned char  msr;		/* R: Modem Status Register */
+  volatile unsigned char  scr;		/* R/W: Scratch Register */
 };
 
-#define UART_LSR_TEMT   0x40		// Transmitter serial register empty
-#define UART_LSR_THRE   0x20		// Transmitter holding register empty
-#define UART_LSR_DR     0x01		// Receiver data ready
+#define UART_LSR_TEMT   0x40		/* Transmitter serial register empty */
+#define UART_LSR_THRE   0x20		/* Transmitter holding register empty */
+#define UART_LSR_DR     0x01		/* Receiver data ready */
 
-#define UART_LCR_DLAB   0x80		// Divisor latch access bit
-#define UART_LCR_8BITS  0x03		// 8 bit data bits
+#define UART_LCR_DLAB   0x80		/* Divisor latch access bit */
+#define UART_LCR_8BITS  0x03		/* 8 bit data bits */
 
 
 #include "bitutils.c"
 
 
+int
 main()
 {
   volatile struct uart16450 *uart = (struct uart16450 *)BASEADDR;
   unsigned short int         divisor;
 
-  divisor = CLOCK_RATE/16/BAUD_RATE;		// DL is for 16x baud rate
+  divisor = CLOCK_RATE/16/BAUD_RATE;		/* DL is for 16x baud rate */
 
-  set( &(uart->lcr), UART_LCR_DLAB );		// Set the divisor latch
+  set( &(uart->lcr), UART_LCR_DLAB );		/* Set the divisor latch */
   uart->buf  = (unsigned char)( divisor       & 0x00ff);
   uart->ier  = (unsigned char)((divisor >> 8) & 0x00ff);
   clr( &(uart->lcr), UART_LCR_DLAB );
 
-  set( &(uart->lcr), UART_LCR_8BITS );		// Set 8 bit data packet
+  set( &(uart->lcr), UART_LCR_8BITS );		/* Set 8 bit data packet */
 
-  // Loop echoing characters
+  /* Loop echoing characters */
   while( 1 ) {
     unsigned char  ch;
 
-    do {			// Loop until a char is available
+    do {			/* Loop until a char is available */
       ;
     } while( is_clr(uart->lsr, UART_LSR_DR) );
 
     ch = uart->buf;
 
-    simputs( "Read: '" );	// Log what was read
+    simputs( "Read: '" );	/* Log what was read */
     simputc( ch );
     simputs( "'\n" );
 
-    do {			// Loop until the transmit register is free
+    do {			/* Loop until the transmit register is free */
       ;
     } while( is_clr( uart->lsr, UART_LSR_TEMT | UART_LSR_THRE ) );
       
     uart->buf = ch;
   }
-}
+
+  return  0;			/* So compiler does not barf */
+
+}	/* main () */

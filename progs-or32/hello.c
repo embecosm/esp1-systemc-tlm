@@ -28,9 +28,11 @@
 #include "utils.h"
 
 
+int
 main()
 {
   simputs( "Hello World\n" );
   simexit( 0 );
+  return  0;			/* So compiler does not barf */
 
-}
+}	/* main () */

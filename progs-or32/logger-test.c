@@ -38,6 +38,7 @@ struct  testdev
 };
 
 
+int
 main()
 {
   struct testdev *dev = (struct testdev *)BASEADDR;
@@ -86,8 +87,8 @@ main()
   simputh( (unsigned long int)(&(dev->fullword)) );
   simputs( "\n" );
 
-  // Terminate the simulation
-
+  /* Terminate the simulation */
   simexit( 0 );
+  return  0;			/* So compiler does not barf */
 
-}	// main()
+}	/* main() */

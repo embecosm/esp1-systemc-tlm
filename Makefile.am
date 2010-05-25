@@ -26,7 +26,8 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = sysc-models
+SUBDIRS = progs-or32  \
+	  sysc-models
 
 # Doxygen description is always regenerated.
 doxygen:
