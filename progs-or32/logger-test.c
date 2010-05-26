@@ -48,7 +48,6 @@ main()
   unsigned long int   fullwordRes;
 
   /* Write different sizes */
-
   simputs( "Writing byte 0xa5 to address 0x" );
   simputh( (unsigned long int)(&(dev->byte)) );
   simputs( "\n" );
@@ -65,7 +64,6 @@ main()
   dev->fullword = 0xdeadbeef;
 
   /* Read different sizes */
-
   byteRes = dev->byte;
   simputs( "Read byte 0x" );
   simputh(  byteRes );

@@ -31,6 +31,7 @@
 #include "Or1ksimJtagSC.h"
 #include "UartIntrSC.h"
 #include "TermSyncSC.h"
+#include "JtagLoggerSC.h"
 
 
 using std::cerr;
@@ -44,8 +45,8 @@ using std::endl;
 
 
 // ----------------------------------------------------------------------------
-//! Main program building a SoC model with temporal decoupling and interrupts
-//! that will run Linux.
+//! Main program building a SoC model with temporal decoupling, a JTAG
+//! analysis module and interrupts that will run Linux.
 
 //! Parses arguments, sets the global time quantum, instantiates the modules
 //! and connects up the ports. Then runs forever.
@@ -66,9 +67,11 @@ int  sc_main( int   argc,
   Or1ksimJtagSC    iss ("or1ksim", argv[1], argv[2]);
   UartIntrSC       uart ("uart", iss.getClockRate());
   TermSyncSC       term ("terminal", BAUD_RATE);
+  JtagLoggerSC     logger ("logger");
 
-  // Connect up the TLM ports. For now we leave the JTAG port unconnected.
+  // Connect up the TLM ports.
   iss.dataBus( uart.bus );
+  logger.jtag (iss.jtag);
 
   // Connect up the UART and terminal Tx and Rx
   uart.tx( term.rx );

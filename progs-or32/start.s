@@ -32,7 +32,7 @@
 
 	.file   "start.s"
 
-	.section	".boot-text,ax"
+	.section	.boot-text,"ax"
 	.org	0x100		# The reset routine goes at 0x100
 
 	.global _start

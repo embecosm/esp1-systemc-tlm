@@ -28,7 +28,11 @@
 #ifndef OR1KSIM_JTAG_SC__H
 #define OR1KSIM_JTAG_SC__H
 
+#include <tlm.h>
+#include <tlm_utils/simple_target_socket.h>
+
 #include "Or1ksimIntrSC.h"
+#include "JtagExtensionSC.h"
 
 
 // ----------------------------------------------------------------------------
@@ -44,23 +48,20 @@ class Or1ksimJtagSC
 {
 public:
 
+  //! A convenience typedef for the JTAG initiator port. Only done to save
+  //! typing elsewhere
+  typedef tlm_utils::simple_target_socket<Or1ksimJtagSC, 8, JtagProtocolTypes>
+    JtagTargetType;
+
+  //! Target socket for JTAG transactions
+  JtagTargetType  jtag;
+
   // Constructor
   Or1ksimJtagSC( sc_core::sc_module_name  name,
 		 const char              *configFile,
 		 const char              *imageFile );
 
-  // The JTAG transactional API
-  void  reset (sc_core::sc_time &delay);
 
-  void  shiftIr (unsigned char    *jreg,
-		 int               numBits,
-		 sc_core::sc_time &delay);
-
-  void  shiftDr (unsigned char    *jreg,
-		 int               numBits,
-		 sc_core::sc_time &delay);
-
-  
 protected:
 
   // Thread which will run the model, which adds a mutex to prevent calling
@@ -74,6 +75,23 @@ private:
   sc_core::sc_mutex  or1ksimMutex;
 
 
+  // The blocking transport routine for the JTAG port.
+  void  jtagHandler( tlm::tlm_generic_payload &payload,
+		     sc_core::sc_time         &delay );
+
+
+  // The JTAG transactional interface functions
+  void  reset (sc_core::sc_time &delay);
+
+  void  shiftIr (unsigned char    *jreg,
+		 int               numBits,
+		 sc_core::sc_time &delay);
+
+  void  shiftDr (unsigned char    *jreg,
+		 int               numBits,
+		 sc_core::sc_time &delay);
+
+  
 };	/* Or1ksimJtagSC() */
 
 

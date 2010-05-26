@@ -25,9 +25,12 @@
    --------------------------------------------------------------------------*/
 
 MEMORY
-        {
-        ram : ORIGIN = 0x00000000, LENGTH = 0x00200000
-        }
+{
+	ram : ORIGIN = 0x00000000, LENGTH = 0x00200000
+}
+
+/* Force _start to be linked in from the library */
+EXTERN(_start)
 
 SECTIONS
 {
@@ -38,8 +41,20 @@ SECTIONS
 	*(.boot-text)
         *(.text)
         *(.rodata)
+        } > ram
+
+	.data :
+	{
 	*(.data)
+        } > ram
+
+	.bss :
+	{
 	*(.bss)
+        } > ram
+
+	.stack ALIGN (0x10) (NOLOAD) :
+	{
         *(.stack)
         } > ram
 }

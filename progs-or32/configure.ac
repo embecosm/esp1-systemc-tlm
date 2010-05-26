@@ -31,13 +31,6 @@
 AC_INIT([embecosm-eps1-sysc-tlm2.0-or32-progs], [2.0], [jeremy.bennett@embecosm.com])
 AC_CONFIG_MACRO_DIR([m4])
 
-# Generically use extensions such as _GNU_SOURCE if available.
-AC_USE_SYSTEM_EXTENSIONS
-
-# Separate config file for the OpenRISC test programs, since they'll need to
-# use the cross compiling tool chain, rather than the native tools chain.
-AC_CONFIG_SUBDIRS([progs-or32])
-
 AC_PROG_LIBTOOL
 AM_INIT_AUTOMAKE
 
@@ -52,12 +45,15 @@ AC_PREREQ(2.63)
 # Sort out the tools. Using the target tool chain here, not native. Note that
 # AC_CHECK_PROGS will not override an already set variable, so we must
 # explicitly unset them first.
+unset AR
 unset CC
 unset RANLIB
 unset LD
+AC_CHECK_PROGS(AR, [$target_alias-ar])
 AC_CHECK_PROGS(CC, [$target_alias-gcc])
 AC_CHECK_PROGS(RANLIB, [$target_alias-ranlib])
 AC_CHECK_PROGS(LD, [$target_alias-ld])
+AC_SUBST(AR)
 AC_SUBST(CC)
 AC_SUBST(RANLIB)
 AC_SUBST(LD)
@@ -70,7 +66,7 @@ AM_PROG_CC_C_O
 AC_PROG_INSTALL
 
 # Specify our baseline CFLAGS
-CPPFLAGS="-I\${top_srcdir}/support -I\${top_srcdir}/mc-common"
+CPPFLAGS=""
 CFLAGS="-Wall -Werror -g -nostdlib -mhard-div -mhard-mul"
 
 AC_SUBST(CPPFLAGS)

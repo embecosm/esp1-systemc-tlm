@@ -84,48 +84,36 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
-am__install_max = 40
-am__nobase_strip_setup = \
-  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
-am__nobase_strip = \
-  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
-am__nobase_list = $(am__nobase_strip_setup); \
-  for p in $$list; do echo "$$p $$p"; done | \
-  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
-  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
-    if (++n[$$2] == $(am__install_max)) \
-      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
-    END { for (dir in files) print dir, files[dir] }'
-am__base_list = \
-  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
-  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)"
-LTLIBRARIES = $(lib_LTLIBRARIES)
+LTLIBRARIES = $(noinst_LTLIBRARIES)
 libboot_la_LIBADD =
-am_libboot_la_OBJECTS = start.lo utils.lo
+am_libboot_la_OBJECTS = bitutils.lo start.lo utils.lo
 libboot_la_OBJECTS = $(am_libboot_la_OBJECTS)
+am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_hello_OBJECTS = hello.$(OBJEXT)
 hello_OBJECTS = $(am_hello_OBJECTS)
-hello_DEPENDENCIES = libboot.la
+hello_DEPENDENCIES = ./libboot.la
 hello_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(hello_LDFLAGS) \
 	$(LDFLAGS) -o $@
-logger_test_SOURCES = logger-test.c
-logger_test_OBJECTS = logger-test.$(OBJEXT)
-logger_test_LDADD = $(LDADD)
-uart_loop_SOURCES = uart-loop.c
-uart_loop_OBJECTS = uart-loop.$(OBJEXT)
-uart_loop_LDADD = $(LDADD)
-uart_loop_intr_SOURCES = uart-loop-intr.c
-uart_loop_intr_OBJECTS = uart-loop-intr.$(OBJEXT)
-uart_loop_intr_LDADD = $(LDADD)
+am_logger_test_OBJECTS = logger-test.$(OBJEXT)
+logger_test_OBJECTS = $(am_logger_test_OBJECTS)
+logger_test_DEPENDENCIES = ./libboot.la
+logger_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(logger_test_LDFLAGS) $(LDFLAGS) -o $@
+am_uart_loop_OBJECTS = uart-loop.$(OBJEXT)
+uart_loop_OBJECTS = $(am_uart_loop_OBJECTS)
+uart_loop_DEPENDENCIES = ./libboot.la
+uart_loop_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(uart_loop_LDFLAGS) $(LDFLAGS) -o $@
+am_uart_loop_intr_OBJECTS = uart-loop-intr.$(OBJEXT)
+uart_loop_intr_OBJECTS = $(am_uart_loop_intr_OBJECTS)
+uart_loop_intr_DEPENDENCIES = ./libboot.la
+uart_loop_intr_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(uart_loop_intr_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -142,10 +130,12 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
 LTCCASCOMPILE = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=compile $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
-SOURCES = $(libboot_la_SOURCES) $(hello_SOURCES) logger-test.c \
-	uart-loop.c uart-loop-intr.c
-DIST_SOURCES = $(libboot_la_SOURCES) $(hello_SOURCES) logger-test.c \
-	uart-loop.c uart-loop-intr.c
+SOURCES = $(libboot_la_SOURCES) $(hello_SOURCES) \
+	$(logger_test_SOURCES) $(uart_loop_SOURCES) \
+	$(uart_loop_intr_SOURCES)
+DIST_SOURCES = $(libboot_la_SOURCES) $(hello_SOURCES) \
+	$(logger_test_SOURCES) $(uart_loop_SOURCES) \
+	$(uart_loop_intr_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -212,7 +202,6 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
-PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
@@ -268,17 +257,17 @@ psdir = @psdir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
-subdirs = @subdirs@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
-lib_LTLIBRARIES = libboot.la
+noinst_LTLIBRARIES = libboot.la
 
 # The boot up library
-libboot_la_SOURCES = start.s \
+libboot_la_SOURCES = bitutils.c \
+		     start.s    \
 		     utils.c
 
 
@@ -286,8 +275,29 @@ libboot_la_SOURCES = start.s \
 hello_SOURCES = hello.c \
 	        utils.h
 
-hello_LDADD = libboot.la
-hello_LDFLAGS = -Tdefault.ld
+hello_LDADD = ./libboot.la
+hello_LDFLAGS = -T$(srcdir)/default.ld
+
+# Generic I/O program
+logger_test_SOURCES = logger-test.c \
+	 	      utils.h
+
+logger_test_LDADD = ./libboot.la
+logger_test_LDFLAGS = -T$(srcdir)/default.ld
+
+# UART loop test
+uart_loop_SOURCES = uart-loop.c \
+		    utils.h
+
+uart_loop_LDADD = ./libboot.la
+uart_loop_LDFLAGS = -T$(srcdir)/default.ld
+
+# UART loop test with interrupts
+uart_loop_intr_SOURCES = uart-loop-intr.c \
+		    	 utils.h
+
+uart_loop_intr_LDADD = ./libboot.la
+uart_loop_intr_LDFLAGS = -T$(srcdir)/default.ld
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -344,39 +354,17 @@ $(srcdir)/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f config.h stamp-h1
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
-	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
-	list2=; for p in $$list; do \
-	  if test -f $$p; then \
-	    list2="$$list2 $$p"; \
-	  else :; fi; \
-	done; \
-	test -z "$$list2" || { \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libdir)'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libdir)"; \
-	}
 
-uninstall-libLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
-	for p in $$list; do \
-	  $(am__strip_dir) \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$f'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$f"; \
-	done
-
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
 	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
 	  test "$$dir" != "$$p" || dir=.; \
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
 libboot.la: $(libboot_la_OBJECTS) $(libboot_la_DEPENDENCIES) 
-	$(LINK) -rpath $(libdir) $(libboot_la_OBJECTS) $(libboot_la_LIBADD) $(LIBS)
+	$(LINK)  $(libboot_la_OBJECTS) $(libboot_la_LIBADD) $(LIBS)
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
@@ -420,6 +408,18 @@ clean-binPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
+hello$(EXEEXT): $(hello_OBJECTS) $(hello_DEPENDENCIES) 
+	@rm -f hello$(EXEEXT)
+	$(hello_LINK) $(hello_OBJECTS) $(hello_LDADD) $(LIBS)
+logger-test$(EXEEXT): $(logger_test_OBJECTS) $(logger_test_DEPENDENCIES) 
+	@rm -f logger-test$(EXEEXT)
+	$(logger_test_LINK) $(logger_test_OBJECTS) $(logger_test_LDADD) $(LIBS)
+uart-loop$(EXEEXT): $(uart_loop_OBJECTS) $(uart_loop_DEPENDENCIES) 
+	@rm -f uart-loop$(EXEEXT)
+	$(uart_loop_LINK) $(uart_loop_OBJECTS) $(uart_loop_LDADD) $(LIBS)
+uart-loop-intr$(EXEEXT): $(uart_loop_intr_OBJECTS) $(uart_loop_intr_DEPENDENCIES) 
+	@rm -f uart-loop-intr$(EXEEXT)
+	$(uart_loop_intr_LINK) $(uart_loop_intr_OBJECTS) $(uart_loop_intr_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -427,6 +427,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitutils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hello.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/logger-test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/uart-loop-intr.Po@am__quote@
@@ -674,10 +675,8 @@ distcleancheck: distclean
 check-am: all-am
 check: check-am
 all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) config.h
-install-binPROGRAMS: install-libLTLIBRARIES
-
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)"; do \
+	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -707,8 +706,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
-	clean-libtool clean-local mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool clean-local \
+	clean-noinstLTLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
@@ -735,7 +734,7 @@ install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-binPROGRAMS install-libLTLIBRARIES
+install-exec-am: install-binPROGRAMS
 
 install-html: install-html-am
 
@@ -777,13 +776,13 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-libLTLIBRARIES
+uninstall-am: uninstall-binPROGRAMS
 
 .MAKE: all install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am am--refresh check check-am clean \
-	clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
-	clean-libtool clean-local ctags dist dist-all dist-bzip2 \
+	clean-binPROGRAMS clean-generic clean-libtool clean-local \
+	clean-noinstLTLIBRARIES ctags dist dist-all dist-bzip2 \
 	dist-gzip dist-lzma dist-shar dist-tarZ dist-xz dist-zip \
 	distcheck distclean distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags distcleancheck \
@@ -791,68 +790,13 @@ uninstall-am: uninstall-binPROGRAMS uninstall-libLTLIBRARIES
 	info-am install install-am install-binPROGRAMS install-data \
 	install-data-am install-dvi install-dvi-am install-exec \
 	install-exec-am install-html install-html-am install-info \
-	install-info-am install-libLTLIBRARIES install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	install-info-am install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-binPROGRAMS \
-	uninstall-libLTLIBRARIES
+	tags uninstall uninstall-am uninstall-binPROGRAMS
 
-
-# ----------------------------------------------------------------------------
-# Make the lot
-
-.PHONY: all
-all: hello logger-test uart-loop uart-loop-intr
-
-# ----------------------------------------------------------------------------
-# Bootloader - puts code at 0x100
-
-start.o: start.s
-	$(CC) $(CFLAGS) -c $<
-
-# ----------------------------------------------------------------------------
-# Utilities
-
-utils.o: utils.c
-	$(CC) $(CFLAGS) -c $<
-
-# ----------------------------------------------------------------------------
-# Hello world. Ensure start.o is first!
-
-hello: start.o utils.o hello.o 
-	$(LD) -Ttext 0x0 $^ -o $@
-
-hello.o: hello.c
-	$(CC) $(CFLAGS) -c $<
-
-# ----------------------------------------------------------------------------
-# Generic I/O. Ensure start.o is first!
-
-logger-test: start.o utils.o logger-test.o 
-	$(LD) -Ttext 0x0 $^ -o $@
-
-logger-test.o: logger-test.c
-	$(CC) $(CFLAGS) -c $<
-
-# ----------------------------------------------------------------------------
-# UART loop test. Ensure start.o is first!
-
-uart-loop: start.o utils.o uart-loop.o 
-	$(LD) -Ttext 0x0 $^ -o $@
-
-uart-loop.o: uart-loop.c
-	$(CC) $(CFLAGS) -c $<
-
-# ----------------------------------------------------------------------------
-# UART loop test with interrupts. Ensure start.o is first!
-
-uart-loop-intr: start.o utils.o uart-loop-intr.o 
-	$(LD) -Ttext 0x0 $^ -o $@
-
-uart-loop-intr.o: uart-loop-intr.c
-	$(CC) $(CFLAGS) -c $<
 
 # Doxygen description is always regenerated.
 doxygen:

@@ -31,82 +31,44 @@ bin_PROGRAMS = hello          \
 	       uart-loop      \
 	       uart-loop-intr
 
-lib_LTLIBRARIES = libboot.la
+noinst_LTLIBRARIES = libboot.la
 
 # The boot up library
-libboot_la_SOURCES = start.s \
+libboot_la_SOURCES = bitutils.c \
+		     start.s    \
 		     utils.c
 
 # Hello world program
 hello_SOURCES = hello.c \
 	        utils.h
 
-hello_LDADD   = libboot.la
+hello_LDADD   = ./libboot.la
 
-hello_LDFLAGS = -Tdefault.ld
+hello_LDFLAGS = -T$(srcdir)/default.ld
 
-# ----------------------------------------------------------------------------
-# Make the lot
+# Generic I/O program
+logger_test_SOURCES = logger-test.c \
+	 	      utils.h
 
-.PHONY: all
-all: hello logger-test uart-loop uart-loop-intr
+logger_test_LDADD   = ./libboot.la
 
+logger_test_LDFLAGS = -T$(srcdir)/default.ld
 
-# ----------------------------------------------------------------------------
-# Bootloader - puts code at 0x100
+# UART loop test
+uart_loop_SOURCES = uart-loop.c \
+		    utils.h
 
-start.o: start.s
-	$(CC) $(CFLAGS) -c $<
+uart_loop_LDADD   = ./libboot.la
 
+uart_loop_LDFLAGS = -T$(srcdir)/default.ld
 
-# ----------------------------------------------------------------------------
-# Utilities
+# UART loop test with interrupts
+uart_loop_intr_SOURCES = uart-loop-intr.c \
+		    	 utils.h
 
-utils.o: utils.c
-	$(CC) $(CFLAGS) -c $<
+uart_loop_intr_LDADD   = ./libboot.la
 
-
-# ----------------------------------------------------------------------------
-# Hello world. Ensure start.o is first!
-
-hello: start.o utils.o hello.o 
-	$(LD) -Ttext 0x0 $^ -o $@
-
-hello.o: hello.c
-	$(CC) $(CFLAGS) -c $<
-
-
-# ----------------------------------------------------------------------------
-# Generic I/O. Ensure start.o is first!
-
-logger-test: start.o utils.o logger-test.o 
-	$(LD) -Ttext 0x0 $^ -o $@
-
-logger-test.o: logger-test.c
-	$(CC) $(CFLAGS) -c $<
-
-
-# ----------------------------------------------------------------------------
-# UART loop test. Ensure start.o is first!
-
-uart-loop: start.o utils.o uart-loop.o 
-	$(LD) -Ttext 0x0 $^ -o $@
-
-uart-loop.o: uart-loop.c
-	$(CC) $(CFLAGS) -c $<
-
-
-# ----------------------------------------------------------------------------
-# UART loop test with interrupts. Ensure start.o is first!
-
-uart-loop-intr: start.o utils.o uart-loop-intr.o 
-	$(LD) -Ttext 0x0 $^ -o $@
-
-uart-loop-intr.o: uart-loop-intr.c
-	$(CC) $(CFLAGS) -c $<
-
-
-
+uart_loop_intr_LDFLAGS = -T$(srcdir)/default.ld
 
 # Doxygen description is always regenerated.
 doxygen:

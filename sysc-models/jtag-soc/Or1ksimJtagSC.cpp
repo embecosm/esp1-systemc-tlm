@@ -32,6 +32,9 @@ using sc_core::SC_SEC;
 using sc_core::sc_module_name;
 using sc_core::sc_time;
 
+using std::cerr;
+using std::endl;
+
 
 // ----------------------------------------------------------------------------
 //! Custom constructor for the Or1ksimJtagSC SystemC module
@@ -40,8 +43,8 @@ using sc_core::sc_time;
 //! declared here. Since we are (for JTAG) a TLM target, it will be the thread
 //! of the initiator socket.
 
-//! In this version we are not a true TLM 2.0 socket. Instead we offer three
-//! transactional interfaces, ::shiftIr, ::shiftDr and ::reset ().
+//! The JTAG interface is implemented as an 8-bit wide TLM target port with an
+//! extension to specify the number of bits.
 
 //! We must initialize the Mutex to be unlocked.
 
@@ -54,6 +57,9 @@ Or1ksimJtagSC::Or1ksimJtagSC (sc_module_name  name,
 			      const char     *imageFile) :
   Or1ksimIntrSC (name, configFile, imageFile)
 {
+  // Bind the handler to the JTAG target port.
+  jtag.register_b_transport( this, &Or1ksimJtagSC::jtagHandler );
+
   // Unlock the Mutex
   or1ksimMutex.unlock ();
 
@@ -100,66 +106,59 @@ Or1ksimJtagSC::run ()
 }	// Or1ksimSC ()
 
 
-// ----------------------------------------------------------------------------
-//! Transaction to request reset of the JTAG interface.
+//-----------------------------------------------------------------------------
+//! Handler for a new JTAG transaction
 
-//! Dummy code for now. Just claims and releases the mutex.
+//! Call the underlying 
 
-//! @param[in,out] delay  The delay so far in the transaction (in) and the
-//!                       total delay after the transaction (out).
-// ----------------------------------------------------------------------------
+//! @param[in,out] payload  The generic payload (with mandatory JTAG extensions)
+//! @param[in,out] delay    The incoming delay and on return the total delay
+//!                         for this thread.
+//-----------------------------------------------------------------------------
 void
-Or1ksimJtagSC::reset (sc_time &delay)
+Or1ksimJtagSC::jtagHandler( tlm::tlm_generic_payload &payload,
+			    sc_core::sc_time         &delay )
 {
-  or1ksimMutex.lock ();
-  delay += sc_time (or1ksim_jtag_reset (), SC_SEC);
-  or1ksimMutex.unlock ();
+  // Retrieve the extension.
+  JtagExtensionSC *ext;
+  payload.get_extension (ext);
 
-}	// reset ()
+  // Check the extension exists
+  if (NULL == ext)
+    {
+      payload.set_response_status (tlm::TLM_GENERIC_ERROR_RESPONSE);
+      return;
+    }
 
+  // Behavior depends on the type
+  switch (ext->getType ())
+    {
+    case JtagExtensionSC::RESET:
+      or1ksimMutex.lock ();
+      delay += sc_time (or1ksim_jtag_reset (), SC_SEC);
+      or1ksimMutex.unlock ();
+      payload.set_response_status (tlm::TLM_OK_RESPONSE);
+      return;
 
-// ----------------------------------------------------------------------------
-//! Transaction to shift a register through the JTAG instruction register
+    case JtagExtensionSC::SHIFT_IR:
+      or1ksimMutex.lock ();
+      delay += sc_time (or1ksim_jtag_shift_ir (payload.get_data_ptr (),
+					       ext->getBitSize ()), SC_SEC);
+      or1ksimMutex.unlock ();
+      payload.set_response_status (tlm::TLM_OK_RESPONSE);
+      return;
 
-//! Dummy code for now. Just claims and releases the mutex.
+    case JtagExtensionSC::SHIFT_DR:
+      or1ksimMutex.lock ();
+      delay += sc_time (or1ksim_jtag_shift_dr (payload.get_data_ptr (),
+					       ext->getBitSize ()), SC_SEC);
+      or1ksimMutex.unlock ();
+      payload.set_response_status (tlm::TLM_OK_RESPONSE);
+      return;
 
-//! @param[in,out] jreg     The JTAG register to shift in and out.
-//! @param[in]     numBits  The number of bits in jreg
-//! @param[in,out] delay    The delay so far in the transaction (in) and the
-//!                         total delay after the transaction (out).
-// ----------------------------------------------------------------------------
-void
-Or1ksimJtagSC::shiftIr (unsigned char *jreg,
-			int            numBits,
-			sc_time       &delay)
-{
-  or1ksimMutex.lock ();
-  delay += sc_time (or1ksim_jtag_shift_ir (jreg, numBits), SC_SEC);
-  or1ksimMutex.unlock ();
-
-}	// shiftIr ()
-
-
-// ----------------------------------------------------------------------------
-//! Transaction to shift a register through the JTAG data register
-
-//! Dummy code for now. Just claims and releases the mutex.
-
-//! @param[in,out] jreg     The JTAG register to shift in and out.
-//! @param[in]     numBits  The number of bits in jreg
-//! @param[in,out] delay    The delay so far in the transaction (in) and the
-//!                         total delay after the transaction (out).
-// ----------------------------------------------------------------------------
-void
-Or1ksimJtagSC::shiftDr (unsigned char *jreg,
-			int            numBits,
-			sc_time       &delay)
-{
-  or1ksimMutex.lock ();
-  delay += sc_time (or1ksim_jtag_shift_dr (jreg, numBits), SC_SEC);
-  or1ksimMutex.unlock ();
-
-}	// shiftDr ()
-
-
-// EOF
+    default:
+      cerr << "ERROR: Unrecognized JTAG transaction type." << endl;
+      payload.set_response_status (tlm::TLM_GENERIC_ERROR_RESPONSE);
+      return;
+    }
+}	/* jtagHandler () */

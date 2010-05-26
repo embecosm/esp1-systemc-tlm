@@ -27,13 +27,18 @@
 # Build a complete program and a library for subsequent programs
 bin_PROGRAMS              = jtag-soc
 noinst_LTLIBRARIES        = libjtag-soc.la
-include_HEADERS           = Or1ksimJtagSC.h
+include_HEADERS           = JtagExtensionSC.h \
+			    Or1ksimJtagSC.h
 
 # Sources for the program. We set the CXX flags as a workaround for name
 # clashing between program and library. It is a no-op effectively. See the
 # automake manual for an explanation.
-jtag_soc_SOURCES        = jtagSocMainSC.cpp \
-		          Or1ksimJtagSC.cpp \
+jtag_soc_SOURCES        = jtagSocMainSC.cpp   \
+			  JtagExtensionSC.cpp \
+			  JtagExtensionSC.h   \
+			  JtagLoggerSC.h      \
+			  JtagLoggerSC.cpp    \
+		          Or1ksimJtagSC.cpp   \
 		          Or1ksimJtagSC.h
 
 jtag_soc_LDADD          = ../intr-soc/libintr-soc.la
@@ -47,7 +52,9 @@ jtag_soc_CPPFLAGS       = -I$(srcdir)/../logger     \
 jtag_soc_CXXFLAGS       = $(AM_CXXFLAGS)
 
 # Sources for the library
-libjtag_soc_la_SOURCES  = Or1ksimJtagSC.cpp \
+libjtag_soc_la_SOURCES  = JtagExtensionSC.cpp \
+			  JtagExtensionSC.h   \
+			  Or1ksimJtagSC.cpp   \
 		          Or1ksimJtagSC.h
 
 libjtag_soc_la_LIBADD   = ../intr-soc/libintr-soc.la

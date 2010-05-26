@@ -148,7 +148,7 @@ AC_CHECK_TYPES([uint8_t, uint16_t, uint32_t, uint64_t], , \
 	       [#include <inttypes.h>])
 
 # Add extra warnings
-CXXFLAGS="$CXXFLAGS -Wall -Werror"
+CXXFLAGS="$CXXFLAGS -Wall -Werror -O0 -ggdb"
 
 # Explicitly substitute the variables we have changed
 AC_SUBST(CPPFLAGS)

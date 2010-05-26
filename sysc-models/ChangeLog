@@ -1,4 +1,16 @@
 2010-05-24  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+	* jtag-soc/JtagExtensionSC.cpp: Created.
+	* jtag-soc/JtagExtensionSC.h: Created.
+	* jtag-soc/JtagLoggerSC.cpp: Created.
+	* jtag-soc/JtagLoggerSC.h: Created.
+	* jtag-soc/jtagSoCMainSC.cpp (sc_main): Added instantiation and
+	connection of JtagLoggerSC.
+	* jtag-soc/Or1ksimJtagSC.h: Added target port for JTAG. Member
+	functions added/removed to match Or1ksimJtagSC.cpp
+	* jtag-soc/Or1ksimJtagSC.cpp (Or1ksimJtagSC): Register JTAG target
+	port handler.
+	(jtagHandler). New function.
+	(reset, shiftIr, shiftDr). Functions deleted.
 	* logger/Or1ksimSC.cpp (staticReadUpall): Args changed to match new
 	Or1ksim.
 	(staticWriteUpcall): Args changed to match new Or1ksim.
