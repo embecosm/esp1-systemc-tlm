@@ -73,22 +73,22 @@ private:
 
   // Support methods to handle different types of JTAG instructions recognized
   // by Or1ksim.
-  void  jtagReset (sc_core::sc_time  delay);
+  void  jtagReset (sc_core::sc_time &delay);
 
-  void  jtagInstruction (unsigned char           inst,
-			 sc_core::sc_time        delay);
+  void  jtagInstruction (unsigned char     inst,
+			 sc_core::sc_time &delay);
 
-  void  jtagSelectModule (unsigned char           moduleId,
-			  sc_core::sc_time        delay);
+  void  jtagSelectModule (unsigned char     moduleId,
+			  sc_core::sc_time &delay);
 
-  void  jtagWriteCommand (unsigned char               accessType,
-			  unsigned long int           addr,
-			  unsigned long int           numBytes,
-			  sc_core::sc_time            delay);
+  void  jtagWriteCommand (unsigned char      accessType,
+			  unsigned long int  addr,
+			  unsigned long int  numBytes,
+			  sc_core::sc_time  &delay);
 
-  void  jtagGoCommandRead (unsigned char               data[],
-			   unsigned long int           dataBytes,
-			   sc_core::sc_time            delay);
+  void  jtagGoCommandRead (unsigned char      data[],
+			   unsigned long int  dataBytes,
+			   sc_core::sc_time  &delay);
 
   // Utilities
   unsigned long int   crc32 (unsigned long long int  value,

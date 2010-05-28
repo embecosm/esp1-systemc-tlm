@@ -315,7 +315,7 @@ AC_CACHE_CHECK([whether deplibs are loaded by dlopen],
   freebsd* | dragonfly*)
     lt_cv_sys_dlopen_deplibs=yes
     ;;
-  gnu* | linux* | k*bsd*-gnu)
+  gnu* | linux* | k*bsd*-gnu | kopensolaris*-gnu)
     # GNU and its variants, using gnu ld.so (Glibc)
     lt_cv_sys_dlopen_deplibs=yes
     ;;
@@ -335,7 +335,7 @@ AC_CACHE_CHECK([whether deplibs are loaded by dlopen],
     # at 6.2 and later dlopen does load deplibs.
     lt_cv_sys_dlopen_deplibs=yes
     ;;
-  netbsd*)
+  netbsd* | netbsdelf*-gnu)
     lt_cv_sys_dlopen_deplibs=yes
     ;;
   openbsd*)
@@ -2094,6 +2094,7 @@ m4trace:configure.ac:29: -1- m4_pattern_allow([^PACKAGE_TARNAME$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^PACKAGE_VERSION$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^PACKAGE_STRING$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^PACKAGE_BUGREPORT$])
+m4trace:configure.ac:29: -1- m4_pattern_allow([^PACKAGE_URL$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^exec_prefix$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^prefix$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^program_transform_name$])
@@ -2121,6 +2122,7 @@ m4trace:configure.ac:29: -1- m4_pattern_allow([^PACKAGE_TARNAME$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^PACKAGE_VERSION$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^PACKAGE_STRING$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^PACKAGE_BUGREPORT$])
+m4trace:configure.ac:29: -1- m4_pattern_allow([^PACKAGE_URL$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^DEFS$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^ECHO_C$])
 m4trace:configure.ac:29: -1- m4_pattern_allow([^ECHO_N$])
@@ -2169,10 +2171,6 @@ m4trace:configure.ac:39: -1- m4_pattern_allow([^target$])
 m4trace:configure.ac:39: -1- m4_pattern_allow([^target_cpu$])
 m4trace:configure.ac:39: -1- m4_pattern_allow([^target_vendor$])
 m4trace:configure.ac:39: -1- m4_pattern_allow([^target_os$])
-m4trace:configure.ac:40: -1- m4_pattern_allow([^host$])
-m4trace:configure.ac:40: -1- m4_pattern_allow([^host_cpu$])
-m4trace:configure.ac:40: -1- m4_pattern_allow([^host_vendor$])
-m4trace:configure.ac:40: -1- m4_pattern_allow([^host_os$])
 m4trace:configure.ac:41: -1- AC_PROG_LIBTOOL
 m4trace:configure.ac:41: -1- _m4_warn([obsolete], [The macro `AC_PROG_LIBTOOL' is obsolete.
 You should run autoupdate.], [m4/libtool.m4:102: AC_PROG_LIBTOOL is expanded from...
@@ -2225,11 +2223,12 @@ m4trace:configure.ac:41: -1- m4_pattern_allow([^LIPO$])
 m4trace:configure.ac:41: -1- m4_pattern_allow([^OTOOL$])
 m4trace:configure.ac:41: -1- m4_pattern_allow([^OTOOL64$])
 m4trace:configure.ac:41: -1- LT_SYS_DLOPEN_SELF
+m4trace:configure.ac:41: -1- m4_pattern_allow([^HAVE_DLFCN_H$])
 m4trace:configure.ac:42: -1- AM_INIT_AUTOMAKE
 m4trace:configure.ac:42: -1- m4_pattern_allow([^AM_[A-Z]+FLAGS$])
 m4trace:configure.ac:42: -1- AM_SET_CURRENT_AUTOMAKE_VERSION
 m4trace:configure.ac:42: -1- AM_AUTOMAKE_VERSION([1.11.1])
-m4trace:configure.ac:42: -1- _AM_AUTOCONF_VERSION([2.63])
+m4trace:configure.ac:42: -1- _AM_AUTOCONF_VERSION([2.65])
 m4trace:configure.ac:42: -1- m4_pattern_allow([^INSTALL_PROGRAM$])
 m4trace:configure.ac:42: -1- m4_pattern_allow([^INSTALL_SCRIPT$])
 m4trace:configure.ac:42: -1- m4_pattern_allow([^INSTALL_DATA$])
@@ -2367,10 +2366,10 @@ m4trace:configure.ac:56: -1- m4_pattern_allow([^am__fastdepCXX_TRUE$])
 m4trace:configure.ac:56: -1- m4_pattern_allow([^am__fastdepCXX_FALSE$])
 m4trace:configure.ac:56: -1- _AM_SUBST_NOTMAKE([am__fastdepCXX_TRUE])
 m4trace:configure.ac:56: -1- _AM_SUBST_NOTMAKE([am__fastdepCXX_FALSE])
-m4trace:configure.ac:57: -1- m4_pattern_allow([^INSTALL_PROGRAM$])
-m4trace:configure.ac:57: -1- m4_pattern_allow([^INSTALL_SCRIPT$])
-m4trace:configure.ac:57: -1- m4_pattern_allow([^INSTALL_DATA$])
 m4trace:configure.ac:60: -1- m4_pattern_allow([^_GNU_SOURCE$])
+m4trace:configure.ac:132: -1- m4_pattern_allow([^HAVE_SYSTEMC$])
+m4trace:configure.ac:134: -1- m4_pattern_allow([^HAVE_TLM_H$])
+m4trace:configure.ac:143: -1- m4_pattern_allow([^HAVE_OR1KSIM_H$])
 m4trace:configure.ac:146: -1- m4_pattern_allow([^HAVE_UINT8_T$])
 m4trace:configure.ac:146: -1- m4_pattern_allow([^HAVE_UINT16_T$])
 m4trace:configure.ac:146: -1- m4_pattern_allow([^HAVE_UINT32_T$])

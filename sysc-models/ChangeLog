@@ -1,3 +1,11 @@
+2010-05-27  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+	* jtag-soc/JtagLoggerSC.cpp (runJtag): Increase delay to 1000ms.
+	(jtagReset): Make delay pass by reference.
+	(jtagInstruction): Make delay pass by reference.
+	(jtagSelectModule): Make delay pass by reference.
+	(jtagWriteCommmand): Make delay pass by reference.
+	(jtagGoCommmandRead): Make delay pass by reference.
+
 2010-05-24  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 	* jtag-soc/JtagExtensionSC.cpp: Created.
 	* jtag-soc/JtagExtensionSC.h: Created.

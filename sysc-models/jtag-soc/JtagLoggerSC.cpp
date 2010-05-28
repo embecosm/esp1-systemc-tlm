@@ -136,7 +136,7 @@ JtagLoggerSC::runJtag ()
       cout << "GO_COMMAND after " << delay << "." << endl;
       cout << "- NPC = 0x" << hex << (int) res[3] << (int) res[2]
 	   << (int) res[1] << (int) res[0] << dec << "." << endl;
-      wait (sc_time (1.0, SC_MS));
+      wait (sc_time (1000.0, SC_MS));
     }
 }	// runJtag ()
 
@@ -150,7 +150,7 @@ JtagLoggerSC::runJtag ()
 //! @param[in,out] delay  The delay before and after the reset.
 //-----------------------------------------------------------------------------
 void
-JtagLoggerSC::jtagReset (sc_time  delay)
+JtagLoggerSC::jtagReset (sc_time &delay)
 {
   // Set up field in the extension and shift it
   ext->setType (JtagExtensionSC::RESET);
@@ -179,7 +179,7 @@ JtagLoggerSC::jtagReset (sc_time  delay)
 //-----------------------------------------------------------------------------
 void
 JtagLoggerSC::jtagInstruction (unsigned char  inst,
-			       sc_time        delay)
+			       sc_time       &delay)
 {
   // Allocate space and then populate with the reversed bits of the
   // instruction.
@@ -219,7 +219,7 @@ JtagLoggerSC::jtagInstruction (unsigned char  inst,
 //-----------------------------------------------------------------------------
 void
 JtagLoggerSC::jtagSelectModule (unsigned char  moduleId,
-				sc_time        delay)
+				sc_time       &delay)
 {
   // Compute the CRC
   unsigned long int  crcIn;
@@ -322,7 +322,7 @@ void
 JtagLoggerSC::jtagWriteCommand (unsigned char      accessType,
 				unsigned long int  addr,
 				unsigned long int  dataBytes,
-				sc_time            delay)
+				sc_time           &delay)
 {
   // Length field is one less than the number of bytes (since zero is not a
   // valid length)
@@ -457,7 +457,7 @@ JtagLoggerSC::jtagWriteCommand (unsigned char      accessType,
 void
 JtagLoggerSC::jtagGoCommandRead (unsigned char      data[],
 				 unsigned long int  dataBytes,
-				 sc_time            delay)
+				 sc_time           &delay)
 {
   // Compute the CRC
   unsigned long int  cmd = 0;		// GO_COMMAND

@@ -1,28 +1,5 @@
-window_sizes 1600 1151 337 1253 997 68
-diagrams
-  active  classdiagram_ref 182402 // JtagSocSC class diagram
-    1253 997 100 18 0 0
-end
+window_sizes 1350 787 337 1007 593 120
 show_stereotypes
-selected classdiagram_ref 129154 // Or1ksim class diagram
-open
-  usecaseview_ref 134530 // top level use case view
-  classview_ref 128002 // top level class view
-  attribute_ref 194562 // type
-  attribute_ref 194690 // bitSize
-  attribute_ref 194818 // debugEnabled
-  operation_ref 238210 // clone
-  operation_ref 238338 // copy_from
-  operation_ref 237698 // getType
-  operation_ref 237826 // setType
-  operation_ref 237954 // getBitSize
-  operation_ref 238082 // setBitSize
-  operation_ref 238466 // getDebugEnabled
-  operation_ref 238594 // setDebugEnabled
-  classrelation_ref 227842 // <generalisation>
-  classview_ref 140162 // UART class view
-  classview_ref 146818 // Terminal class view
-  classview_ref 129154 // TLM 2.0 class view
-  classview_ref 133378 // SystemC IEEE 1666 class view
-end
+selected 
+package_ref 129 // model
 end
