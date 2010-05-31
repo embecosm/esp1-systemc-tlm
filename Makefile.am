@@ -29,6 +29,8 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = progs-or32  \
 	  sysc-models
 
+DISTCHECK_CONFIGURE_FLAGS = --target=or32-elf
+
 # Doxygen description is always regenerated.
 doxygen:
 	sed < $(srcdir)/doxygen.config > ./doxygen.config \

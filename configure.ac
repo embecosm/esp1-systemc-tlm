@@ -26,7 +26,7 @@
 
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([embecosm-eps1-sysc-tlm2.0-examples], [2.0], [jeremy.bennett@embecosm.com])
+AC_INIT([esp1-tlm2-or1ksim-examples], [2.0], [jeremy.bennett@embecosm.com])
 AC_CONFIG_MACRO_DIR([m4])
 
 # Generically use extensions such as _GNU_SOURCE if available.
@@ -50,7 +50,7 @@ AC_REVISION([$Id$])
 AC_PREREQ(2.63)
 
 # We're using C++
-AC_LANG(C++)
+AC_LANG([C++])
 
 # C++ compiler and install utility
 AC_PROG_CXX
@@ -65,7 +65,7 @@ if test "x$host_os" == "xlinux-gnu"
 then
   sysc_os=linux
 else
-  sysc_os=$target_os
+  sysc_os=$host_os
 fi
 
 AC_ARG_WITH([systemc],

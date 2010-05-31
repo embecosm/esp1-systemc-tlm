@@ -42,6 +42,9 @@ AC_REVISION([$Id$])
 # Make sure we are using a reasonably recent autoconf version
 AC_PREREQ(2.63)
 
+# We're using C
+AC_LANG([C])
+
 # Sort out the tools. Using the target tool chain here, not native. Note that
 # AC_CHECK_PROGS will not override an already set variable, so we must
 # explicitly unset them first.
@@ -62,8 +65,8 @@ AC_HEADER_STDC
 
 # We need assembler, installer and per target C flags
 AM_PROG_AS
-AM_PROG_CC_C_O
 AC_PROG_INSTALL
+AM_PROG_CC_C_O
 
 # Specify our baseline CFLAGS
 CPPFLAGS=""

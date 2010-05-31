@@ -33,6 +33,8 @@ bin_PROGRAMS = hello          \
 
 noinst_LTLIBRARIES = libboot.la
 
+EXTRA_DIST = default.ld
+
 # The boot up library
 libboot_la_SOURCES = bitutils.c \
 		     start.s    \
