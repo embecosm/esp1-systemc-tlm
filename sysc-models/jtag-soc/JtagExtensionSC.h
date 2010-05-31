@@ -27,29 +27,11 @@
 #ifndef JTAG_EXTENSION_SC__H
 #define JTAG_EXTENSION_SC__H
 
-#include <stdint.h>
-
 #include <tlm.h>
 
 
 // --------------------------------------------------------------------------
-//! A user defined protocol traits class for JTAG
-
-//! We must have this, to enforce the extension as a mandatory
-//! extension. However it is identical to the default traits
-// --------------------------------------------------------------------------
-class JtagProtocolTypes
-{
-public:
-
-  typedef tlm::tlm_generic_payload  tlm_payload_type;
-  typedef tlm::tlm_phase            tlm_phase_type;
-
-};	// class JtagProtocolTypes
-
-
-// --------------------------------------------------------------------------
-//! A user defined mandatory TLM extension class for JTAG
+//! A user defined ignorable TLM extension class for JTAG
 
 //! The existence of our own protocol traits class means this will be
 //! mandatory.
@@ -65,12 +47,8 @@ public:
     SHIFT_DR
   };
 
-  // Constructors
-  JtagExtensionSC (AccessType  _type,
-		   int         _bitSize,
-		   bool        _debugEnabled);
-  JtagExtensionSC (AccessType  _type,
-		   int         _bitSize);
+  // Constructor
+  JtagExtensionSC ();
 
   // Mandatory implementation of the clone method
   virtual tlm::tlm_extension_base* clone() const;

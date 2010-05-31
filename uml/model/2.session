@@ -1,5 +1,8 @@
-window_sizes 1350 787 337 1007 593 120
+window_sizes 1590 1146 337 1243 940 120
 show_stereotypes
-selected 
-package_ref 129 // model
+selected sequencediagram_ref 182530 // JtagSocSC debug sequence diagram
+open
+  classview_ref 128002 // top level class view
+  operation_ref 245122 // jtagHandler
+end
 end

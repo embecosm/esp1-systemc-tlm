@@ -109,7 +109,12 @@ Or1ksimJtagSC::run ()
 //-----------------------------------------------------------------------------
 //! Handler for a new JTAG transaction
 
-//! Call the underlying 
+//! The extension is ignorable, for greatest interoperability. If it is not
+//! present, then the data length multiplied by 8 is used as the bit length
+//! and the address is used to indicate the transaction required as follows:
+//! - 0:               Shift through IR
+//! - 1:               Shift through DR
+//! - any other value: Reset
 
 //! @param[in,out] payload  The generic payload (with mandatory JTAG extensions)
 //! @param[in,out] delay    The incoming delay and on return the total delay
@@ -123,15 +128,28 @@ Or1ksimJtagSC::jtagHandler( tlm::tlm_generic_payload &payload,
   JtagExtensionSC *ext;
   payload.get_extension (ext);
 
-  // Check the extension exists
+  // Check if the extension exists. Set up the access type and bit size as
+  // appropriate.
+  JtagExtensionSC::AccessType  type;
+  int                          bitSize;
+
   if (NULL == ext)
     {
-      payload.set_response_status (tlm::TLM_GENERIC_ERROR_RESPONSE);
-      return;
+      unsigned int  addr = (unsigned int) payload.get_address ();
+
+      type    = (ADDR_SHIFT_IR == addr) ? JtagExtensionSC::SHIFT_IR :
+	        (ADDR_SHIFT_DR == addr) ? JtagExtensionSC::SHIFT_DR :
+                                          JtagExtensionSC::RESET ;
+      bitSize = 8 * (int) payload.get_data_length ();
+    }
+  else
+    {
+      type     = ext->getType ();
+      bitSize = ext->getBitSize ();
     }
 
   // Behavior depends on the type
-  switch (ext->getType ())
+  switch (type)
     {
     case JtagExtensionSC::RESET:
       or1ksimMutex.lock ();
@@ -143,7 +161,7 @@ Or1ksimJtagSC::jtagHandler( tlm::tlm_generic_payload &payload,
     case JtagExtensionSC::SHIFT_IR:
       or1ksimMutex.lock ();
       delay += sc_time (or1ksim_jtag_shift_ir (payload.get_data_ptr (),
-					       ext->getBitSize ()), SC_SEC);
+					       bitSize), SC_SEC);
       or1ksimMutex.unlock ();
       payload.set_response_status (tlm::TLM_OK_RESPONSE);
       return;
@@ -151,7 +169,7 @@ Or1ksimJtagSC::jtagHandler( tlm::tlm_generic_payload &payload,
     case JtagExtensionSC::SHIFT_DR:
       or1ksimMutex.lock ();
       delay += sc_time (or1ksim_jtag_shift_dr (payload.get_data_ptr (),
-					       ext->getBitSize ()), SC_SEC);
+					       bitSize), SC_SEC);
       or1ksimMutex.unlock ();
       payload.set_response_status (tlm::TLM_OK_RESPONSE);
       return;

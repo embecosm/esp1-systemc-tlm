@@ -47,8 +47,7 @@ SC_HAS_PROCESS (JtagLoggerSC);
 //-----------------------------------------------------------------------------
 //! Constructor for the JTAG logger
 
-//! Allocate (one off) the payload extension and associate it with the generic
-//! payload.
+//! Associate the payload extension with the generic payload.
 
 //! Declare the SystemC thread which will generate JTAG traffic.
 
@@ -57,30 +56,13 @@ SC_HAS_PROCESS (JtagLoggerSC);
 JtagLoggerSC::JtagLoggerSC (sc_module_name  name) :
   sc_module (name)
 {
-  // Allocate the extension with default values and hook it up to the payload
-  ext = new JtagExtensionSC (JtagExtensionSC::RESET, 0, false);
-  payload.set_extension (ext);
+  // Hook the extension to the payload
+  payload.set_extension (&ext);
 
   // The main thread
   SC_THREAD (runJtag);
 
 }	// JtagLoggerSC ()
-
-
-//-----------------------------------------------------------------------------
-//! Destructor for the JTAG logger
-
-//! Free the payload extension.
-
-//! @param[in] name  Name of this SystemC module
-//-----------------------------------------------------------------------------
-JtagLoggerSC::~JtagLoggerSC ()
-{
-  // Free up the extension and its connection to the payload
-  payload.clear_extension (ext);
-  delete  ext;
-
-}	// JtagLoggerSC~ ()
 
 
 //-----------------------------------------------------------------------------
@@ -153,7 +135,7 @@ void
 JtagLoggerSC::jtagReset (sc_time &delay)
 {
   // Set up field in the extension and shift it
-  ext->setType (JtagExtensionSC::RESET);
+  ext.setType (JtagExtensionSC::RESET);
 
   jtag->b_transport (payload, delay);
 
@@ -189,8 +171,8 @@ JtagLoggerSC::jtagInstruction (unsigned char  inst,
 
   // Set up the fields in the payload and extension and shift it
   payload.set_data_ptr (jreg);
-  ext->setType (JtagExtensionSC::SHIFT_IR);
-  ext->setBitSize (4);
+  ext.setType (JtagExtensionSC::SHIFT_IR);
+  ext.setBitSize (4);
 
   jtag->b_transport (payload, delay);
 
@@ -254,8 +236,8 @@ JtagLoggerSC::jtagSelectModule (unsigned char  moduleId,
 
   // Set up the fields in the payload and extension and shift it
   payload.set_data_ptr (jreg);
-  ext->setType (JtagExtensionSC::SHIFT_DR);
-  ext->setBitSize (73);
+  ext.setType (JtagExtensionSC::SHIFT_DR);
+  ext.setBitSize (73);
 
   jtag->b_transport (payload, delay);
 
@@ -386,8 +368,8 @@ JtagLoggerSC::jtagWriteCommand (unsigned char      accessType,
 
   // Set up the fields in the payload and extension and shift it
   payload.set_data_ptr (jreg);
-  ext->setType (JtagExtensionSC::SHIFT_DR);
-  ext->setBitSize (125);
+  ext.setType (JtagExtensionSC::SHIFT_DR);
+  ext.setBitSize (125);
 
   jtag->b_transport (payload, delay);
 
@@ -495,8 +477,8 @@ JtagLoggerSC::jtagGoCommandRead (unsigned char      data[],
 
   // Set up the fields in the payload and extension and shift it
   payload.set_data_ptr (jreg);
-  ext->setType (JtagExtensionSC::SHIFT_DR);
-  ext->setBitSize (73 + dataBytes * 8);
+  ext.setType (JtagExtensionSC::SHIFT_DR);
+  ext.setBitSize (73 + dataBytes * 8);
 
   jtag->b_transport (payload, delay);
 

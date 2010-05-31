@@ -31,32 +31,13 @@ using tlm::tlm_extension_base;
 
 
 // --------------------------------------------------------------------------
-//! Constructor
+//! Default constructor
 
-//! Set up the various fields
+//! Set up all fields to their default
 // --------------------------------------------------------------------------
-JtagExtensionSC::JtagExtensionSC(JtagExtensionSC::AccessType  _type,
-				 int                          _bitSize,
-				 bool                         _debugEnabled ) :
-  type (_type),
-  bitSize (_bitSize),
-  debugEnabled (_debugEnabled)
-{
-
-}	// JtagExtensionSC ()
-
-
-// --------------------------------------------------------------------------
-//! Variant constructor
-
-//! Set up debug to some default value. Could be done using a default
-//! parameter, but this gives a shape that could use more complex default
-//! algorithms in the future.
-// --------------------------------------------------------------------------
-JtagExtensionSC::JtagExtensionSC(JtagExtensionSC::AccessType  _type,
-				 int                          _bitSize ) :
-  type (_type),
-  bitSize (_bitSize),
+JtagExtensionSC::JtagExtensionSC () :
+  type (RESET),
+  bitSize (0),
   debugEnabled (false)
 {
 
@@ -66,12 +47,19 @@ JtagExtensionSC::JtagExtensionSC(JtagExtensionSC::AccessType  _type,
 // --------------------------------------------------------------------------
 //! Clone an instance
 
-//! It is mandatory for us to define this function. Placeholder for now
+//! It is mandatory for us to define this function. This is boilerplace code,
+//! which suffices for us.
+
+//! @return  The cloned instance
 // --------------------------------------------------------------------------
 tlm_extension_base *
 JtagExtensionSC::clone() const
 {
-  JtagExtensionSC *jtesc = new JtagExtensionSC (type, bitSize);
+  JtagExtensionSC *jtesc = new JtagExtensionSC ();
+
+  jtesc->setType (type);
+  jtesc->setBitSize (bitSize);
+  jtesc->setDebugEnabled (debugEnabled);
 
   return jtesc;
 
@@ -81,13 +69,17 @@ JtagExtensionSC::clone() const
 // --------------------------------------------------------------------------
 //! Copy our state from another instance
 
-//! It is mandatory for us to define this function. Placeholder for now
+//! It is mandatory for us to define this function. This is boilerplace code,
+//! which suffices for us.
+
+//! @param[in] ext  The instance from which we are copying
 // --------------------------------------------------------------------------
 void
 JtagExtensionSC::copy_from (tlm_extension_base const &ext)
 {
-  type    = static_cast<JtagExtensionSC const &>(ext).type;
-  bitSize = static_cast<JtagExtensionSC const &>(ext).bitSize;
+  type         = static_cast<JtagExtensionSC const &>(ext).type;
+  bitSize      = static_cast<JtagExtensionSC const &>(ext).bitSize;
+  debugEnabled = static_cast<JtagExtensionSC const &>(ext).debugEnabled;
 
 }	// copy_from ()
 

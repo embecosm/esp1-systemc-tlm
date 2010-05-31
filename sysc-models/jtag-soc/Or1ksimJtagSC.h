@@ -48,13 +48,8 @@ class Or1ksimJtagSC
 {
 public:
 
-  //! A convenience typedef for the JTAG initiator port. Only done to save
-  //! typing elsewhere
-  typedef tlm_utils::simple_target_socket<Or1ksimJtagSC, 8, JtagProtocolTypes>
-    JtagTargetType;
-
   //! Target socket for JTAG transactions
-  JtagTargetType  jtag;
+  tlm_utils::simple_target_socket<Or1ksimJtagSC, 1>  jtag;
 
   // Constructor
   Or1ksimJtagSC( sc_core::sc_module_name  name,
@@ -71,6 +66,9 @@ protected:
 
 private:
 
+  static const unsigned int  ADDR_SHIFT_IR = 0;
+  static const unsigned int  ADDR_SHIFT_DR = 1;
+
   //! SystemC mutex controlling access to the underlying ISS.
   sc_core::sc_mutex  or1ksimMutex;
 
@@ -80,18 +78,6 @@ private:
 		     sc_core::sc_time         &delay );
 
 
-  // The JTAG transactional interface functions
-  void  reset (sc_core::sc_time &delay);
-
-  void  shiftIr (unsigned char    *jreg,
-		 int               numBits,
-		 sc_core::sc_time &delay);
-
-  void  shiftDr (unsigned char    *jreg,
-		 int               numBits,
-		 sc_core::sc_time &delay);
-
-  
 };	/* Or1ksimJtagSC() */
 
 

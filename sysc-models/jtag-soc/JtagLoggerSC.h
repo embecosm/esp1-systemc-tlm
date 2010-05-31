@@ -45,17 +45,11 @@ class JtagLoggerSC
 {
 public:
 
-  //! A convenience typedef for the JTAG initiator port. Only done to save
-  //! typing elsewhere
-  typedef tlm_utils::simple_initiator_socket<JtagLoggerSC, 8, JtagProtocolTypes>
-    JtagInitiatorType;
-
   //! Initiator socket for JTAG transactions
-  JtagInitiatorType  jtag;
+  tlm_utils::simple_initiator_socket<JtagLoggerSC, 1>  jtag;
 
-  // Constructor and destructor
+  // Constructor
   JtagLoggerSC (sc_core::sc_module_name  name);
-  ~JtagLoggerSC ();
 
 
 private:
@@ -64,9 +58,8 @@ private:
   //! port.
   tlm::tlm_generic_payload  payload;
 
-  //! Pointer to payload extension for JTAG. We'll allocate this in the
-  //! constructor
-  JtagExtensionSC *ext;
+  //! Payload extension for JTAG with default initialization
+  JtagExtensionSC  ext;
 
   // Thread which will generate the JTAG transactions.
   virtual void  runJtag();

@@ -1,6 +1,6 @@
 format 73
 "model"
-  revision 66
+  revision 69
   modified_by 2 "jeremy"
   cpp_root_dir "/home/jeremy/svntrunk/Projects/or-debug-proxy/uml/generation/"
 
@@ -270,6 +270,13 @@ ${inlines}
 	    classrelation_ref 227970 // <directional composition>
 	  b parent class_ref 211714 // JtagExtensionSC
       end
+
+      classrelation 234754 // <directional composition>
+	relation 234114 *-->
+	  a role_name "" private
+	    classrelation_ref 234754 // <directional composition>
+	  b parent class_ref 133122 // tlm_generic_payload
+      end
     end
   end
 
@@ -515,12 +522,12 @@ ${inlines}
 	
       end
 
-      classrelation 194306 // <unidirectional association>
-	relation 193666 --->
+      classrelation 194306 // <directional composition>
+	relation 193666 *-->
 	  a role_name "" private
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
-	    classrelation_ref 194306 // <unidirectional association>
+	    classrelation_ref 194306 // <directional composition>
 	  b parent class_ref 133122 // tlm_generic_payload
       end
 
@@ -842,41 +849,10 @@ ${inlines}
 	
       end
 
-      operation 229890 "reset"
-	public explicit_return_type "void"
-	nparams 1
-	  param inout name "delay" type class_ref 149762 // sc_time
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-	
-      end
-
-      operation 230146 "shiftIr"
+      operation 245122 "jtagHandler"
 	public explicit_return_type "void"
 	nparams 2
-	  param inout name "jreg" type class_ref 205058 // JtagRegister
-	  param inout name "delay" type class_ref 149762 // sc_time
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-	
-      end
-
-      operation 230274 "shiftDr"
-	public explicit_return_type "void"
-	nparams 2
-	  param inout name "jreg" type class_ref 205058 // JtagRegister
+	  param inout name "payload" type class_ref 133122 // tlm_generic_payload
 	  param inout name "delay" type class_ref 149762 // sc_time
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${abstract};
 "
@@ -905,6 +881,24 @@ ${inlines}
 "
 	    classrelation_ref 227586 // jtag (<directional composition>)
 	  b parent class_ref 130946 // simple_target_socket
+      end
+
+      classrelation 234626 // <unidirectional association>
+	relation 233986 --->
+	  a role_name "" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 234626 // <unidirectional association>
+	  b parent class_ref 133122 // tlm_generic_payload
+      end
+
+      classrelation 234882 // <unidirectional association>
+	relation 234242 --->
+	  a role_name "" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 234882 // <unidirectional association>
+	  b parent class_ref 211714 // JtagExtensionSC
       end
     end
 

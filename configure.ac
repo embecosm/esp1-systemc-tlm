@@ -101,7 +101,7 @@ AC_ARG_WITH([or1ksim],
             [with_or1ksim=$OR1KSIM_HOME])
 if test x"$with_or1ksim" = x
 then
-  AC_MSG_FAILURE(with-or1ksim not specified and \$OR1KSIM not defined)
+  AC_MSG_FAILURE(with-or1ksim not specified and \$OR1KSIM_HOME not defined)
 else
   CPPFLAGS="$CPPFLAGS -I$with_or1ksim/include"
   LDFLAGS="$LDFLAGS -L$with_or1ksim/lib"
