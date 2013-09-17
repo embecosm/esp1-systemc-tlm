@@ -1,3 +1,10 @@
+2013-09-17  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+
+	Transfer to git
+
+	* README: Updated with URL to application note.
+	* README.md: Created as a soft link to README
+
 2010-05-31  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 	* configure.ac: Release name changed.
 	distcheck.

@@ -1,17 +1,12 @@
-   Example Models for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
-   =========================================================================
+# Example Models for "Building a Loosely Timed SoC Model with OSCI TLM 2.0"
 
-
-ABOUT
-=====
+## About
 
 This is a set of example models to accompany Embecosm Application Note 2.
-"Building a Loosely Timed SoC Model with OSCI TLM 2.0: A Case Study Using an
-Open Source ISS and Linux 2.6 Kernel".
+[Building a Loosely Timed SoC Model with OSCI TLM 2.0: A Case Study Using an
+Open Source ISS and Linux 2.6 Kernel](http://www.embecosm.com/resources/appnotes/#EAN1 "Embecosm EAN1").
 
-
-COPYING
-=======
+## Copying
 
 This software is licensed under the GNU General Public License (GPL). Full
 details of the GPL can be found in the file COPYING
